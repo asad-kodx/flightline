@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <!-- <ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon name="menu"></ion-icon>
+        <span><alarm-count></alarm-count></span>
+      </ion-menu-button>
+    </ion-buttons> -->
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Alarms Card -->
+  <!-- <ion-card (click)="navToAlarms()">
+    <ion-card-header>
+      <ion-card-title style="color:gainsboro; font-weight:bold; text-align: center">
+        Alarms
+      </ion-card-title>
+    </ion-card-header>
+    <ion-list>
+      <ion-item button>
+        <ion-row style="text-align:center; width:100%">
+          <ion-col>
+            <ion-icon style="color:red !important" name="notifications" slot="start"></ion-icon>
+            <span style="font-size:2.0em">{{ alarmData.getAlarmCounts(null, null).activeCount }}</span>
+            <div style="font-size:.9rem; text-transform: uppercase; display:block">Active</div>
+          </ion-col>
+          <ion-col>
+            <ion-icon style="color: orange !important" name="notifications" slot="start"></ion-icon>
+            <span style="font-size:2.0em;">{{ alarmData.getAlarmCounts(null, null).acknowledgedCount }}</span>
+            <div style="font-size:.9rem; text-transform: uppercase; display:block">Acknowledged</div>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-list>
+  </ion-card> -->
+
+  <!-- Controls Card -->
+  <!-- <ion-card (click)="navToControls()">
+    <ion-card-header>
+      <ion-card-title style="color:gainsboro; font-weight:bold; text-align: center">
+        Controls
+      </ion-card-title>
+    </ion-card-header>
+    <ion-list>
+      <ion-item button>
+        <ion-row style="text-align:center; width:100%; line-height:2.0em">
+          <ion-col>
+            <ion-icon style="color:red !important;" name="notifications" slot="start"></ion-icon>
+            <span style="font-size:2.0em;">{{ getOfflineControlsCount() | async }}</span>
+            <div style="font-size:.9rem; text-transform: uppercase; display:block">Offline</div>
+          </ion-col>
+          <ion-col>
+            <ion-icon style="color: green !important" name="notifications" slot="start"></ion-icon>
+            <span style="font-size:2.0em;">{{ getOnlineControlsCount() | async }}</span>
+            <div style="font-size:.9rem; text-transform: uppercase; display:block">Online</div>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-list>
+  </ion-card> -->
+
+  <!-- Version Card -->
+  <ion-card>
+    <ion-item>
+      Version: 3.1.31
+    </ion-item>
+  </ion-card>
+
+</ion-content>

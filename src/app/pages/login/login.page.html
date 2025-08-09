@@ -1,0 +1,31 @@
+<ion-content>
+  <img
+    src="assets/imgs/flightline.png"
+    style="margin-top: 50%; display: block; margin-left: 2%; margin-right: auto"
+  />
+
+  <ion-list style="margin-top: 15%">
+    <ion-item lines="none">
+      <ion-label position="fixed">Username</ion-label>
+      <ion-input type="text" [(ngModel)]="username"></ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label position="fixed">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" color="primary" (click)="login()">
+      Login
+    </ion-button>
+
+    <ion-button
+      id="submitLogin"
+      color="secondary"
+      expand="block"
+      (click)="launchPasswordReset()"
+    >
+      Forgot Password
+    </ion-button>
+  </ion-list>
+</ion-content>
