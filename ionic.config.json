@@ -1,0 +1,7 @@
+{
+  "name": "flightline",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
