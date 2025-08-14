@@ -1,3 +1,9 @@
+import { Injectable } from "@angular/core";
+
+@Injectable({
+    providedIn: 'root'
+})
+
 export class ConfigurationService {
     public static baseUrl: string = 'https://controltechonline.azurewebsites.net';
     public static fusionLightWebUrl: string = 'https://lite.flightline-control.com';

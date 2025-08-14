@@ -1,0 +1,3 @@
+<ion-badge *ngIf="(alarmData.getAllAlarmsCount(orgId)).active > 0" color="alarm0">{{(alarmData.getAllAlarmsCount(orgId)).active}}</ion-badge>
+<ion-badge *ngIf="(alarmData.getAllAlarmsCount(orgId)).acked > 0" color="alarm1">{{(alarmData.getAllAlarmsCount(orgId)).acked}}</ion-badge>
+<ion-badge *ngIf="(alarmData.getAllAlarmsCount(orgId)).silent > 0" style=" background-color: alarm3; color: white;">{{(alarmData.getAllAlarmsCount(orgId)).silent}}</ion-badge>

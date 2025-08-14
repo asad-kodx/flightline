@@ -15,6 +15,34 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
+  {
+    path: 'user-settings',
+    loadChildren: () => import('./pages/user-settings/user-settings.module').then( m => m.UserSettingsPageModule)
+  },
+  {
+    path: 'site-alarms-list',
+    loadChildren: () => import('./pages/site-alarms-list/site-alarms-list.module').then( m => m.SiteAlarmsListPageModule)
+  },
+  {
+    path: 'rooms-page',
+    loadChildren: () => import('./pages/rooms-page/rooms-page.module').then( m => m.RoomsPagePageModule)
+  },
+  {
+    path: 'remote-settings',
+    loadChildren: () => import('./pages/remote-settings/remote-settings.module').then( m => m.RemoteSettingsPageModule)
+  },
+  {
+    path: 'alarm-list',
+    loadChildren: () => import('./pages/alarm-list/alarm-list.module').then( m => m.AlarmListPageModule)
+  },
+  {
+    path: 'control-list',
+    loadChildren: () => import('./pages/control-list/control-list.module').then( m => m.ControlListPageModule)
+  },
+  {
+    path: 'register-user',
+    loadChildren: () => import('./pages/register-user/register-user.module').then( m => m.RegisterUserPageModule)
+  },
 ];
 
 @NgModule({

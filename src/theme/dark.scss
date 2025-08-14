@@ -1,0 +1,74 @@
+:root {
+  /* Core Colors */
+  --ion-color-primary: #eeae15;
+  --ion-color-primary-contrast: #000;
+  --ion-color-secondary: #007ACC;
+  --ion-color-secondary-contrast: #000;
+  --ion-color-danger: #f43e00;
+  --ion-color-light: #bdc3c7;
+  --ion-color-light-contrast: #000;
+  --ion-color-dark: #d35400;
+  --ion-color-dark-contrast: #000;
+  --ion-color-alert: #F39C12;
+
+  /* Backgrounds & Text */
+  --ion-background-color: #363232;
+  --ion-text-color: #DADFE1;
+  --ion-color-step-50: #434343; /* for step-based text contrasts */
+  --ion-color-step-100: #666666;
+
+  /* Toolbar */
+  --ion-toolbar-background: #434343;
+  --ion-toolbar-border-color: #434343;
+  --ion-toolbar-color: var(--ion-color-primary);
+
+  /* Tabs */
+  --ion-tab-bar-background: #434343;
+  --ion-tab-bar-border-color: #434343;
+  --ion-tab-bar-color: #8c8c8c;
+  --ion-tab-bar-color-selected: var(--ion-color-primary);
+
+  /* Lists */
+  --ion-item-background: #242424;
+  --ion-item-border-color: #4C4C4C;
+  --ion-item-color: var(--ion-text-color);
+  --ion-item-divider-color: var(--ion-text-color);
+  --ion-item-divider-background: #515151;
+
+  /* Cards */
+  --ion-card-background: #242424;
+  --ion-card-color: var(--ion-text-color);
+
+  /* Toast */
+  --ion-toast-background: #019875;
+  --ion-toast-color: var(--ion-text-color);
+
+  /* Searchbar */
+  --ion-searchbar-background: #313131;
+  --ion-searchbar-color: #bdc3c7;
+  --ion-placeholder-color: #A3A8AC;
+
+  /* Toggle */
+  --ion-toggle-background: #696969;
+  --ion-toggle-background-checked: #eeae15;
+
+  /* Alert */
+  --ion-alert-background: #434343;
+  --ion-alert-color: var(--ion-text-color);
+  --ion-alert-button-color: var(--ion-color-primary);
+  --ion-alert-input-background: #bdc3c7;
+  --ion-alert-input-color: #242424;
+
+  /* Refresher */
+  --ion-refresher-color: #ffffff;
+}
+
+/* Optional specific component styles */
+.alert-input {
+  color: var(--ion-alert-input-color);
+  background-color: var(--ion-alert-input-background);
+}
+
+body {
+  color: var(--ion-text-color);
+}

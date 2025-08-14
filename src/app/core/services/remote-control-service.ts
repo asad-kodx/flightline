@@ -1,21 +1,18 @@
-import { Observable } from 'rxjs/Observable';
-import { Events, Toast, ToastController } from 'ionic-angular';
+import { interval, of } from 'rxjs';
+import { take } from "rxjs/operators";
+import { ToastController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import { ConfigurationService } from "./configuration.service";
-import Moment from 'moment';
-import { StatusCode } from '../models/types/status-code';
-import { DeviceType } from '../models/types/device-type';
-import { Mode } from '../models/types/mode';
+import * as Moment from 'moment';
 import { SignalRService } from './signalr.service';
 import { RemoteControlProvider } from '../providers/remote-control.provider';
-import { RemoteControlCommandType } from '../models/types/remote-control-command-type';
-import { FusionFeatureFlag } from '../models/types/fusion-feature-flag';
-import { isNullOrUndefined } from 'util';
 
+import { RemoteControlCommandType, FusionFeatureFlag, StatusCode, DeviceType, Mode } from "../../shared/models";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class RemoteControlService {
 
     private config = ConfigurationService;
@@ -25,9 +22,9 @@ export class RemoteControlService {
     private requestTimes: Map<string, any>;
     private slowRequests: Map<string, any>;
     private requestLog: string[];
-    private toast: Toast;
+    private toast: any;
 
-    constructor(private events: Events, private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
+    constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
         this.timedOutRequests = new Map<string, string>();
         this.requestTimes = new Map<string, any>();
@@ -48,7 +45,7 @@ export class RemoteControlService {
         if((fusionFeatureFlag & FusionFeatureFlag.RemoteSettings) == FusionFeatureFlag.RemoteSettings) {
             isRemoteSettingEnabled = true;
             var serialNumber = 0;
-            if(!isNullOrUndefined(deviceId)) {
+            if(deviceId != null) {
                 serialNumber = Number(deviceId.split(".")[0]);
             }
             obj = { ControlSerialNumber: serialNumber, EntityId: deviceId, Mode: mode, Value: value, ConnectionId: "noconnection", RemoteControlCommandType: commandType};
@@ -58,31 +55,33 @@ export class RemoteControlService {
             obj = { DeviceId: deviceId, Mode: mode, Value: value, ConnectionId: "noconnection", RemoteControlCommandType: commandType};
         }        
         this.remoteControlProvider.sendRemoteControlRequest<any>(obj, isRemoteSettingEnabled)
-            .subscribe(res => {
-                console.log(res)
-                var requestId = res.requestId;
-                console.log('Post Returned', requestId, this.slowRequests)
-                if (this.slowRequests.has(requestId)) {
-                    this.handleSlowRequest(time, deviceId, this.slowRequests.get(requestId));
-                    return;
-                }
-                this.requestTimes.set(requestId, time);
-                this.activeRequests.set(deviceId, requestId);
-                console.log(this.activeRequests)
-                this.events.publish('GetRequestId');
-                this.timedOutRequests.delete(deviceId);
-                Observable.interval(30000).take(1).subscribe(() => {
-                    if (this.activeRequests.get(deviceId) == requestId) {
-                        this.timedOutRequests.set(deviceId, requestId);
-                        this.activeRequests.delete(deviceId);
-                        this.events.publish('RequestTimeout');
+            .subscribe({
+                next: (res: any) => {
+                    console.log(res)
+                    var requestId = res.requestId;
+                    console.log('Post Returned', requestId, this.slowRequests)
+                    if (this.slowRequests.has(requestId)) {
+                        this.handleSlowRequest(time, deviceId, this.slowRequests.get(requestId));
+                        return;
                     }
-                });
-            }, error => {
-                () => {
-                    this.events.publish('PostFailed');
+                    this.requestTimes.set(requestId, time);
+                    this.activeRequests.set(deviceId, requestId);
+                    console.log(this.activeRequests)
+                    // this.events.publish('GetRequestId');
+                    this.timedOutRequests.delete(deviceId);
+                    interval(30000).pipe(take(1)).subscribe(() => {
+                        if (this.activeRequests.get(deviceId) == requestId) {
+                            this.timedOutRequests.set(deviceId, requestId);
+                            this.activeRequests.delete(deviceId);
+                            // this.events.publish('RequestTimeout');
+                        }
+                    });
+                },
+                error: (error: any) => {
+                    
+                    // this.events.publish('PostFailed');
                     console.error(error)
-                    return Observable.of(null);
+                    return of(null);
                 }
             });
     }
@@ -91,11 +90,11 @@ export class RemoteControlService {
         console.log("Handling slow request")
         var requestTime = requestInfo.time.diff(startTime, 'milliseconds');
         this.handleError(requestInfo.statusCode);
-        this.events.publish('GetRequestId');
+        // this.events.publish('GetRequestId');
     }
 
-    getRequestId(deviceId): string {
-        return this.activeRequests.get(deviceId);
+    getRequestId(deviceId: string): string {
+        return this.activeRequests.get(deviceId) || '';
     }
 
     isTimedOut(deviceId: string): boolean {
@@ -106,7 +105,8 @@ export class RemoteControlService {
         return this.requestLog;
     }
 
-    getDeviceType(deviceType: DeviceType, version?: string, featureFlag: FusionFeatureFlag = null) {
+    getDeviceType(deviceType: DeviceType, version?: string, featureFlag: FusionFeatureFlag | null = null) {
+        if (featureFlag == null) return null;
         switch (deviceType) {
             case DeviceType.DualRelayCardBooleanFanDevice:
             case DeviceType.OctoRelayCardBooleanFanDevice:
@@ -142,7 +142,7 @@ export class RemoteControlService {
                 return 'curtain'
             case DeviceType.CurtainCardCurtainDevice:
             case DeviceType.CurtainDeviceV2:
-                if (Number(version.split('.')[2]) >= 90) return "curtain2";
+                if (Number(version?.split('.')[2]) >= 90) return "curtain2";
                 return 'curtain';
             case DeviceType.ChainDiskDevice:
             case DeviceType.GenericProcessDevice:
@@ -165,7 +165,7 @@ export class RemoteControlService {
             window.setTimeout(() => {
                 var processedResponse = this.mapSignalrResponse(data)
                 this.handleResponse(processedResponse.deviceId, processedResponse.requestId, processedResponse.statusCode, processedResponse.statusDescription);
-                this.events.publish('CheckRequestId', data);
+                // this.events.publish('CheckRequestId', data);
             }, 1000);
         });
     }
@@ -185,10 +185,8 @@ export class RemoteControlService {
     var t = this.toastCtrl.create({
         message: "The command was not sent due to a lack of connection to control",
         position: 'middle',
-        duration: 5000,
-        showCloseButton: true
-    });
-    t.present();
+        duration: 5000
+    })
 }
 
     handleResponse(deviceId: string, requestId: string, statusCode: StatusCode, statusDescription: string) {
@@ -211,8 +209,7 @@ export class RemoteControlService {
          this.toast = this.toastCtrl.create({
             message: "A remote control call for this device has timed out, the control may be unreachable",
             position: 'middle',
-            duration: 5000,
-            showCloseButton: true
+            duration: 5000
         });
         this.toast.present();
         this.toast.onDidDismiss(() => {
@@ -224,8 +221,7 @@ export class RemoteControlService {
          this.toast = this.toastCtrl.create({
             message: message,
             position: 'middle',
-            duration: 5000,
-            showCloseButton: true
+            duration: 5000
         });
         this.toast.present();
         this.toast.onDidDismiss(() => {
@@ -237,8 +233,7 @@ export class RemoteControlService {
          this.toast = this.toastCtrl.create({
             message: 'Successfully applied the selected changes',
             position: 'bottom',
-            duration: 5000,
-            showCloseButton: true
+            duration: 5000
         });
         this.toast.present();
         this.toast.onDidDismiss(() => {

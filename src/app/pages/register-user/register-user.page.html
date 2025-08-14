@@ -1,0 +1,47 @@
+<ion-content class="ion-padding">
+  <img
+    src="assets/imgs/flightline.png"
+    alt="Flightline"
+    style="margin-top: 10%; display: block; margin-left: auto; margin-right: auto;"
+  />
+
+  <ion-item lines="none" style="text-align: center; color: #03A9F4; margin-top: 5%; font-weight: bold;">
+    <ion-label>NEW USER REGISTRATION</ion-label>
+  </ion-item>
+
+  <ion-list style="margin-top: 10%">
+    <ion-item>
+      <ion-label position="stacked">First Name</ion-label>
+      <ion-input type="text" [(ngModel)]="firstName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Last Name</ion-label>
+      <ion-input type="text" [(ngModel)]="lastName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Username</ion-label>
+      <ion-input type="text" [(ngModel)]="userName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Confirm Password</ion-label>
+      <ion-input type="password" [(ngModel)]="confirmPassword"></ion-input>
+    </ion-item>
+
+    <ion-item lines="none" style="background-color: transparent;">
+      <ion-label>
+        <span class="error-message">{{ errorMessage }}</span>
+      </ion-label>
+    </ion-item>
+
+    <ion-button expand="block" color="primary" (click)="registerUser()">Register</ion-button>
+    <ion-button expand="block" color="danger" (click)="backToLogin()">Back to Login</ion-button>
+  </ion-list>
+</ion-content>

@@ -1,3 +1,121 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <!-- Logged In Menu -->
+  <ion-menu id="loggedInMenu" side="start" contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="outer-content">
+      <ion-list style="margin-bottom: 0px">
+        <ion-list-header style="zoom: 0.8" color="primary">
+          {{ currentUser }}
+          <ion-icon
+            slot="end"
+            (click)="logout()"
+            style="color: red; margin-right: 15px; font-size: 2.5em; font-weight: 600"
+            name="log-out"
+          ></ion-icon>
+        </ion-list-header>
+
+        <ion-list-header style="zoom: 0.8" color="primary" (click)="changeOrg()">
+          Org: {{ orgName }}
+          <ion-badge
+            *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
+            slot="end"
+            color="alarm0"
+            class="icon-badge"
+          >
+            {{ alarmData.getAllAlarmsNotInOrg(orgId) }}
+          </ion-badge>
+          <ion-icon
+            slot="end"
+            name="settings"
+            style="color: white; margin-right: 15px; font-size: 3em"
+          ></ion-icon>
+        </ion-list-header>
+
+        <ion-list-header
+          *ngIf="!pushEnabled"
+          style="zoom: 0.8"
+          color="danger"
+          (click)="goToPushSettings()"
+        >
+          Notifications are disabled. Tap here to enable.
+        </ion-list-header>
+
+        <ion-item
+          button
+          menuClose
+          *ngFor="let p of appPages"
+          (click)="openPage(p)"
+        >
+          <ion-icon slot="start" [name]="p.icon" [color]="isActive(p)"></ion-icon>
+          {{ p.title }}
+        </ion-item>
+      </ion-list>
+
+      <ion-toolbar>
+        <ion-title>Sites</ion-title>
+      </ion-toolbar>
+
+      <ion-list>
+        <ion-item
+          no-padding
+          class="site"
+          *ngFor="let site of sites | async"
+        >
+          <ion-item
+            button
+            detail="false"
+            (click)="toggleSite(site)"
+            lines="none"
+          >
+            <ng-container *ngIf="isSiteSelected(site); else notSelected">
+              <ion-icon name="checkbox"></ion-icon>&nbsp;
+            </ng-container>
+            <ng-template #notSelected>
+              <ion-icon name="square-outline"></ion-icon>&nbsp;
+            </ng-template>
+            <span>{{ site.siteName }}</span>
+          </ion-item>
+
+          <ion-button
+            fill="clear"
+            style="margin: 0 auto; height: 100%; padding: 0; width: 50px"
+            (click)="navToSiteAlarms(site)"
+            slot="end"
+          >
+            <ion-badge
+              color="alarm0"
+              *ngIf="
+                alarmData.getAlarmCounts(undefined, undefined, undefined, site.siteId).activeCount +
+                alarmData.getAlarmCounts(undefined, undefined, undefined, site.siteId).acknowledgedCount > 0
+              "
+            >
+              {{
+                alarmData.getAlarmCounts(undefined, undefined, undefined, site.siteId).activeCount +
+                alarmData.getAlarmCounts(undefined, undefined, undefined, site.siteId).acknowledgedCount
+              }}
+            </ion-badge>
+
+            <ion-badge
+              color="alarm3"
+              style="color: white"
+              *ngIf="
+                alarmData.getAlarmCounts(undefined, undefined, undefined, site.siteId).silentCount > 0
+              "
+            >
+              {{ alarmData.getAlarmCounts(undefined, undefined, undefined, site.siteId).silentCount }}
+            </ion-badge>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Main Content -->
+  <ion-router-outlet id="main-content" swipeBackEnabled="true"></ion-router-outlet>
+
 </ion-app>

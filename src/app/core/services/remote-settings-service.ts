@@ -4,17 +4,25 @@
  * Description: Remote settings service
  *********************************************************************/
 
-import { Events, Toast, ToastController } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import { SignalRService } from './signalr.service';
-import { RemoteSettingCommandType } from '../models/types/remote-settings-command-type';
-import { RemoteSettingsProvider } from '../providers/remote-settings-provider';
-import { EntityType } from '../models/types/entity-type';
-import { RemoteHeader } from '../models/remote-header-model';
-import { Setting } from '../models/remote-setting-update-model';
-import { RemoteSettings } from '../models/remote-setting-model'
+// import { RemoteSettingCommandType } from '../models/types/remote-settings-command-type';
+// import { RemoteSettingsProvider } from '../providers/remote-settings-provider';
+// import { EntityType } from '../models/types/entity-type';
+// import { RemoteHeader } from '../models/remote-header-model';
+// import { Setting } from '../models/remote-setting-update-model';
+// import { RemoteSettings } from '../models/remote-setting-model'
+
+import {
+  RemoteSettingCommandType,
+  EntityType,
+  RemoteHeader,
+  Setting,
+  RemoteSettings
+} from '../../shared/models/index';
+import { RemoteSettingsProvider } from "../providers/remote-settings-provider";
 
 
 
@@ -29,7 +37,7 @@ export class RemoteSettingsService {
      * @param signalR SignalR service
      * @param remoteSettingsProvider Provider for remote settings
      */
-    constructor(private events: Events, private signalR: SignalRService, private remoteSettingsProvider: RemoteSettingsProvider) {
+    constructor(private signalR: SignalRService, private remoteSettingsProvider: RemoteSettingsProvider) {
         this.setupGetRemoteSettingsBlobSubscription();
         this.setupRemoteSettingsUpdatedAcknolwedgeSubscription();
         this.activeGetRequests = new Map<string, any>();
@@ -50,7 +58,7 @@ export class RemoteSettingsService {
                 res => {
                     console.log("active get requests",this.activeGetRequests);
                     if(this.activeGetRequests.has(res.requestId)) {
-                        this.events.publish('receiveRemoteSettings', this.activeGetRequests.get(res.requestId));
+                        // this.events.publish('receiveRemoteSettings', this.activeGetRequests.get(res.requestId));
                     }
                     else {
                         this.activeGetRequests.set(res.requestId, "");
@@ -68,7 +76,7 @@ export class RemoteSettingsService {
             if (this.activeGetRequests.has(data.requestId)) {
                 this.activeGetRequests.delete(data.requestId);
                 this.activeGetRequests.set(data.requestId, data);
-                this.events.publish('receiveRemoteSettings', data);
+                // this.events.publish('receiveRemoteSettings', data);
             }
             else {
                 this.activeGetRequests.set(data.requestId, data);
@@ -91,7 +99,7 @@ export class RemoteSettingsService {
                 res => {
                     console.log("active set requests",this.activeApplyRequests);
                     if (this.activeApplyRequests.has(res.requestId)) {
-                        this.events.publish('receivedRemoteSettingsAcknowledgement', this.activeApplyRequests.get(res.requestId));
+                        // this.events.publish('receivedRemoteSettingsAcknowledgement', this.activeApplyRequests.get(res.requestId));
                     }
                     else {
                         this.activeApplyRequests.set(res.requestId, "");
@@ -110,7 +118,7 @@ export class RemoteSettingsService {
             if (this.activeApplyRequests.has(data.requestId)) {
                 this.activeApplyRequests.delete(data.requestId);
                 this.activeApplyRequests.set(data.requestId, data);
-                this.events.publish('receivedRemoteSettingsAcknowledgement', data);
+                // this.events.publish('receivedRemoteSettingsAcknowledgement', data);
             }
             else {
                 this.activeApplyRequests.set(data.requestId, data);

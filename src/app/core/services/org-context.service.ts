@@ -1,15 +1,18 @@
 import { Injectable } from "@angular/core";
 import { Subject, BehaviorSubject } from "rxjs";
-import { Storage } from '@ionic/storage';
-import { DBKeys } from "../models/dbkeys.static";
-import { Events } from "ionic-angular";
+// import { Storage } from '@ionic/storage';
+// import { DBKeys } from "../models/dbkeys.static";
+// import { Events } from "ionic-angular";
+import { DBKeys } from "../../shared/models/index";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class OrgContextService {
-    private organization$: Subject<number>;
+    private organization$: Subject<number|undefined>;
 
-    constructor(private events: Events) {
-        this.organization$ = new BehaviorSubject<number>(null);
+    constructor() {
+        this.organization$ = new BehaviorSubject<number | undefined>(undefined);
         let orgId = Number(localStorage.getItem(DBKeys.SELECTED_ORG_ID));
 
         if (!orgId) {
@@ -17,16 +20,16 @@ export class OrgContextService {
             this.organization$.next(orgId);
         }
 
-        this.events.subscribe('logout', () => {
-            this.organization$.next(null);
-        })
+        // this.events.subscribe('logout', () => {
+        //     this.organization$.next(null);
+        // })
     }
 
     public get OrganizationId(): number {
         return this.getOrgSelectionFromLocalStorage();
     }
 
-    public get OrganizationChanged(): Subject<number> {
+    public get OrganizationChanged(): Subject<number|undefined> {
         return this.organization$;
     }
 

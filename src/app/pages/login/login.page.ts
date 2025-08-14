@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
         next: (data) => {
             loading.dismiss();
             console.debug('Auth Service Return', data);
-            this.navCtrl.navigateRoot('home-page');
+            this.navCtrl.navigateRoot('home');
         },
         error: (err) => {
             loading.dismiss();

@@ -9,8 +9,8 @@ export class BaseDataProvider<T> {
     protected orgId?: number;
     protected configurations = ConfigurationService;
 
-    public data?: Observable<T>;
-    public _data$?: BehaviorSubject<T>;
+    public data!: Observable<T>;
+    public _data$!: BehaviorSubject<T>;
     protected dataStore?: {
         values: T;
     }

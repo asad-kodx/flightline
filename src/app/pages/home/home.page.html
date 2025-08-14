@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <!-- <ion-buttons slot="start">
+    <ion-buttons slot="start">
       <ion-menu-button>
         <ion-icon name="menu"></ion-icon>
         <span><alarm-count></alarm-count></span>
       </ion-menu-button>
-    </ion-buttons> -->
+    </ion-buttons>
     <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,58 +13,58 @@
 <ion-content [fullscreen]="true" class="ion-padding">
 
   <!-- Alarms Card -->
-  <!-- <ion-card (click)="navToAlarms()">
+  <ion-card type="button" (click)="navToAlarms()">
     <ion-card-header>
       <ion-card-title style="color:gainsboro; font-weight:bold; text-align: center">
         Alarms
       </ion-card-title>
     </ion-card-header>
     <ion-list>
-      <ion-item button>
+      <ion-item button lines="none">
         <ion-row style="text-align:center; width:100%">
           <ion-col>
-            <ion-icon style="color:red !important" name="notifications" slot="start"></ion-icon>
-            <span style="font-size:2.0em">{{ alarmData.getAlarmCounts(null, null).activeCount }}</span>
+            <ion-icon style="color:red !important; margin-right: 10px;" name="notifications" class="ion-margin-end"></ion-icon>
+            <span style="font-size:2.0em">{{ alarmData.getAlarmCounts(undefined, undefined).activeCount }}</span>
             <div style="font-size:.9rem; text-transform: uppercase; display:block">Active</div>
           </ion-col>
           <ion-col>
-            <ion-icon style="color: orange !important" name="notifications" slot="start"></ion-icon>
-            <span style="font-size:2.0em;">{{ alarmData.getAlarmCounts(null, null).acknowledgedCount }}</span>
+            <ion-icon style="color: orange !important; margin-right: 10px;" name="notifications"></ion-icon>
+            <span style="font-size:2.0em;">{{ alarmData.getAlarmCounts(undefined, undefined).acknowledgedCount }}</span>
             <div style="font-size:.9rem; text-transform: uppercase; display:block">Acknowledged</div>
           </ion-col>
         </ion-row>
       </ion-item>
     </ion-list>
-  </ion-card> -->
+  </ion-card>
 
   <!-- Controls Card -->
-  <!-- <ion-card (click)="navToControls()">
+  <ion-card (click)="navToControls()">
     <ion-card-header>
       <ion-card-title style="color:gainsboro; font-weight:bold; text-align: center">
         Controls
       </ion-card-title>
     </ion-card-header>
     <ion-list>
-      <ion-item button>
+      <ion-item button lines="none">
         <ion-row style="text-align:center; width:100%; line-height:2.0em">
           <ion-col>
-            <ion-icon style="color:red !important;" name="notifications" slot="start"></ion-icon>
+            <ion-icon style="color:red !important; margin-right: 10px;" name="notifications"></ion-icon>
             <span style="font-size:2.0em;">{{ getOfflineControlsCount() | async }}</span>
             <div style="font-size:.9rem; text-transform: uppercase; display:block">Offline</div>
           </ion-col>
           <ion-col>
-            <ion-icon style="color: green !important" name="notifications" slot="start"></ion-icon>
+            <ion-icon style="color: green !important; margin-right: 10px;" name="notifications"></ion-icon>
             <span style="font-size:2.0em;">{{ getOnlineControlsCount() | async }}</span>
             <div style="font-size:.9rem; text-transform: uppercase; display:block">Online</div>
           </ion-col>
         </ion-row>
       </ion-item>
     </ion-list>
-  </ion-card> -->
+  </ion-card>
 
   <!-- Version Card -->
   <ion-card>
-    <ion-item>
+    <ion-item lines="none">
       Version: 3.1.31
     </ion-item>
   </ion-card>

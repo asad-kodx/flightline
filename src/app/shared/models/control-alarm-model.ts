@@ -22,7 +22,7 @@ export interface ControlAlarm {
         entityId: string;
         alarmGroupId: number;
     
-    
+        entityType: number;
         canAcknowledge: boolean;
         canResolve: boolean;
     

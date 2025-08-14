@@ -1,0 +1,154 @@
+remote-settings-page {
+  .settings-card-content-min {
+    max-height: 0px;
+    padding-bottom: 5px;
+  }
+  
+  .settings-card-content-max {
+    max-height: 5000px;  
+  }
+  
+  .settings-expand-collapse-animation {
+    -webkit-transition: max-height 200ms, padding 800ms;
+    transition: max-height 200ms, padding 800ms;
+  }
+  
+  .expand-collapse-all-button {  
+    float: right;  
+    font-weight: bold;
+  }
+  
+  .alarm-actions-grid {
+    padding: 0%; 
+    padding-top: 1%; 
+    padding-bottom: 5%;
+  }
+  
+  .scroll-content {
+    bottom: -7%;
+  }
+
+  .alarm-actions-ack-col {
+    padding: 0%; padding-right: 2%;
+  }
+  
+  .alarm-actions-resolve-col {
+    padding: 0%;
+  }
+  
+  .alarm-actions-ack-btn {
+    width: 90%; color: black
+  }
+  
+  .alarm-actions-resolve-btn {
+    width: 98%;
+  }
+  
+  .ion-textbox {
+    background-color: #363232;
+    border-color: #03a9f4;
+    border-style: solid;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .ion-textbox-disabled {
+    opacity: .4;
+  }
+  
+  .ion-textbox-enabled {
+    opacity: 1;
+  }
+  
+  .ion-textbox-item {
+    padding-left: 0px;
+  }
+  .item-md.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner, .item-md.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+    -webkit-box-shadow: inset 0 -1px 0 0 #32db6400;
+    box-shadow: inset 0 -1px 0 0 #32db6400;
+    border-bottom-color: #32db6400;
+  }
+  .item-md.item-input.item-input-has-focus .item-inner, .item-md.item-input.input-has-focus .item-inner {
+    -webkit-box-shadow: inset 0 -1px 0 0 #32db6400;
+    box-shadow: inset 0 -1px 0 0 #32db6400;
+    border-bottom-color: #32db6400;
+  }
+  .input-md[clearInput] .text-input {
+    padding-right: 0px;
+  }
+  
+  .ion-switch-mode-on {
+    font-weight: bold;
+  }
+  
+  .input-ios[clearInput] {
+    padding-left: 30px;
+  }
+  
+  .ion-drop-down {
+    background-color: #363232;
+    border-color: #03a9f4;
+    border-style: solid;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .ion-drop-down-menu .alert-radio-label {
+    color: white;
+  }
+  
+  .footer-toolbar {
+    position: sticky;
+  }
+  
+  .checkbox-md .checkbox-icon {
+    border-color: #03a9f4;
+    font-weight: bold;
+    width: 25px;
+    height: 25px;
+  }
+  
+  .checkbox-md .checkbox-checked .checkbox-inner {
+    border-color: white;
+  }
+  
+  .checkbox-md .checkbox-icon .checkbox-inner {
+    left: 8px;
+    width: 6px;
+    height: 16px;
+  }
+  
+  .switch-item-ios-overrride {
+    padding-left: 0px;
+    max-width: 29%;
+  }
+  
+  .error-grid {
+    position: absolute; 
+    height: 90%;
+  }
+  
+  .error-grid-row {
+    height: 100%;
+  }
+  
+  .item-min-max {
+    padding-left: 2px;
+  }
+  
+  .label-min-max {
+    font-family: "Helvetica Neue", "Roboto", sans-serif;
+    font-size: 1.4rem;
+  }
+  
+  .min-max-bold {
+    font-weight: bolder;
+    color: white;
+  }
+
+  .remote-settings-content{
+    .scroll-content{
+      margin-bottom: 3.9em !important;
+    }
+  }  
+}

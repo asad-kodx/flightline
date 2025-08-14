@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="entityData?.controlName">{{ entityData.controlName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="remote-settings-content">
+  <ion-refresher (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+    <ion-refresher-content pullingText="- Refresh -" refreshingText="Refreshing settings..."></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="remoteSettings">
+
+    <ion-item lines="full" *ngIf="remoteSettings.entityName">
+      <ion-button slot="start" (click)="expandCollapseAllSettings(remoteSettings.settings)" 
+                  [disabled]="isEmptySettingReceived">
+        {{ expandCollapseBtnTxt }}
+      </ion-button>
+      <ion-label>{{ remoteSettings.entityName }} {{ settingsType }}</ion-label>
+    </ion-item>
+
+    <ion-item-group *ngIf="remoteSettings.settings?.entitySettings?.length || 0 > 0;">
+      <ion-card *ngFor="let setting of remoteSettings.settings.entitySettings" (click)="checkIsSettingEnabled(setting)">
+        
+        <ion-card-header *ngIf="setting.header" (click)="toggleExpandCollapseSettings(setting)">
+          <ion-card-title>{{ setting.header }}</ion-card-title>
+          <ion-icon slot="end" [name]="setting.expandCollapseIcon"></ion-icon>
+        </ion-card-header>
+
+        <ion-card-content [ngClass]="setting.cssClass" class="settings-expand-collapse-animation">
+          <ion-row *ngFor="let option of setting.options">
+
+            <ion-col size="11" *ngIf="option.inputType == remoteSettingsInputType.Number; else normalLabel">
+              <ion-label>
+                {{ option.label }} [Min: <span class="min-max-bold">{{ option.minValue }}</span>, 
+                Max: <span class="min-max-bold">{{ option.maxValue }}</span>]
+              </ion-label>
+            </ion-col>
+
+            <ng-template #normalLabel>
+              <ion-col size="11">
+                <ion-label>{{ option.label }}</ion-label>
+              </ion-col>
+            </ng-template>
+
+            <ion-col size="7" *ngIf="option.inputType == remoteSettingsInputType.Number">
+              <ion-item class="ion-textbox-item">
+                <ion-input class="ion-textbox" clear-input inputmode="numeric" type="text"
+                  [disabled]="!(setting.editable && option.enabled)"
+                  [(ngModel)]="option.value"
+                  (ionFocus)="saveOldvalue(option.value)"
+                  (ionBlur)="validateMaxMinRange(setting, option)"
+                  (keyup)="checkIfNumberValid($event, option, setting)"
+                  [style.border-color]="option.borderColor">
+                </ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="11" *ngIf="option.inputType == remoteSettingsInputType.Text">
+              <ion-input class="ion-textbox" [disabled]="!(setting.editable && option.enabled)"
+                [(ngModel)]="option.value" (ionChange)="enableApplyButton()">
+              </ion-input>
+            </ion-col>
+
+            <ion-item *ngIf="option.inputType == remoteSettingsInputType.Switch" class="switch-item-ios-overrride">
+              <ion-toggle color="primary" slot="start"
+                [disabled]="!(setting.editable && option.enabled)"
+                [(ngModel)]="option.value" (ionChange)="enableApplyButton()">
+              </ion-toggle>
+            </ion-item>
+
+            <ion-col size="2" *ngIf="option.inputType == remoteSettingsInputType.Switch">
+              <ion-label color="primary" *ngIf="option.value">On</ion-label>
+              <ion-label color="light" *ngIf="!option.value">Off</ion-label>
+            </ion-col>
+
+            <ion-col size="2" *ngIf="option.inputType == remoteSettingsInputType.Checkbox">
+              <ion-checkbox [disabled]="!(setting.editable && option.enabled)"
+                [(ngModel)]="option.value"></ion-checkbox>
+            </ion-col>
+
+            <ion-col *ngIf="option.inputType == remoteSettingsInputType.Dropbox" size="11">
+              <ion-select interface="popover" placeholder="Please select a value"
+                [disabled]="!(setting.editable && option.enabled)"
+                [(ngModel)]="option.value" (ionChange)="enableApplyButton()">
+                <ion-select-option *ngFor="let selectorValue of option.valueOptions" 
+                  [value]="selectorValue.value">{{ selectorValue.label }}
+                </ion-select-option>
+              </ion-select>
+            </ion-col>
+
+            <ion-col size="4" *ngIf="option.unit">
+              <ion-label>{{ option.unit }}</ion-label>
+            </ion-col>
+
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-item-group>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="!btnApplyDisabled && !isKeyboardOpen" [hidden]="hideApplyResetButtons">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="danger" (click)="resetToOriginal()">Reset</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" color="primary" (click)="applySettings()">Apply</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

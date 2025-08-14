@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
+
+  <ion-item>
+    <ion-label>Current:</ion-label>
+    <ion-text slot="end">{{ orgName }}</ion-text>
+  </ion-item>
+
+  <ion-list>
+ 
+    <!-- All Orgs -->
+    <ion-item (click)="changeOrg(allOrgs, $event)">
+      <ion-icon slot="start" color="primary" [name]="isChecked(allOrgs)"></ion-icon>
+      <ion-label>{{ allOrgs.name }}</ion-label>
+    </ion-item>
+
+    <!-- Organization list -->
+    <ion-item *ngFor="let org of organizations | async"
+              (click)="changeOrg(org, $event)">
+      <ion-icon slot="start" color="primary" [name]="isChecked(org)"></ion-icon>
+      <ion-label>{{ org?.name }}</ion-label>
+      <alarm-count slot="end" [orgId]="org?.organizationId"></alarm-count>
+    </ion-item>
+  </ion-list>
+</ion-content>

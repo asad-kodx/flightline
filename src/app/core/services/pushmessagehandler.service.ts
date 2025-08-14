@@ -1,37 +1,30 @@
 import { Injectable, ViewChild } from "@angular/core";
 import { ConfigurationService } from "./configuration.service";
-import { AlertController, MenuController, App, Alert, NavController, Nav, Events } from "ionic-angular";
+import { AlertController, MenuController } from "@ionic/angular";
 import { HttpService } from "./http-service";
-import { Push } from "@ionic-native/push";
 import { RemoteControlService } from "./remote-control-service";
-import { MessageType } from "../models/types/message-type";
-import { AlarmState } from "../models/types/alarm-state";
-import { AlertState } from "../models/types/alert-state";
 import * as _ from 'lodash'
-import { StatusCode } from "../models/types/status-code";
-import { AlarmDetailsTabs } from "../pages/alarm-details/alarm-details-tabs/alarm-details-tabs.component";
 import { AlarmDataProvider } from "../providers/alarm-data.provider";
-import { ControlAlarm } from "../models/control-alarm-model";
-import { OfflineAlert } from "../models/offline-alert.model";
-import { OfflineAlertDetailsPage } from "../pages/offline-alert-details/offline-alert-details";
-import { Observable, Subscription } from "rxjs";
-import { Control } from "../models/controls-model";
+import { interval, Subscription } from "rxjs";
 
-@Injectable()
+import { MessageType, AlarmState, OfflineAlert, ControlAlarm } from "../../shared/models/index";
+@Injectable({
+  providedIn: 'root'
+})
 export class PushMessageHandler {
 
-  private alert: Alert;
+  private alert: any;
   private config = ConfigurationService;
-  private pushQueueSub: Subscription;
+  private pushQueueSub?: Subscription;
   private alarmPushList: ControlAlarm[];
 
   constructor(private alertCtrl: AlertController, private httpService: HttpService, private menuCtrl: MenuController,
-    private remoteControlService: RemoteControlService, private app: App, private alarmData: AlarmDataProvider, private events: Events) {
+    private remoteControlService: RemoteControlService, private alarmData: AlarmDataProvider) {
       this.alarmPushList = [];
       this.startPushQueue();
   }
 
-  processPushMessage(pushMessage, background = false) {
+  processPushMessage(pushMessage: any, background = false) {
     console.log("Processing push message", pushMessage, background)
     let messageType = _.get(pushMessage.additionalData, ["messageType"]);
     let serialNumber = _.get(pushMessage.additionalData, ["controlSerialNumber"]);
@@ -80,7 +73,7 @@ export class PushMessageHandler {
       this.alert.dismiss();
     }
     this.alert = this.alertCtrl.create({
-      title: "Alarm Alert",
+      header: "Alarm Alert",
       message: "You have a new alarm. Do you want to view it?",
       buttons: [
         {
@@ -106,7 +99,7 @@ export class PushMessageHandler {
       this.alert.dismiss();
     }
     this.alert = this.alertCtrl.create({
-      title: title,
+      header: title,
       message: message,
       buttons: [
         {
@@ -130,8 +123,8 @@ export class PushMessageHandler {
     // const modal = app._appRoot._modalPortal.getActive();
     console.log("Have Alarm, pushing with alarm", alarm)
     this.addToPushQueue(alarm);
-    this.alarmData.getSingleAlarm(this.alarmData).subscribe(alarm => {
-      this.events.publish("AlarmSwitch", alarm)
+    this.alarmData.getSingleAlarm(alarm.controlAlarmId.toString()).subscribe(alarm => {
+      // this.events.publish("AlarmSwitch", alarm)
     })
 
     // if (modal && modal.dismiss()) {
@@ -140,7 +133,7 @@ export class PushMessageHandler {
     this.menuCtrl.close();
   }
 
-  navToControlAlertDetails(offlineAlert) {
+  navToControlAlertDetails(offlineAlert: any) {
     // const modal = app._app._appRoot._modalPortal.getActive();
     offlineAlert.offlineTime = offlineAlert.OfflineTime;
     offlineAlert.onlineTime = offlineAlert.OnlineTime;
@@ -148,7 +141,7 @@ export class PushMessageHandler {
     offlineAlert.state = offlineAlert.State;
     offlineAlert.isActive = offlineAlert.IsActive;
     offlineAlert.siteName = offlineAlert.SiteName;
-    this.events.publish("AlertNav", offlineAlert);
+    // this.events.publish("AlertNav", offlineAlert);
     // if (modal && modal.dismiss()) {
     //   modal.dismiss();
     // }
@@ -160,17 +153,17 @@ export class PushMessageHandler {
   }
 
   startPushQueue(){
-    if(!this.pushQueueSub) this.pushQueueSub = Observable.interval(1000).subscribe(() => {
+    if(!this.pushQueueSub) this.pushQueueSub = interval(1000).subscribe(() => {
       if(this.alarmPushList.length > 0){
         console.log("Navving fromg queue", this.alarmPushList[0])
-        this.events.publish('AlarmNav', this.alarmPushList[0]);
+        // this.events.publish('AlarmNav', this.alarmPushList[0]);
         this.alarmPushList.splice(0,1);
       }
     })
   }
 
   pausePushQueue(){
-    this.pushQueueSub.unsubscribe();
-    this.pushQueueSub = null;
+    this.pushQueueSub?.unsubscribe();
+    this.pushQueueSub = undefined;
   }
 }

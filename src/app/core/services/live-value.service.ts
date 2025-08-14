@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';;
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { SignalRService } from './signalr.service';
-import { timer } from 'rxjs/observable/timer';
 import { ControlDataProvider } from '../providers/control-data.provider';
 
 @Injectable()
@@ -20,7 +19,7 @@ export class LiveValueService {
        
 
         this.signalRService.liveValueMessageReceived$.subscribe(lvData => {
-            lvData.data.forEach(lv => {
+            lvData.data?.forEach(lv => {
                 this.setLiveValues(lv);
             });
         });
@@ -38,19 +37,19 @@ export class LiveValueService {
         return this.liveValues; 
     }
 
-    public setLiveValues(data){
+    public setLiveValues(data: any){
         this.liveValuesMap.set(data.key, data);
         this.$liveValues.next(this.liveValuesMap);
     }
 
-    public setExtendedLiveValues(data){
+    public setExtendedLiveValues(data: any){
         data.dayTemperatureHistory.setTemperature = this.convertTemperature(Number(data.dayTemperatureHistory.setTemperature), data.serialNumber);
         data.dayTemperatureHistory.roomTemperature = this.convertTemperature(Number(data.dayTemperatureHistory.roomTemperature), data.serialNumber);
         this.liveValuesMap.set(data.serialNumber + '.' + data.roomIndex, data);
         this.$liveValues.next(this.liveValuesMap);
     }
 
-    convertTemperature(value, serialNumber){
+    convertTemperature(value: number, serialNumber: string){
         var control = this.controlData.getControl(Number(serialNumber));
         if(!control) return value.toFixed(1) + ' °F';
         if(value == 0) return '--'
@@ -59,9 +58,9 @@ export class LiveValueService {
     }
 
 
-    public getLiveValueItemBinding(hardwareString: string) : Observable<any> {
-        return this.liveValues.switchMap((lvData) => {
-            return lvData[hardwareString];
-        });
+    public getLiveValueItemBinding(hardwareString: string): Observable<any> {
+        return this.liveValues.pipe(
+            switchMap((lvData: any) => lvData[hardwareString])
+        );
     }
 }

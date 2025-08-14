@@ -1,0 +1,40 @@
+<ion-item *ngIf="shouldShow(control)" class="control-item" style="zoom:.85">
+  <ion-icon
+    name="radio-button-on"
+    style="zoom:0.5; line-height:2.5em"
+    [color]="isOnline(control)"
+    slot="start">
+  </ion-icon>
+
+  <ion-grid style="padding: 0px">
+    <ion-row style="height: 100%; padding: 0px;">
+      
+      <ion-col size="1" style="margin-top: 15px; margin-bottom: 15px;" (click)="favoriteClicked()">
+        <ion-icon style="font-size: 1.4em" class="pushDown" [name]="control.isFavorite ? 'star' : 'star-outline'"></ion-icon>
+      </ion-col>
+
+      <ion-col size="6" style="margin-top: 15px; margin-bottom: 15px;" (click)="itemTapped()">
+        <h2>{{ control.name || control.serialNumber }}</h2>
+        <p class="version">{{ control.siteSiteName }} - Version: {{ control.version }}</p>
+      </ion-col>
+
+      <ion-col size="1" style="margin-top: 15px; margin-bottom: 15px;" (click)="itemTapped()"></ion-col>
+
+      <ion-col size="2" style="margin-top: 15px; margin-bottom: 15px;" (click)="itemTapped()">
+        <ion-badge *ngIf="shouldShowBadge(control)" class="pushdown-badge" color="danger">
+          {{ alarmData.getAlarmCounts(control.serialNumber, undefined).activeCount + alarmData.getAlarmCounts(control.serialNumber, undefined).acknowledgedCount }}
+        </ion-badge>
+        <ion-badge *ngIf="shouldShowSilentBadge(control)" class="pushdown-badge control-alarm-silent">
+          {{ alarmData.getAlarmCounts(control.serialNumber, undefined).silentCount }}
+        </ion-badge>
+      </ion-col>
+
+      <ion-col size="2" style="padding: 0px; margin: 0px;">
+        <ion-button expand="block" style="height:100%; margin:0px" (click)="startRemoteAccess(control)">
+          VNC
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-item>
