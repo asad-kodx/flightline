@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'register-user',
     loadChildren: () => import('./pages/register-user/register-user.module').then( m => m.RegisterUserPageModule)
   },
+  {
+    path: 'add-control',
+    loadChildren: () => import('./pages/add-control/add-control.module').then( m => m.AddControlPageModule)
+  },
 ];
 
 @NgModule({
