@@ -112,14 +112,14 @@
       <ion-list-header *ngIf="hasNormal('offline', controls | async)">
         Controls
       </ion-list-header>
-      <!-- <ng-container *ngFor="let control of controls">
+      <ng-container *ngFor="let control of (controls | async)">
         <control
           [control]="control"
           [searchText]="searchText"
           (controlClicked)="navigateToDetails(control)"
           (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
-      </ng-container> -->
+      </ng-container>
     </ion-list>
 
   </ng-container>

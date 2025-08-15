@@ -116,6 +116,6 @@ export class HomePage {
   }
 
   navToControls() {
-    this.navCtrl.navigateRoot('controls-list')
+    this.navCtrl.navigateRoot('control-list')
   }
 }
