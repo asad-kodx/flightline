@@ -44,11 +44,56 @@ export class ControlListPage implements OnInit {
   }
 
 
+  handleRefresh(event: any) {
+      var sub = this.getControlData().subscribe({
+        next: (unused) => {
+          console.log("Control List refresh sub")
+          window.setTimeout(() => event.complete(), 500)
+          // sub.unsubscribe();
+        },
+        error: error => { }
+      });
+  }
+
+
   public toggleFavorite(control: Control) {
     console.log("toggling favorite")
     this.controlData.toggleFavoriteControl(control.serialNumber!, !control.isFavorite).subscribe(() => {
         // window.setTimeout(() => this.controls = this.getControlData(), 10);
         this.controls = this.controlData.updateControls();
     });
+  }
+
+
+  hasFavorites(val: string, controls: Control[] | null){
+      if(!controls) return false;
+      switch(val){
+          case "all":
+              return controls.filter(ctrl => ctrl.isFavorite).length > 0;
+          case "online":
+              return controls.filter(ctrl => ctrl.isFavorite && ctrl.status == 0).length > 0;
+          case "offline":
+              return controls.filter(ctrl => ctrl.isFavorite && ctrl.status != 0).length > 0;
+          default: return false;
+      }
+  }
+
+  hasNormal(val: string, controls: Control[] | null){
+      if(!controls) return false;
+      switch(val){
+          case "all":
+              return controls.filter(ctrl => !ctrl.isFavorite).length > 0;
+          case "online":
+              return controls.filter(ctrl => !ctrl.isFavorite && ctrl.status == 0).length > 0;
+          case "offline":
+              return controls.filter(ctrl => !ctrl.isFavorite && ctrl.status != 0).length > 0;
+          default: return false;
+      }
+  }
+
+
+  isFavorite(control: Control){
+      if(control.isFavorite) return 'star';
+      return 'star-outline';
   }
 }
