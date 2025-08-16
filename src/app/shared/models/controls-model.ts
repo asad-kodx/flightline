@@ -7,6 +7,7 @@ export interface Control {
     bridgeOnline?: boolean;
     controlId?: number;
     created?: Date;
+    isIgnored: boolean;
     devices?: any;
     isFavorite?: boolean;
     lastUpdated?: Date;
@@ -19,6 +20,7 @@ export interface Control {
     rooms?: any;
     sensors?: any;
     serialNumber?: number;
+    siteSiteName: string;
     siteId: number;
     updateStatus?: number;
     version?: string;

@@ -55,6 +55,10 @@ const routes: Routes = [
     path: 'offline-alert-details',
     loadChildren: () => import('./pages/offline-alert-details/offline-alert-details.module').then( m => m.OfflineAlertDetailsPageModule)
   },
+  {
+    path: 'ignored-controls',
+    loadChildren: () => import('./pages/ignored-controls/ignored-controls.module').then( m => m.IgnoredControlsPageModule)
+  },
 ];
 
 @NgModule({
