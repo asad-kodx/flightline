@@ -47,6 +47,10 @@ const routes: Routes = [
     path: 'add-control',
     loadChildren: () => import('./pages/add-control/add-control.module').then( m => m.AddControlPageModule)
   },
+  {
+    path: 'offline-alerts',
+    loadChildren: () => import('./pages/offline-alerts/offline-alerts.module').then( m => m.OfflineAlertsPageModule)
+  },
 ];
 
 @NgModule({
