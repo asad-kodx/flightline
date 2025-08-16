@@ -53,7 +53,7 @@ export class AlertDataProvider {
       });
   }
 
-  clearOfflineAlert(serialNumber: number, userId: string) {
+  clearOfflineAlert(serialNumber: number, userId: string | null) {
     return this.httpService
       .post(
         `${this.config.baseUrl}/api/mobile/alerts/${userId}/offlinealerts/clear/${serialNumber}`,
