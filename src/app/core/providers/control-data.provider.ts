@@ -70,7 +70,7 @@ export class ControlDataProvider extends BaseDataProvider<Control[]> {
     }
 
     public getControlBySerialNo(serialNo: number): Observable<any> {
-        var endpointUrl = String.Format(this.controlsBySnoUrl, serialNo);
+        var endpointUrl = formatString(this.controlsBySnoUrl, serialNo);
         return this.getData<any>(endpointUrl);
     }
 
@@ -99,19 +99,22 @@ export class ControlDataProvider extends BaseDataProvider<Control[]> {
             endpointUrl = this.controlsByUserUrl;
         }
         this.getData<Control[]>(endpointUrl)
-            .subscribe((data) => {
-                data.forEach(c => this.controlsMap.set(c.serialNumber!, c));
-                localStorage.setItem('controls', JSON.stringify(data));
-                this.dataStore!.values = _.sortBy(data, 'name');
-                this._data$.next(Object.assign({}, this.dataStore).values);
-        }, err => {
-            var string = localStorage.getItem('controls');
-            if (string) {
-                var ctrls = <Control[]>JSON.parse(string);
-                this.dataStore!.values = ctrls;
-                this._data$.next(Object.assign({}, this.dataStore).values);
-            }
-        });
+            .subscribe({
+                next: (data) => {
+                    data.forEach(c => this.controlsMap.set(c.serialNumber!, c));
+                    localStorage.setItem('controls', JSON.stringify(data));
+                    this.dataStore!.values = _.sortBy(data, 'name');
+                    this._data$.next(Object.assign({}, this.dataStore).values);
+                }, 
+                error: (err) => {
+                    var string = localStorage.getItem('controls');
+                    if (string) {
+                        var ctrls = <Control[]>JSON.parse(string);
+                        this.dataStore!.values = ctrls;
+                        this._data$.next(Object.assign({}, this.dataStore).values);
+                    }
+                }
+            });
 
         return this.data;
     }
