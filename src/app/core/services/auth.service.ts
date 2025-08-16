@@ -30,7 +30,7 @@ export class AuthService {
     private get loginUrl() { return this._baseUrl + this._loginUrl; }
 
     getAuthToken() {
-        return localStorage.getItem('auth_token');
+        return localStorage.getItem('auth_token') || '';
     }
 
     setAuthToken(authToken: string) {
