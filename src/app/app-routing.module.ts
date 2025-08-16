@@ -59,6 +59,30 @@ const routes: Routes = [
     path: 'ignored-controls',
     loadChildren: () => import('./pages/ignored-controls/ignored-controls.module').then( m => m.IgnoredControlsPageModule)
   },
+  {
+    path: 'alarm-details',
+    loadChildren: () => import('./pages/alarm-details/alarm-details.module').then( m => m.AlarmDetailsPageModule)
+  },
+  {
+    path: 'alarm-details-wrapper',
+    loadChildren: () => import('./pages/alarm-details-wrapper/alarm-details-wrapper.module').then( m => m.AlarmDetailsWrapperPageModule)
+  },
+  {
+    path: 'alarm-actions',
+    loadChildren: () => import('./pages/alarm-details/alarm-actions/alarm-actions.module').then( m => m.AlarmActionsPageModule)
+  },
+  {
+    path: 'alarm-history',
+    loadChildren: () => import('./pages/alarm-details/alarm-history/alarm-history.module').then( m => m.AlarmHistoryPageModule)
+  },
+  {
+    path: 'alarm-group-members',
+    loadChildren: () => import('./pages/alarm-details/alarm-group-members/alarm-group-members.module').then( m => m.AlarmGroupMembersPageModule)
+  },
+  {
+    path: 'alarm-details-tab',
+    loadChildren: () => import('./pages/alarm-details/alarm-details-tab/alarm-details-tab.module').then( m => m.AlarmDetailsTabPageModule)
+  },
 ];
 
 @NgModule({
