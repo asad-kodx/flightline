@@ -41,7 +41,7 @@ export class HomePage {
     private signalr: SignalRService,
   ) {}
 
-   ionViewDidLoad() {
+   ionViewWillEnter() {
       this.alarms = this.alarmData.getAlarms();
       this.controls = this.controlData.getControls();
       if(this.controls) this.sub = this.controls.subscribe(controls => {
