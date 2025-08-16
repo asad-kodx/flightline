@@ -78,7 +78,7 @@ export class OrganizationDataProvider extends BaseDataProvider<Organization[]> {
         return this.postData(endpointUrl, newCustomer);
     }
 
-    addNewControl(serialNumber: any, orgId: any, siteId: any){
+    addNewControl(serialNumber: any, orgId: any, siteId: any): Observable<Organization>{
         const endpointUrl = String.Format(this.newControlUrl, orgId, siteId, serialNumber);
         return this.postData(endpointUrl, null);
     }

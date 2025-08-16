@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Offline Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card *ngIf="offlineAlert">
+    <ion-card-header style="border-top:1px solid gray; border-top-left-radius:5px; border-top-right-radius:5px;">
+      <ion-card-title style="white-space: normal;">
+        {{ offlineAlert.siteName }} - {{ offlineAlert.name || offlineAlert.serialNumber }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content style="text-align:left">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">Offline Time:</ion-col>
+          <ion-col size="6">{{ offlineAlert.offlineTime | date: 'short' }}</ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="offlineAlert.onlineTime">
+          <ion-col size="6">Online Time:</ion-col>
+          <ion-col size="6">{{ offlineAlert.onlineTime | date: 'short' }}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+
+    <ion-card-content *ngIf="offlineAlert.state == 0">
+      <ion-button expand="full" size="large" style="border-radius:5px" (click)="clearOfflineAlert(offlineAlert)">
+        Clear
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!offlineAlert">
+    <ion-card-content style="text-align:left">
+      This control is currently online
+    </ion-card-content>
+  </ion-card>
+</ion-content>

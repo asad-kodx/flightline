@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon name="menu"></ion-icon>
+        <span><alarm-count></alarm-count></span>
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title>Offline Alerts</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Pull-to-refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingText="- Refresh -"
+      refreshingText="Loading Offline Alerts"
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Search bar -->
+  <ion-searchbar
+    [(ngModel)]="searchInput"
+    (ionInput)="onSearchInput($event)"
+    (keyup)="handleKeyUp($event)"
+    (ionClear)="closeKeyboard()"
+  ></ion-searchbar>
+
+  <!-- Ignored Controls Button -->
+  <ion-button expand="full" (click)="openIgnoredControlsModal()">
+    Set Ignored Controls
+  </ion-button>
+
+  <!-- Alerts list -->
+  <ng-container *ngIf="(offlineAlerts | async) as alerts">
+    <ion-list *ngIf="alerts.length === 0; else alertsList">
+      <ion-item>No Offline Alerts...</ion-item>
+    </ion-list>
+
+    <ng-template #alertsList>
+      <ion-list>
+        <ion-card
+          *ngFor="let offlineAlert of alerts"
+          button
+          (click)="itemTapped(offlineAlert)"
+        >
+          <ion-card-header>
+            <ion-card-title>A control has gone OFFLINE.</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Site Name: {{ offlineAlert.siteName }}</p>
+            <p>Control Serial: {{ offlineAlert.serialNumber }}</p>
+            <p>Control Name: {{ offlineAlert.name }}</p>
+            <p>
+              Offline Time:
+              {{ offlineAlert.offlineTime | date: 'short' }}
+            </p>
+            <p *ngIf="offlineAlert.onlineTime">
+              Online Time:
+              {{ offlineAlert.onlineTime | date: 'short' }}
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </ng-template>
+  </ng-container>
+</ion-content>

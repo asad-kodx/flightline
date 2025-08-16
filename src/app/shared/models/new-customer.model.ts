@@ -1,9 +1,9 @@
 import { Site } from "./site.model";
 
-export interface NewCustomer{
-    organizationName: string;
-    organizationPhoneNumber: number;
-    controlSerialNumbers: number[];
-    userIds: string[];
-    sites: Site[];
+export class NewCustomer{
+    organizationName: string = '';
+    organizationPhoneNumber: number = 0;
+    controlSerialNumbers: number[] = [];
+    userIds: string[] = [];
+    sites: Site[] = [];
 }

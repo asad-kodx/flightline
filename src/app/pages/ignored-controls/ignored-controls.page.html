@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ignored Controls</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Search bar -->
+  <ion-searchbar
+    [(ngModel)]="searchText"
+    (keyup)="handleKeyUp($event)"
+    (ionClear)="closeKeyboard()"
+  ></ion-searchbar>
+
+  <!-- List of controls -->
+  <ion-list>
+    <ng-container *ngFor="let control of controls">
+      <ion-item *ngIf="shouldShow(control)">
+        <ion-label>
+          {{ control.siteSiteName }} - {{ control.name || control.serialNumber }}
+        </ion-label>
+        <ion-checkbox slot="end" [(ngModel)]="control.isIgnored"></ion-checkbox>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>
