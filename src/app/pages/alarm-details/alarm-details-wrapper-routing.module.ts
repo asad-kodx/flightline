@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'alarm-group-members',
     loadChildren: () => import('./alarm-group-members/alarm-group-members.module').then( m => m.AlarmGroupMembersPageModule)
+  },
+  {
+    path: 'alarm-history',
+    loadChildren: () => import('./alarm-history/alarm-history.module').then( m => m.AlarmHistoryPageModule)
   }
 ];
 
