@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="popBack()" fill="clear">
+        <ion-icon slot="start" name="arrow-back"></ion-icon>
+        Back
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Alarm History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-card>
+        <ion-card-content style="text-align: left">
+            <ion-list>
+                <ul *ngFor="let transaction of alarm.transactions">
+                    <li *ngIf="transaction.actionType == 0 && !alarm.alarmGroupId" class="state-colored">
+                        Alarm created by Barn Controller at {{ transaction.created | date:'medium' }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 0 && alarm.alarmGroupId" class="state-colored">
+                        Alarm created by Barn Controller at {{ transaction.created | date:'medium'}} and assigned to {{ transaction.assignedToUsername }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 1" class="state-colored">
+                        Acknowledged by {{ transaction.initiatedByUserName }} at {{ transaction.created | date:'medium' }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 2 && !transaction.autoResolved" class="state-colored">
+                        Resolved by {{ transaction.initiatedByUserName }} at {{ transaction.created | date:'medium' }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 2 && transaction.autoResolved" class="state-colored">
+                        Automatically resolved at {{ transaction.created | date:'medium' }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 3" class="state-colored">
+                        Bumped to {{ transaction.assignedToUsername }} at {{ transaction.created | date:'medium' }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 5 && alarm.alarmGroupId" class="state-colored">
+                        Acknowledge expired, alarm bumped to {{ transaction.assignedToUsername }} at {{ transaction.created | date:'medium' }}
+                    </li>
+                    <li *ngIf="transaction.actionType == 5 && (!alarm.alarmGroupId || alarm.alarmGroupId == 0)" class="state-colored">
+                        Acknowledge expired, alarm bumped to everyone at {{ transaction.created | date:'medium' }}
+                    </li>
+                </ul>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

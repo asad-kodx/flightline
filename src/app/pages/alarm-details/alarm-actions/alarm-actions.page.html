@@ -1,0 +1,203 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Alarm Actions</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button *ngIf="alarm?.entityType === 2" (click)="goToRemoteControl()">
+        <ion-icon name="custom-device-switch-off" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goToSettings()">
+        <ion-icon name="information-circle" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+    <ion-refresher-content pullingText="- Refresh -" refreshingText="Loading Alarm"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Actions Card -->
+  <ion-card>
+    <ion-card-header (click)="toggleCard('actions')" class="ion-align-items-center" style="height: 3.2em">
+      Actions
+      <ion-icon *ngIf="!actionsExpanded" name="arrow-forward" style="font-size:1.7em; margin-top:-.1em;"></ion-icon>
+      <ion-icon *ngIf="actionsExpanded" name="arrow-down" style="font-size:1.7em; margin-top:-.1em;"></ion-icon>
+    </ion-card-header>
+
+    <ion-card-content *ngIf="actionsExpanded">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="1" class="ion-text-center" style="padding-top:20px; font-size:1.2em;">
+            <ion-icon [color]="alarmColor()" name="radio-button-on"></ion-icon>
+          </ion-col>
+          <ion-col size="11">
+            <span style="font-weight:bold; font-size:1.1em;">
+              {{ alarm.description }}
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="5">Site:</ion-col>
+          <ion-col size="7">{{ alarm.siteSiteName }}</ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="5">Control:</ion-col>
+          <ion-col size="7">{{ alarm.controlName }}</ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="5">Room:</ion-col>
+          <ion-col size="7">{{ alarm.roomName }}</ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="alarm?.entityName">
+          <ion-col size="5">Component:</ion-col>
+          <ion-col size="7">{{ alarm.entityName }}</ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="5">Received:</ion-col>
+          <ion-col size="7">{{ alarm.created | date: 'medium' }}</ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="alarm?.entityHardwareId">
+          <ion-col size="5">Live:</ion-col>
+          <ion-col size="7">
+            {{ ((liveValuesMap | async)?.get(alarm.entityHardwareId)?.value 
+              | LiveValueDisplay: [
+                  roomData.isSensorOrDevice(alarm.entityHardwareId),
+                  roomData.getEntity(alarm.entityHardwareId)?.sensorType || roomData.getEntity(alarm.entityHardwareId)?.deviceType,
+                  controlData.getControl(alarm.controlSerialNumber),
+                  (liveValuesMap | async)?.get(alarm.entityHardwareId)?.label
+              ]) || '- -' }}
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm.entityHardwareId)!.deviceType < 268435456">
+          <ion-col size="5">Amps:</ion-col>
+          <ion-col size="7">
+            {{ ((liveValuesMap | async)?.get(alarm.entityHardwareId)?.amps | number: '1.0-3') || '- -' }}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div *ngIf="alarm?.state === 2 && actionsExpanded">
+        <br /><br />
+        <h1 class="ion-text-center">Alarm is Resolved</h1>
+      </div>
+    </ion-card-content>
+
+    <!-- Buttons -->
+    <ion-grid *ngIf="alarm?.state !== 2 && !alarm?.silent && actionsExpanded">
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="block" size="large" color="primary" (click)="bumpAlarm()" [disabled]="!canBump()">
+            Bump
+          </ion-button>
+          <div *ngIf="isAtBumpLimit() && alarm?.alarmGroupId && alarm?.state === 0" style="font-size:.7em;">48 hour bump limit reached</div>
+          <div *ngIf="!isAtBumpLimit() && alarm?.alarmGroupId && alarm?.state === 0" style="font-size:.7em;">
+            Next bump at {{ getNextBumpTime() | date: 'medium' }}
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="alarm?.state !== 2 && !alarm?.silent && actionsExpanded">
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="block" size="large" color="primary" (click)="acknowledgeAlarm()" [disabled]="!canAcknowledge()">
+            Acknowledge
+          </ion-button>
+          <div style="font-size:.7em;" *ngIf="alarm?.state === 1">
+            Ack expire at {{ getAckExpireTime() | date: 'medium' }}
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="alarm?.state !== 2 && actionsExpanded">
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="block" size="large" color="primary" (click)="resolveAlarm()" [disabled]="!canResolve()">
+            Resolve
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- Members -->
+  <ion-card>
+    <ion-card-header (click)="toggleCard('members')" style="height:3.2em;">
+      Members
+      <ion-icon *ngIf="!membersExpanded" name="arrow-forward"></ion-icon>
+      <ion-icon *ngIf="membersExpanded" name="arrow-down"></ion-icon>
+    </ion-card-header>
+    <ion-card-content *ngIf="membersExpanded">
+      <ion-list lines="none">
+        <ion-list-header>Users</ion-list-header>
+        <ion-row *ngFor="let user of alarm.alarmGroup?.members">
+          <ion-col size="1">
+            <ion-icon name="person" *ngIf="alarm.assignedToId === user.userId"></ion-icon>
+            <ion-icon name="radio-button-on" *ngIf="alarm.assignedToId !== user.userId"></ion-icon>
+          </ion-col>
+          <ion-col size="11">
+            <b *ngIf="alarm.assignedToId === user.userId">{{ user.userUsername }}</b>
+            <span *ngIf="alarm.assignedToId !== user.userId">{{ user.userUsername }}</span>
+          </ion-col>
+          <ion-col>
+            <ion-icon name="alarm" *ngIf="user.isSnoozed"></ion-icon>
+            <ion-icon color="success" name="cloud-done" *ngIf="user.isOnline"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Assignments -->
+  <ion-card>
+    <ion-card-header (click)="toggleCard('assignments')" style="height:3.2em;">
+      Assignments
+      <ion-icon *ngIf="!assignmentsExpanded" name="arrow-forward"></ion-icon>
+      <ion-icon *ngIf="assignmentsExpanded" name="arrow-down"></ion-icon>
+    </ion-card-header>
+    <ion-card-content *ngIf="assignmentsExpanded" class="ion-text-left">
+      <ion-list>
+        <ul *ngFor="let transaction of alarm.transactions">
+          <li *ngIf="transaction.actionType === 0 && !alarm.alarmGroupId">
+            Alarm created by Barn Controller at {{ transaction.created | date:'medium' }}
+          </li>
+          <li *ngIf="transaction.actionType === 0 && alarm.alarmGroupId">
+            Alarm created at {{ transaction.created | date:'medium' }} and assigned to {{ transaction.assignedToUsername }}
+          </li>
+          <li *ngIf="transaction.actionType === 1">
+            Acknowledged by {{ transaction.initiatedByUserName }} at {{ transaction.created | date:'medium' }}
+          </li>
+          <li *ngIf="transaction.actionType === 2 && !transaction.autoResolved">
+            Resolved by {{ transaction.initiatedByUserName }} at {{ transaction.created | date:'medium' }}
+          </li>
+          <li *ngIf="transaction.actionType === 2 && transaction.autoResolved">
+            Automatically resolved at {{ transaction.created | date:'medium' }}
+          </li>
+          <li *ngIf="transaction.actionType === 3">
+            Bumped to {{ transaction.assignedToUsername }} at {{ transaction.created | date:'medium' }}
+          </li>
+          <li *ngIf="transaction.actionType === 5 && alarm.alarmGroupId">
+            Acknowledge expired, bumped to {{ transaction.assignedToUsername }} at {{ transaction.created | date:'medium' }}
+          </li>
+          <li *ngIf="transaction.actionType === 5 && (!alarm.alarmGroupId || alarm.alarmGroupId === 0)">
+            Acknowledge expired, bumped to everyone at {{ transaction.created | date:'medium' }}
+          </li>
+        </ul>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

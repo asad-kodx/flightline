@@ -8,6 +8,7 @@ import { Control } from 'src/app/shared/models';
   selector: 'app-ignored-controls',
   templateUrl: './ignored-controls.page.html',
   styleUrls: ['./ignored-controls.page.scss'],
+  standalone: false
 })
 export class IgnoredControlsPage implements OnInit {
   public controls!: Control[];

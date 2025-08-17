@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="popBack()" fill="clear">
+        <ion-icon name="arrow-back"></ion-icon>
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Users</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-card>
+        <ion-card-content>
+            <ion-list no-lines>
+                <ion-list-header>
+                    Users
+                </ion-list-header>
+                <ion-row *ngFor="let user of alarm.alarmGroup?.members">
+                    <ion-col col-1>
+                        <ion-icon name="person" *ngIf="alarm.assignedToId == user.userId"></ion-icon>
+                        <ion-icon name="radio-button-on" *ngIf="alarm.assignedToId != user.userId"></ion-icon>
+                    </ion-col>
+                    <ion-col col-11>
+                        <div *ngIf="alarm.assignedToId == user.userId">
+                            <b>{{ user.userUsername }}</b>
+                        </div>
+                        <div *ngIf="alarm.assignedToId != user.userId">
+                            {{ user.userUsername }}
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <ion-icon name="alarm" *ngIf="user.isSnoozed"></ion-icon>
+                        <ion-icon color="online" name="cloud-done" *ngIf="user.isOnline"></ion-icon>
+                    </ion-col>
+                </ion-row>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
