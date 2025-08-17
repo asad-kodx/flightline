@@ -1,0 +1,21 @@
+<ion-tabs [ngClass]="pushUp()">
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="alarm-actions" (click)="onTab('Alarm Actions')">
+      <ion-icon name="thermometer"></ion-icon>
+      <ion-label>Actions</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button
+      tab="alarm-assignments"
+      (click)="onTab('Alarm Assignments')"
+    >
+      <ion-icon name="thermometer"></ion-icon>
+      <ion-label>Assignments</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="users" (click)="onTab('Users')">
+      <ion-icon name="thermometer"></ion-icon>
+      <ion-label>Users</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

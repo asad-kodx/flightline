@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: AlarmDetailsWrapperPage
+  },
+  {
+    path: 'alarm-details-tab',
+    loadChildren: () => import('./alarm-details-tab/alarm-details-tab.module').then( m => m.AlarmDetailsTabPageModule)
   }
 ];
 
