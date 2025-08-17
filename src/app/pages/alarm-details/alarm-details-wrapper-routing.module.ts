@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'alarm-details-tab',
     loadChildren: () => import('./alarm-details-tab/alarm-details-tab.module').then( m => m.AlarmDetailsTabPageModule)
+  },
+  {
+    path: 'alarm-actions',
+    loadChildren: () => import('./alarm-actions/alarm-actions.module').then( m => m.AlarmActionsPageModule)
   }
 ];
 
