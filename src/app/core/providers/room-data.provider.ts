@@ -45,7 +45,7 @@ export class RoomDataProvider extends BaseDataProvider<Room[]> {
 
     }
 
-    getEntity(hardwareId: string){
+    getEntity(hardwareId: string) {
         if(!this.entityMap.get(hardwareId) && !this.checkingMap.get(hardwareId.split('.')[0])){
             this.checkingMap.set(hardwareId.split('.')[0], true)
             this.getSensorsForControl(hardwareId.split('.')[0])?.subscribe();

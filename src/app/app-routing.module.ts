@@ -109,6 +109,10 @@ const routes: Routes = [
         './pages/alarm-details/alarm-details-tab/alarm-details-tab.module'
       ).then((m) => m.AlarmDetailsTabPageModule),
   },
+  {
+    path: 'remote-control-component',
+    loadChildren: () => import('./pages/remote-control-component/remote-control-component.module').then( m => m.RemoteControlComponentPageModule)
+  },
 ];
 
 @NgModule({
