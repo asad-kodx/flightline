@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'entity-alarms',
     loadChildren: () => import('./entity-alarms/entity-alarms.module').then( m => m.EntityAlarmsPageModule)
+  },
+  {
+    path: 'tab-sensor-list',
+    loadChildren: () => import('./sensor-list/tab-sensor-list.module').then( m => m.TabSensorListPageModule)
   }
 ];
 

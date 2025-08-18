@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ control?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="handleRefresh($event)" [pullMax]=pullMax [pullMin]=pullMin [snapbackDuration]=500>
+    <ion-refresher-content pullingText="- Refresh -" refreshingText="Loading Sensors">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-searchbar [(ngModel)]="searchText" [formControl]="searchControl"></ion-searchbar>
+  <ion-item-group *ngFor="let room of rooms">
+    <ion-item-divider style="background: linear-gradient(to bottom, #515151 51%,#383838 51%)">
+      <ion-label style="margin-top: .4em; margin-bottom: .6em;">
+        <span>
+          <img *ngIf="room.type == 1" style="height: 1em;" src="../../assets/room/room_white.svg">
+          <img *ngIf="room.type == 2" style="height: 1em;" src="../../assets/room/plant_white.svg">
+          &nbsp;
+        </span>
+        {{room.name}}
+        <ion-icon *ngIf="room.collapsed" name="arrow-forward" style="float: right; margin-left: 20px; margin-right: 5px; width: 15.5px"
+          (click)="expandRoom(room)"></ion-icon>
+        <ion-icon *ngIf="!room.collapsed" name="arrow-down" style="float: right; margin-left: 20px; margin-right: 5px; width: 15.5px"
+          (click)="expandRoom(room)"></ion-icon>
+        <ion-icon *ngIf="room.type == 1" name="settings" style="float: right" (click)="navToRoomSettings(control.serialNumber,room)"></ion-icon>
+        <br />
+        <div style="zoom: .7; margin-top: 1em; font-size: 1.1em;"><span *ngIf="room.type == 1">Setpoint: </span><span *ngIf="room.type == 1" style='color: orange'>{{((liveValuesMap | async )?.get(control.serialNumber+'.'+room.programId)?.dayTemperatureHistory.setTemperature) || '- -'}} </span>
+          <span *ngIf="room.type == 1">Room Temp: </span><span *ngIf="room.type == 1" style='color: orange'>{{ ((liveValuesMap | async )?.get(control.serialNumber+'.'+room.programId)?.dayTemperatureHistory.roomTemperature) || '- -' }}</span>
+          <span *ngIf="room.type == 1">Animal Day: </span><span *ngIf="room.type == 1"
+            style='color: orange'>{{ ((liveValuesMap | async )?.get(control.serialNumber+'.'+room.programId)?.animalDay) || '- -' }}</span>
+            <span>&nbsp;</span>
+      </div>
+
+      </ion-label>
+    
+    </ion-item-divider>
+    <div *ngFor="let sensor of room?.sensors">
+      <button ion-item style="zoom:.85" (click)="navToGraph(sensor)" *ngIf="shouldShow(sensor) && !room.collapsed">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-1>
+              <ion-icon [name]="sensor.sensorType | SensorDisplayIcon: [sensor.sensorType]"></ion-icon>
+            </ion-col>
+            <ion-col col-6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <span style="font-weight:bold"></span>
+              {{sensor?.sensorName}}
+            </ion-col>
+            <ion-col col-2>
+              <ion-badge *ngIf="shouldShowBadge(sensor)" color="danger">
+                {{ alarmData.getAlarmCounts(null, sensor.sensorSerialNumber).activeCount + alarmData.getAlarmCounts(null, sensor.sensorSerialNumber).acknowledgedCount }}
+              </ion-badge>
+              <ion-badge style="color: white;" *ngIf="shouldShowSilentBadge(sensor)" color="alarm3">
+                {{ alarmData.getAlarmCounts(null, sensor.sensorSerialNumber).silentCount }}
+              </ion-badge>
+            </ion-col>
+            <ion-col col-3 style="text-align: right" [ngStyle]="{'color': getLVColor((liveValuesMap | async)?.get(sensor.sensorSerialNumber)?.value)}">
+              {{ ((liveValuesMap | async )?.get(sensor.sensorSerialNumber)?.value | LiveValueDisplay: ['sensor',
+              sensor.sensorType, control, (liveValuesMap | async )?.get(sensor.sensorSerialNumber)?.label]) || '- -' }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </button>
+    </div>
+  </ion-item-group>
+</ion-content>
