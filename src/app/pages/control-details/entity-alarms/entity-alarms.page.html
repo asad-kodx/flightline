@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ entity?.deviceName || entity?.sensorName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" 
+    [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+    <ion-refresher-content
+      pullingText="- Refresh -"
+      refreshingSpinner="circles"
+      refreshingText="Loading Alarms">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
+
+  <!-- No alarms -->
+  <ion-list *ngIf="!activeAlarmsPresent">
+    <ion-list-header>
+      No Control Alarms...
+    </ion-list-header>
+  </ion-list>
+
+  <!-- Active alarms -->
+  <ion-list *ngIf="activeAlarmsPresent">
+    <ion-list-header>
+      Active Alarms
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let alarm of alarms | AlarmStateActive:(alarm | async) | async" 
+      button
+      (click)="navigateToDetails(alarm)">
+      
+      <ion-icon 
+        name="radio-button-on" 
+        [color]="alarmStateColor(alarm)" 
+        slot="start"
+        style="zoom:0.5; line-height:2.5em">
+      </ion-icon>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" style="white-space: initial">
+            <span *ngIf="alarm.entityType === 3">{{ alarm.roomName }}: {{ alarm.description }}</span>
+            <span *ngIf="alarm.entityType === 1 || alarm.entityType === 2">{{ alarm.entityName }}: {{ alarm.description }}</span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" style="white-space: initial">
+            {{ alarm.created | date: 'medium' }}
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="alarm.entityHardwareId">
+          <ion-col size="6">
+            Current: {{
+              (
+                (liveValuesMap | async)?.get(alarm.entityHardwareId)?.value
+                  | LiveValueDisplay: [
+                    roomData.isSensorOrDevice(alarm.entityHardwareId),
+                    roomData.getEntity(alarm.entityHardwareId)?.sensorType || roomData.getEntity(alarm.entityHardwareId)?.deviceType,
+                    controlData.getControl(alarm.controlSerialNumber),
+                    (liveValuesMap | async)?.get(alarm?.entityHardwareId)?.label
+                  ]
+              )
+            }}
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="1">
+            <ion-icon name="desktop" style="zoom:0.8;"></ion-icon>
+          </ion-col>
+          <ion-col size="5" style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+            {{ alarm.siteSiteName }}
+            <br />
+            {{ controlData.getControl(alarm.controlSerialNumber)?.name || controlData.getControl(alarm.controlSerialNumber)?.serialNumber }}
+          </ion-col>
+
+          <ion-col size="1">
+            <ion-icon name="contact" style="zoom:0.8;"></ion-icon>
+          </ion-col>
+          <ion-col size="5" style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+            <span>Assigned To:</span>
+            <br />{{ alarm.transactions[0]?.assignedToUsername || 'System Controller' }}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>

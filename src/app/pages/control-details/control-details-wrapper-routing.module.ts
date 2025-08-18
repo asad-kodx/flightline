@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'tabs-device-list',
     loadChildren: () => import('./device-list/tabs-device-list.module').then( m => m.TabsDeviceListPageModule)
+  },
+  {
+    path: 'entity-alarms',
+    loadChildren: () => import('./entity-alarms/entity-alarms.module').then( m => m.EntityAlarmsPageModule)
   }
 ];
 
