@@ -7,6 +7,14 @@ const routes: Routes = [
   {
     path: '',
     component: ControlDetailsWrapperPage
+  },
+  {
+    path: 'control-detail-tabs',
+    loadChildren: () => import('./control-detail-tabs/control-detail-tabs.module').then( m => m.ControlDetailTabsPageModule)
+  },
+  {
+    path: 'tabs-device-list',
+    loadChildren: () => import('./device-list/tabs-device-list.module').then( m => m.TabsDeviceListPageModule)
   }
 ];
 

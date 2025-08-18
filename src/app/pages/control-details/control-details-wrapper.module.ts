@@ -13,7 +13,8 @@ import { ControlDetailsWrapperPage } from './control-details-wrapper.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ControlDetailsWrapperPageRoutingModule
+    ControlDetailsWrapperPageRoutingModule,
+    ControlDetailsWrapperPage
   ],
   declarations: [ControlDetailsWrapperPage]
 })

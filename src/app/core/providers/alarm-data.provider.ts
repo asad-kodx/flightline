@@ -267,7 +267,7 @@ export class AlarmDataProvider extends BaseDataProvider<ControlAlarm[]> {
         return count;
     }
 
-    getAlarmCounts(serialNumber?: number, hardwareId?: string, programId?: string, siteId?: number) {
+    getAlarmCounts(serialNumber?: number | null, hardwareId?: string, programId?: string | null, siteId?: number) {
         var alarmCount = new AlarmCount;
         var alarms = this.dataStore!.values;
         if (serialNumber) alarms = alarms.filter(a => {
