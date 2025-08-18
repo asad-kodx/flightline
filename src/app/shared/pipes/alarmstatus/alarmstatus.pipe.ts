@@ -8,7 +8,7 @@ import { AlarmState, ControlAlarm } from '../../models';
 })
 export class AlarmStateActivePipe implements PipeTransform {
 
-  transform(value: ControlAlarm[] | null | undefined) {
+  transform(value: ControlAlarm[] | null, args: any) {
     if (value) {
         return value.filter(a =>
             a.state === AlarmState.Active ||
@@ -21,9 +21,9 @@ export class AlarmStateActivePipe implements PipeTransform {
 
 @Pipe({ name: 'AlarmStateOther', standalone: false })
 export class AlarmStateOtherPipe implements PipeTransform {
-    transform(value: BehaviorSubject<ControlAlarm[]>, args: any) {
-        if (value !== undefined && value.value) {
-            return value.value.filter((a: ControlAlarm) => {
+    transform(value: ControlAlarm[] | null, args: any) {
+        if (value !== null) {
+            return value.filter((a: ControlAlarm) => {
               return a.state === AlarmState.Resolved;
             });
         }

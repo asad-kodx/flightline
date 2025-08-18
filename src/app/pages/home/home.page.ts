@@ -112,7 +112,7 @@ export class HomePage {
   }
 
   navToAlarms() {
-    this.navCtrl.navigateRoot('alarm-list')
+    this.navCtrl.navigateForward('alarm-list')
   }
 
   navToControls() {

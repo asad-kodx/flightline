@@ -35,7 +35,7 @@
       Active Alarms
     </ion-list-header>
 
-    <ng-container *ngFor="let alarm of (alarms | async) | AlarmStateActive">
+    <ng-container *ngFor="let alarm of (alarms | async) | AlarmStateActive: (alarms | async)">
       <ion-item *ngIf="shouldShow(alarm)" style="zoom:.85" (click)="navigateToDetails(alarm)" button>
         <ion-icon slot="start" name="radio-button-on" style="zoom: 0.5; line-height:2.5em" [color]="alarmStateColor(alarm)"></ion-icon>
 
