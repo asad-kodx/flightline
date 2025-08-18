@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ entity?.controlName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-card>
+        <ion-card-content>
+            <ion-row>
+                <ion-col width-33>
+                    Name:
+                </ion-col>
+                <ion-col width-66>
+                    {{ entity.sensorName }}
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col width-33>
+                    Type:
+                </ion-col>
+                <ion-col width-66>
+                    {{ entity.sensorType | EntityType: ['sensor', entity.sensorType]}}
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col width-35>
+                  Site:
+                </ion-col>
+                <ion-col width-65>
+                  {{ control.siteSiteName }}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col width-35>
+                  Room:
+                </ion-col>
+                <ion-col width-65>
+                  {{ entity.roomName }}
+                </ion-col>
+              </ion-row>
+            <ion-row>
+                <ion-col width-33>
+                    <b>Live:</b>
+                </ion-col>
+                <ion-col width-66>
+                    <b>{{ (liveValuesMap | async)?.get(entity.sensorSerialNumber)?.value | LiveValueDisplay: ['sensor', entity.sensorType, control, (liveValuesMap | async)?.get(entity.sensorSerialNumber)?.label] || '- -' }}</b>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+    <ngx-charts-line-chart *ngIf="graphData[0].series.length > 0" [view]="view" [scheme]="colorScheme" [results]="graphData" [gradient]="gradient" [xAxis]="showXAxis"
+        [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel" [xAxisTickFormatting]="xAxisTickFormatting" [xAxisTicks]="xAxisTicks" [autoScale]="autoScale" [yScaleMin]="yScaleMin" [yScaleMax]="yScaleMax">
+    </ngx-charts-line-chart>
+    <h1 *ngIf="typeData && graphData[0].series.length == 0">Attempting to retrieve graph data</h1>
+    <h1 *ngIf=!typeData>Graphs for this sensor type are not currently supported</h1>
+</ion-content>

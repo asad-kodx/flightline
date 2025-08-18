@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'entity-alarms',
     loadChildren: () => import('./entity-alarms/entity-alarms.module').then( m => m.EntityAlarmsPageModule)
+  },
+  {
+    path: 'entity-graphs',
+    loadChildren: () => import('./entity-graphs/entity-graphs.module').then( m => m.EntityGraphsPageModule)
   }
 ];
 
