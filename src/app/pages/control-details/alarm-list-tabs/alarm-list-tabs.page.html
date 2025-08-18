@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ control.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-refresher (ionRefresh)="handleRefresh($event)" [pullMax]=pullMax [pullMin]=pullMin [snapbackDuration]=500>
+        <ion-refresher-content pullingText="- Refresh -" refreshingText="Loading Alarms">
+        </ion-refresher-content>
+    </ion-refresher>
+    <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
+
+    <div *ngIf="!activeAlarmsPresent">
+        <ion-list-header>
+            No Control Alarms...
+        </ion-list-header>
+    </div>
+    <div *ngIf="activeAlarmsPresent">
+        <ion-list-header>
+            Active Alarms
+        </ion-list-header>
+        <div *ngFor="let alarm of alarms | AlarmStateActive: (alarm | async ) | async">
+            <button *ngIf="shouldShow(alarm)" ion-item style="zoom:.85" (click)="navigateToDetails(alarm)">
+                <ion-icon name="radio-button-on" style="zoom: 0.5; line-height:2.5em" [color]="alarmStateColor(alarm)"
+                    item-start></ion-icon>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-12 style="white-space: initial">
+                            <!-- if its a room alarm append room name -->
+                            <span *ngIf="alarm.entityType == 3">{{alarm.roomName}}: {{alarm.description}}</span>
+                            <span *ngIf="alarm.entityType == 1 || alarm.entityType == 2">{{alarm.entityName}}: {{alarm.description}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-12 style="white-space: initial">
+                            {{ alarm.created | date: 'medium'}}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="alarm.entityHardwareId">
+                        <ion-col col-6>
+                                Current: {{ ((liveValuesMap | async )?.get(alarm.entityHardwareId)?.value | LiveValueDisplay: [roomData.isSensorOrDevice(alarm.entityHardwareId),
+                                roomData.getEntity(alarm.entityHardwareId)?.sensorType || roomData.getEntity(alarm.entityHardwareId)?.deviceType, controlData.getControl(alarm.controlSerialNumber),
+                                (liveValuesMap | async )?.get(alarm?.entityHardwareId)?.label]) }}
+                        </ion-col>                   
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-1>
+                            <ion-icon name="desktop" style="zoom:0.8;"></ion-icon>
+                        </ion-col>
+                        <ion-col col-5 style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+                            {{ alarm.siteSiteName}}
+                            <br />{{ controlData.getControl(alarm.controlSerialNumber)?.name || controlData.getControl(alarm.controlSerialNumber)?.serialNumber}}
+    
+                        </ion-col>
+                        <ion-col col-1>
+                            <ion-icon name="contact" style="zoom:0.8; "></ion-icon>
+                        </ion-col>
+                        <ion-col col-5 style="zoom:0.8; line-height:1.6;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+                            <span>Assigned To:</span>
+                            <br />{{ alarm.transactions[0]?.assignedToUsername || 'System Controller' }}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </button>
+        </div>
+
+    </div>
+</ion-content>
