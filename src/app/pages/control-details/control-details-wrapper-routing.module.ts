@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('./entity-alarms/entity-alarms.module').then( m => m.EntityAlarmsPageModule)
   },
   {
+    path: 'entity-graphs',
+    loadChildren: () => import('./entity-graphs/entity-graphs.module').then( m => m.EntityGraphsPageModule)
+  },
+  {
     path: 'tab-sensor-list',
     loadChildren: () => import('./sensor-list/tab-sensor-list.module').then( m => m.TabSensorListPageModule)
   }

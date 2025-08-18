@@ -16,14 +16,13 @@
 
   <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
 
-  <!-- No alarms -->
+
   <ion-list *ngIf="!activeAlarmsPresent">
     <ion-list-header>
       No Control Alarms...
     </ion-list-header>
   </ion-list>
 
-  <!-- Active alarms -->
   <ion-list *ngIf="activeAlarmsPresent">
     <ion-list-header>
       Active Alarms
