@@ -9,6 +9,7 @@ import { ControlAlarm } from 'src/app/shared/models';
   selector: 'app-alarm-history',
   templateUrl: './alarm-history.page.html',
   styleUrls: ['./alarm-history.page.scss'],
+  standalone: false
 })
 export class AlarmHistoryPage implements OnInit, OnDestroy {
   public alarm: ControlAlarm;

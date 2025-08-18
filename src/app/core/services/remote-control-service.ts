@@ -106,6 +106,7 @@ export class RemoteControlService {
     }
 
     getDeviceType(deviceType: DeviceType, version?: string, featureFlag: FusionFeatureFlag | null = null) {
+        if(deviceType == null) return null;
         if (featureFlag == null) return null;
         switch (deviceType) {
             case DeviceType.DualRelayCardBooleanFanDevice:
