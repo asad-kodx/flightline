@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CalibrationStatus } from '../../models/types/calibration-status';
 
 @Pipe({
-  name: 'calibrationStatus',
+  name: 'CalibrationStatus',
   standalone: false,
 })
 export class CalibrationStatusPipe implements PipeTransform {
