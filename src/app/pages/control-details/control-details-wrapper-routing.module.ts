@@ -27,6 +27,10 @@ const routes: Routes = [
   {
     path: 'tab-sensor-list',
     loadChildren: () => import('./sensor-list/tab-sensor-list.module').then( m => m.TabSensorListPageModule)
+  },
+  {
+    path: 'alarm-list-tabs',
+    loadChildren: () => import('./alarm-list-tabs/alarm-list-tabs.module').then( m => m.AlarmListTabsPageModule)
   }
 ];
 

@@ -113,6 +113,10 @@ const routes: Routes = [
     path: 'remote-control-component',
     loadChildren: () => import('./pages/remote-control-component/remote-control-component.module').then( m => m.RemoteControlComponentPageModule)
   },
+  {
+    path: 'alarm-item',
+    loadChildren: () => import('./pages/alarm-list/alarm-item/alarm-item.module').then( m => m.AlarmItemPageModule)
+  },
 ];
 
 @NgModule({

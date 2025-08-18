@@ -1,16 +1,61 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-menu-button>
+        <ion-icon name="menu"></ion-icon>
+        <span><alarm-count></alarm-count></span>
+      </ion-menu-button>
     </ion-buttons>
-    <ion-title>alarm-list</ion-title>
+    <ion-title>Alarms List</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">alarm-list</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+    <ion-refresher-content pullingText="- Refresh -" refreshingText="Loading Alarms"></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-searchbar [(ngModel)]="searchText" [formControl]="searchControl"></ion-searchbar>
+
+  <ion-segment [(ngModel)]="segmentSelected">
+    <ion-segment-button value="mine">Mine</ion-segment-button>
+    <ion-segment-button value="active">Active</ion-segment-button>
+    <ion-segment-button value="resolved">Resolved</ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="segmentSelected">
+    <ion-list *ngSwitchCase="'mine'">
+      <ion-list-header>
+        {{ activeAlarmsPresent ? 'My Alarms' : 'No Alarms to display...' }}
+      </ion-list-header>
+      <app-alarm-item *ngIf="activeAlarmsPresent"
+        [searchText]="searchText"
+        [alarms]="alarms"
+        [mine]="true">
+      </app-alarm-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'active'">
+      <ion-list-header>
+        {{ activeAlarmsPresent ? 'Active Alarms' : 'No Alarms to display...' }}
+      </ion-list-header>
+      <app-alarm-item *ngIf="activeAlarmsPresent"
+        [searchText]="searchText"
+        [alarms]="alarms"
+        [mine]="false">
+      </app-alarm-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'resolved'">
+      <ion-list-header>
+        {{ resolvedAlarmsPresent ? 'Resolved Alarms' : 'No Alarms to display...' }}
+      </ion-list-header>
+      <app-alarm-item *ngIf="resolvedAlarmsPresent"
+        [searchText]="searchText"
+        [alarms]="alarms"
+        [resolved]="true"
+        [mine]="false">
+      </app-alarm-item>
+    </ion-list>
+  </div>
 </ion-content>

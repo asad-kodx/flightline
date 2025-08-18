@@ -15,36 +15,36 @@ import { LiveValuesSubscription } from 'src/app/core/providers/livevalues-subscr
   standalone: false,
 })
 export class AlarmListPage {
-    public myAlarmsPresent: boolean = true;
+  public myAlarmsPresent: boolean = true;
   public activeAlarmsPresent: boolean = true;
   public resolvedAlarmsPresent: boolean = true;
   private sub!: Subscription;
 
-  public alarms?: Observable<ControlAlarm[]>;
+  public alarms!: Observable<ControlAlarm[]>;
   public segmentSelected: any = 'mine';
-  public searchText?: string = undefined;
+  public searchText!: string;
   public searchControl: FormControl = new FormControl();
-  public pullMax = window.innerHeight * .7
-    public pullMin = window.innerHeight * .12
+  public pullMax = window.innerHeight * 0.7;
+  public pullMin = window.innerHeight * 0.12;
 
   constructor(
     private navCtrl: NavController,
     private alarmData: AlarmDataProvider,
     public roomData: RoomDataProvider,
     private liveValues: LiveValuesSubscription
-  ) { }
-
+  ) {}
 
   ionViewDidLoad() {
     this.alarms = this.alarmData.getAlarmsBinding();
-    this.sub = this.alarms?.subscribe(alarms => {
-      this.myAlarmsPresent = alarms.filter(a => a.state <= 1).length > 0;
-      this.activeAlarmsPresent = alarms.filter(a => a.state <= 1).length > 0;
-      this.resolvedAlarmsPresent = alarms.filter(a => a.state === 2).length > 0;
+    this.sub = this.alarms?.subscribe((alarms) => {
+      this.myAlarmsPresent = alarms.filter((a) => a.state <= 1).length > 0;
+      this.activeAlarmsPresent = alarms.filter((a) => a.state <= 1).length > 0;
+      this.resolvedAlarmsPresent =
+        alarms.filter((a) => a.state === 2).length > 0;
       this.myAlarmsPresent = alarms.length > 0;
       let entityIds: string[] = [];
-      alarms.forEach(a => {
-          entityIds.push(a.entityHardwareId);
+      alarms.forEach((a) => {
+        entityIds.push(a.entityHardwareId);
       });
       entityIds = _.union(entityIds);
       this.liveValues.requestLiveValuesList(entityIds).subscribe();
@@ -58,27 +58,24 @@ export class AlarmListPage {
   handleRefresh(event: any) {
     this.getAlarmData()?.subscribe({
       next: (unused) => {
-        window.setTimeout(() => event.complete(), 500)
-      }, error: (err) => {
+        window.setTimeout(() => event.complete(), 500);
+      },
+      error: (err) => {
         console.error(err);
-      }
+      },
     });
     // {
     //   next:(unused) => {
     //   window.setTimeout(() => event.complete(), 500)
     // }, error => { }
-
   }
 
-
-  ionViewDidLeave(){
+  ionViewDidLeave() {
     this.sub?.unsubscribe();
   }
 
-
   getAlarmData() {
     this.alarmData.getAlarms<ControlAlarm[]>().subscribe();
-    
 
     return this.alarms;
   }
