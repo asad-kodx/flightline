@@ -11,85 +11,192 @@
   <div class="remote-control">
     <ion-card>
       <ion-card-content>
-        <ion-icon class="remote-icon" [name]="entity.deviceType | DeviceDisplayIcon: [entity.deviceType]"></ion-icon>
+        <ion-icon
+          class="remote-icon"
+          [name]="entity.deviceType | DeviceDisplayIcon"
+        ></ion-icon>
         <span class="remote-title">{{ entity.deviceName }}</span>
         <span *ngIf="type != 'binProcess' && intialLv">
-          <ion-badge class="remote-value-badge" *ngIf="type == 'variable' || type == 'curtain2'; else booleanCircle"
+          <ion-badge
+            class="remote-value-badge"
+            *ngIf="type == 'variable' || type == 'curtain2'; else booleanCircle"
             [style.background-color]="(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value > 0 ? '#b3ff1a': 'rgb(70, 63, 63)'"
-            [style.box-shadow]="((liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value > 0) ? '0px 0px 0px 1.5px #b3ff1a': '0px 0px 0px 1.5px #484848'">
-            <span *ngIf="entity?.deviceType != 268435464">{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value + "%"}}</span>
-            <span *ngIf="entity?.deviceType == 268435464 && !hasSliderValue">{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value + " CFM" }}</span>
-            <span *ngIf="entity?.deviceType == 268435464 && hasSliderValue">{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject.manualModeValue + "%" }}</span>
+            [style.box-shadow]="((liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value > 0) ? '0px 0px 0px 1.5px #b3ff1a': '0px 0px 0px 1.5px #484848'"
+          >
+            <span *ngIf="entity?.deviceType != 268435464"
+              >{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value
+              + "%"}}</span
+            >
+            <span *ngIf="entity?.deviceType == 268435464 && !hasSliderValue"
+              >{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value
+              + " CFM" }}</span
+            >
+            <span *ngIf="entity?.deviceType == 268435464 && hasSliderValue"
+              >{{ (liveValuesMap |
+              async)?.get(entity.deviceSerialNumber)?.valueObject.manualModeValue
+              + "%" }}</span
+            >
           </ion-badge>
-            <ion-item *ngIf="deviceType < 268435456" style="width: 20%; margin-left: 25em;" text-wrap no-lines class="remote-amps">
-              {{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.amps | number: '1.1-3' }} A
-            </ion-item>
+          <ion-item
+            *ngIf="deviceType < 268435456"
+            style="width: 20%; margin-left: 25em"
+            text-wrap
+            no-lines
+            class="remote-amps"
+          >
+            {{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.amps |
+            number: '1.1-3' }} A
+          </ion-item>
           <ng-template #booleanCircle>
             <div *ngIf="!entity?.hideManualControl && type">
-              <div class="boolean-color-on"
+              <div
+                class="boolean-color-on"
                 [style.background-color]="((liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value == 1 || (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject.isProcessRunning) ? '#b3ff1a': 'rgb(70, 63, 63)'"
-                [style.box-shadow]="((liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value == 1 || (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject.isProcessRunning) ? '0px 0px 0px 1.5px #b3ff1a': '0px 0px 0px 1.5px #484848'">
-              </div>
+                [style.box-shadow]="((liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value == 1 || (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject.isProcessRunning) ? '0px 0px 0px 1.5px #b3ff1a': '0px 0px 0px 1.5px #484848'"
+              ></div>
             </div>
           </ng-template>
         </span>
 
         <!-- Joe's Control Card -->
-        <div *ngIf="!entity?.hideManualControl && type" style="width: calc(100% - 24px); margin: 12px;">
+        <div
+          *ngIf="!entity?.hideManualControl && type"
+          style="width: calc(100% - 24px); margin: 12px"
+        >
           <ion-item *ngIf="type != 'binProcess'" no-lines>
             <div *ngIf="type == 'variable' || type == 'curtain2'">
               <ion-grid>
                 <ion-row>
                   <!-- left column with auto, manual, and stop -->
-                  <ion-col width="70" *ngIf="entity?.deviceType != 268435464 && entity?.deviceType != 67108864">
+                  <ion-col
+                    width="70"
+                    *ngIf="entity?.deviceType != 268435464 && entity?.deviceType != 67108864"
+                  >
                     <ion-row (click)="autoPress()">
-                      <div class="remote-auto" [style.color]="autoBolden ? 'white': default">Auto<br> <br> <br> <br>
+                      <div
+                        class="remote-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br />
+                        <br />
+                        <br />
+                        <br />
                       </div>
                     </ion-row>
                     <ion-row class="stop-row">
                       <div>
-                        <span (click)="stopPress()" class="rotate-stop"
-                          [style.color]="stopBolden ? 'white': default">Stop</span><img (click)="stopPress()"
-                          class="remote-auto-stop-manual" src="{{variableSwitchImage}}">
+                        <span
+                          (click)="stopPress()"
+                          class="rotate-stop"
+                          [style.color]="stopBolden ? 'white': default"
+                          >Stop</span
+                        ><img
+                          (click)="stopPress()"
+                          class="remote-auto-stop-manual"
+                          src="{{variableSwitchImage}}"
+                        />
                       </div>
                     </ion-row>
                     <ion-row (click)="manualPress()">
-                      <div class="remote-manual" [style.color]="manualBolden ? 'white': default"> <br> <br>Manual
+                      <div
+                        class="remote-manual"
+                        [style.color]="manualBolden ? 'white': default"
+                      >
+                        <br />
+                        <br />Manual
                       </div>
                     </ion-row>
                   </ion-col>
-                  <ion-col *ngIf="entity?.deviceType == 268435464 || entity.deviceType == 67108864" (click)="variableToggle()">
+                  <ion-col
+                    *ngIf="entity?.deviceType == 268435464 || entity.deviceType == 67108864"
+                    (click)="variableToggle()"
+                  >
                     <ion-row>
-                      <div class="boolean-auto" [style.color]="autoBolden ? 'white': default">Auto<br><br><br><br></div>
+                      <div
+                        class="boolean-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    
-                    <ion-row><img class="boolean-left" src="{{ variableSwitchImage }}"></ion-row>
+
+                    <ion-row
+                      ><img
+                        class="boolean-left"
+                        src="{{ variableSwitchImage }}"
+                    /></ion-row>
                     <ion-row>
-                      <div class="boolean-manual" [style.color]="manualBolden ? 'white': default"><br><br><br>Manual
+                      <div
+                        class="boolean-manual"
+                        [style.color]="manualBolden ? 'white': default"
+                      >
+                        <br /><br /><br />Manual
                       </div>
                     </ion-row>
                   </ion-col>
                   <!-- right column with value, amps, and slider-->
                   <ion-col width="30">
                     <!-- Amps -->
-                    
+
                     <!-- Vertical Slider -->
                     <ion-row>
-                     
-                      <ion-item text-wrap no-lines class="slider-rect ion-float-right ion-no-padding">
-                        <button [disabled]="mode != 1" (click)="pressPlusButton()" [style.opacity]="mode == 1 ? 1 : .1" ion-button
-                          class="slider-plus-minus">
-                          <span style='color: white; position: absolute;top: 1em;' *ngIf="type == 'curtain2'">Open</span>
-                          <img  src="assets/others/plus_white.svg"></button>
-                        <div class="remote-slider-container" [style.opacity]="mode == 1 ? 1 : .1">
-                          <ion-badge class="rangeBadge" [ngStyle]="{'top': getVariableSliderTop()}">{{value + '%'}}</ion-badge>
-                          <input [disabled]="mode != 1" [(ngModel)]="value" type="range" min="0" max="100" value="30"
-                            class="remote-slider" #variableSlider>
+                      <ion-item
+                        text-wrap
+                        no-lines
+                        class="slider-rect ion-float-right ion-no-padding"
+                      >
+                        <button
+                          [disabled]="mode != 1"
+                          (click)="pressPlusButton()"
+                          [style.opacity]="mode == 1 ? 1 : .1"
+                          ion-button
+                          class="slider-plus-minus"
+                        >
+                          <span
+                            style="color: white; position: absolute; top: 1em"
+                            *ngIf="type == 'curtain2'"
+                            >Open</span
+                          >
+                          <img src="assets/others/plus_white.svg" />
+                        </button>
+                        <div
+                          class="remote-slider-container"
+                          [style.opacity]="mode == 1 ? 1 : .1"
+                        >
+                          <ion-badge
+                            class="rangeBadge"
+                            [ngStyle]="{'top': getVariableSliderTop()}"
+                            >{{value + '%'}}</ion-badge
+                          >
+                          <input
+                            [disabled]="mode != 1"
+                            [(ngModel)]="value"
+                            type="range"
+                            min="0"
+                            max="100"
+                            value="30"
+                            class="remote-slider"
+                            #variableSlider
+                          />
                         </div>
-                        <button [disabled]="mode != 1" (click)="pressMinusButton()"  [style.opacity]="mode == 1 ? 1 : .1" ion-button
-                          class="slider-plus-minus">
-                          <span style='color: white; position: absolute;bottom: 1em;' *ngIf="type == 'curtain2'">Close</span>
-                          <img src="assets/others/minus_white.svg"></button>
+                        <button
+                          [disabled]="mode != 1"
+                          (click)="pressMinusButton()"
+                          [style.opacity]="mode == 1 ? 1 : .1"
+                          ion-button
+                          class="slider-plus-minus"
+                        >
+                          <span
+                            style="
+                              color: white;
+                              position: absolute;
+                              bottom: 1em;
+                            "
+                            *ngIf="type == 'curtain2'"
+                            >Close</span
+                          >
+                          <img src="assets/others/minus_white.svg" />
+                        </button>
                       </ion-item>
                     </ion-row>
                   </ion-col>
@@ -102,22 +209,54 @@
                 <ion-row>
                   <ion-col>
                     <ion-row (click)="chainDiskToggle()">
-                      <div class="chain-disk-auto" 
-                        [style.color]="autoBolden ? 'white': default">Auto<br><br><br><br><br></div>
+                      <div
+                        class="chain-disk-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br /><br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    <ion-row (click)="chainDiskToggle()"><img class="chain-disk-auto-stop-manual" src="{{ chainDiskSwitchImage }}"></ion-row>
-                    <ion-row (click)="chainDiskToggle()" *ngIf="entity?.deviceType != 268435464">
-                      <div [style.color]="offBolden ? 'white': default" class="chain-disk-off"><br><br><br><br>Off</div>
+                    <ion-row (click)="chainDiskToggle()"
+                      ><img
+                        class="chain-disk-auto-stop-manual"
+                        src="{{ chainDiskSwitchImage }}"
+                    /></ion-row>
+                    <ion-row
+                      (click)="chainDiskToggle()"
+                      *ngIf="entity?.deviceType != 268435464"
+                    >
+                      <div
+                        [style.color]="offBolden ? 'white': default"
+                        class="chain-disk-off"
+                      >
+                        <br /><br /><br /><br />Off
+                      </div>
                     </ion-row>
                   </ion-col>
                   <ion-col>
                     <ion-row>
-                      <button class="chain-disk-go-button" item-content ion-button
-                        *ngIf="!activeRequest && type == 'chainDisk'" large color="online" [disabled]="mode != 0"
-                        (click)="go()">GO!</button>
-                      <button class="chain-disk-go-button" item-content large
-                        *ngIf="activeRequest && type == 'chainDisk'" ion-button color='online' [disabled]="mode != 0"
-                        style="border-radius: 5%;">
+                      <button
+                        class="chain-disk-go-button"
+                        item-content
+                        ion-button
+                        *ngIf="!activeRequest && type == 'chainDisk'"
+                        large
+                        color="online"
+                        [disabled]="mode != 0"
+                        (click)="go()"
+                      >
+                        GO!
+                      </button>
+                      <button
+                        class="chain-disk-go-button"
+                        item-content
+                        large
+                        *ngIf="activeRequest && type == 'chainDisk'"
+                        ion-button
+                        color="online"
+                        [disabled]="mode != 0"
+                        style="border-radius: 5%"
+                      >
                         <ion-spinner></ion-spinner>
                       </button>
                     </ion-row>
@@ -131,27 +270,67 @@
                 <ion-row>
                   <ion-col>
                     <ion-row (click)="chainDiskToggle()">
-                      <div class="chain-disk-auto"
-                        [style.color]="autoBolden ? 'white': default">Auto<br><br><br><br><br></div>
+                      <div
+                        class="chain-disk-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br /><br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    <ion-row (click)="chainDiskToggle()"><img class="chain-disk-auto-stop-manual" src="{{ chainDiskSwitchImage }}"></ion-row>
-                    <ion-row (click)="chainDiskToggle()" *ngIf="entity?.deviceType != 268435464">
-                      <div [style.color]="offBolden ? 'white': default" class="chain-disk-off"><br><br><br><br>Off</div>
+                    <ion-row (click)="chainDiskToggle()"
+                      ><img
+                        class="chain-disk-auto-stop-manual"
+                        src="{{ chainDiskSwitchImage }}"
+                    /></ion-row>
+                    <ion-row
+                      (click)="chainDiskToggle()"
+                      *ngIf="entity?.deviceType != 268435464"
+                    >
+                      <div
+                        [style.color]="offBolden ? 'white': default"
+                        class="chain-disk-off"
+                      >
+                        <br /><br /><br /><br />Off
+                      </div>
                     </ion-row>
                   </ion-col>
                   <ion-col>
                     <ion-row>
-                      <button class="chain-disk-go-button" style="background-color: #0094fc;" item-content ion-button
+                      <button
+                        class="chain-disk-go-button"
+                        style="background-color: #0094fc"
+                        item-content
+                        ion-button
                         *ngIf="!activeRequest && type == 'mixingProcess' && (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.isPaused"
-                        large color="online" [disabled]="" (click)="resume()">Resume</button>
-                      <button class="chain-disk-go-button" style="background-color: #ffb635" item-content ion-button
+                        large
+                        color="online"
+                        [disabled]=""
+                        (click)="resume()"
+                      >
+                        Resume
+                      </button>
+                      <button
+                        class="chain-disk-go-button"
+                        style="background-color: #ffb635"
+                        item-content
+                        ion-button
                         *ngIf="!activeRequest && type == 'mixingProcess' && !(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.isPaused"
-                        large color="online"
+                        large
+                        color="online"
                         [disabled]=" !(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.isProcessRunning"
-                        (click)="pause()">Pause</button>
-                      <button class="chain-disk-go-button" item-content large
-                        *ngIf="activeRequest && type == 'mixingProcess'" ion-button color='online'
-                        style="border-radius: 5%;">
+                        (click)="pause()"
+                      >
+                        Pause
+                      </button>
+                      <button
+                        class="chain-disk-go-button"
+                        item-content
+                        large
+                        *ngIf="activeRequest && type == 'mixingProcess'"
+                        ion-button
+                        color="online"
+                        style="border-radius: 5%"
+                      >
                         <ion-spinner></ion-spinner>
                       </button>
                     </ion-row>
@@ -165,37 +344,93 @@
                 <ion-row>
                   <ion-col>
                     <ion-row (click)="chainDiskToggle()">
-                      <div class="chain-disk-auto"
-                        [style.color]="autoBolden ? 'white': default">Auto<br><br><br><br><br></div>
+                      <div
+                        class="chain-disk-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br /><br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    <ion-row (click)="chainDiskToggle()"><img class="chain-disk-auto-stop-manual" src="{{ chainDiskSwitchImage }}"></ion-row>
-                    <ion-row (click)="chainDiskToggle()" *ngIf="entity?.deviceType != 268435464">
-                      <div [style.color]="offBolden ? 'white': default" class="chain-disk-off"><br><br><br><br>Off</div>
+                    <ion-row (click)="chainDiskToggle()"
+                      ><img
+                        class="chain-disk-auto-stop-manual"
+                        src="{{ chainDiskSwitchImage }}"
+                    /></ion-row>
+                    <ion-row
+                      (click)="chainDiskToggle()"
+                      *ngIf="entity?.deviceType != 268435464"
+                    >
+                      <div
+                        [style.color]="offBolden ? 'white': default"
+                        class="chain-disk-off"
+                      >
+                        <br /><br /><br /><br />Off
+                      </div>
                     </ion-row>
                   </ion-col>
                   <ion-col>
                     <ion-row>
-                      <button class="chain-disk-go-button" style="background-color: #0094fc; margin-top: 70px" item-content ion-button
+                      <button
+                        class="chain-disk-go-button"
+                        style="background-color: #0094fc; margin-top: 70px"
+                        item-content
+                        ion-button
                         *ngIf="!activeRequest && type == 'chainDisk2' && (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.isPaused"
-                        large color="online" [disabled]="mode == 2" (click)="resume()">Resume</button>
-                      <button class="chain-disk-go-button" style="background-color: #ffb635;  margin-top: 70px" item-content ion-button
+                        large
+                        color="online"
+                        [disabled]="mode == 2"
+                        (click)="resume()"
+                      >
+                        Resume
+                      </button>
+                      <button
+                        class="chain-disk-go-button"
+                        style="background-color: #ffb635; margin-top: 70px"
+                        item-content
+                        ion-button
                         *ngIf="!activeRequest && type == 'chainDisk2' && !(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.isPaused"
-                        large color="online"
+                        large
+                        color="online"
                         [disabled]=" !(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.isProcessRunning || mode == 2"
-                        (click)="pause()">Pause</button>
-                      <button class="chain-disk-go-button" item-content large
-                        *ngIf="activeRequest && type == 'chainDisk2'" ion-button color='online'
-                        style="border-radius: 5%; margin-top: 70px;">
+                        (click)="pause()"
+                      >
+                        Pause
+                      </button>
+                      <button
+                        class="chain-disk-go-button"
+                        item-content
+                        large
+                        *ngIf="activeRequest && type == 'chainDisk2'"
+                        ion-button
+                        color="online"
+                        style="border-radius: 5%; margin-top: 70px"
+                      >
                         <ion-spinner></ion-spinner>
                       </button>
                     </ion-row>
                     <ion-row>
-                      <button class="chain-disk-go-button" style="background-color: online; margin-top: 10px" item-content ion-button
+                      <button
+                        class="chain-disk-go-button"
+                        style="background-color: online; margin-top: 10px"
+                        item-content
+                        ion-button
                         *ngIf="!activeRequest && type == 'chainDisk2'"
-                        large color="online" [disabled]="mode == 2" (click)="restart()">Restart</button>
-                      <button class="chain-disk-go-button" item-content large
-                        *ngIf="activeRequest && type == 'chainDisk2'" ion-button color='online'
-                        style="border-radius: 5%; margin-top: 10px;">
+                        large
+                        color="online"
+                        [disabled]="mode == 2"
+                        (click)="restart()"
+                      >
+                        Restart
+                      </button>
+                      <button
+                        class="chain-disk-go-button"
+                        item-content
+                        large
+                        *ngIf="activeRequest && type == 'chainDisk2'"
+                        ion-button
+                        color="online"
+                        style="border-radius: 5%; margin-top: 10px"
+                      >
                         <ion-spinner></ion-spinner>
                       </button>
                     </ion-row>
@@ -209,32 +444,59 @@
                 <ion-row>
                   <ion-col (click)="toggleCurtain()">
                     <ion-row class="remote-curtain-auto-row">
-                      <div class="remote-curtain-auto" [style.color]="autoBolden ? 'white': default">
-                        Auto<br><br><br><br><br><br></div>
+                      <div
+                        class="remote-curtain-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br /><br /><br /><br /><br /><br />
+                      </div>
                     </ion-row>
                     <ion-row>
-                      <img class="remote-curtain-auto-stop-manual-left" src="{{ curtainSwitchImageLeft }}">
+                      <img
+                        class="remote-curtain-auto-stop-manual-left"
+                        src="{{ curtainSwitchImageLeft }}"
+                      />
                     </ion-row>
                     <ion-row class="remote-curtain-manual-row">
-                      <div class="remote-curtain-manual" [style.color]="curtainManualBolden ? 'white': default">
-                        <br><br><br>Manual</div>
+                      <div
+                        class="remote-curtain-manual"
+                        [style.color]="curtainManualBolden ? 'white': default"
+                      >
+                        <br /><br /><br />Manual
+                      </div>
                     </ion-row>
                   </ion-col>
                   <ion-col>
                     <ion-row (click)="closeCurtainPress()">
-                      <div [style.color]="curtainManualBolden ? default: 'grey'"
-                        [style.color]="closeBolden ? 'white': default" class="remote-curtain-open">
-                        Close<br><br><br><br><br></div>
+                      <div
+                        [style.color]="curtainManualBolden ? default: 'grey'"
+                        [style.color]="closeBolden ? 'white': default"
+                        class="remote-curtain-open"
+                      >
+                        Close<br /><br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    <ion-row style="padding: 20px;" (click)="stopCurtainPress()">
-                      <img [style.opacity]="autoBolden ? '0.5': default" class="remote-curtain-auto-stop-manual-right"
-                        src="{{ curtainSwitchImageRight }}">
-                      <div [style.color]="curtainManualBolden ? default: 'grey'"
-                        [style.color]="curtainStopBolden ? 'white': default" class="remote-curtain-close">Stop</div>
+                    <ion-row style="padding: 20px" (click)="stopCurtainPress()">
+                      <img
+                        [style.opacity]="autoBolden ? '0.5': default"
+                        class="remote-curtain-auto-stop-manual-right"
+                        src="{{ curtainSwitchImageRight }}"
+                      />
+                      <div
+                        [style.color]="curtainManualBolden ? default: 'grey'"
+                        [style.color]="curtainStopBolden ? 'white': default"
+                        class="remote-curtain-close"
+                      >
+                        Stop
+                      </div>
                     </ion-row>
                     <ion-row (click)="openCurtainPress()">
-                      <div [style.color]="curtainManualBolden ? default: 'grey'"
-                        [style.color]="openBolden ? 'white': default" class="remote-curtain-stop"><br><br>Open
+                      <div
+                        [style.color]="curtainManualBolden ? default: 'grey'"
+                        [style.color]="openBolden ? 'white': default"
+                        class="remote-curtain-stop"
+                      >
+                        <br /><br />Open
                       </div>
                     </ion-row>
                   </ion-col>
@@ -247,24 +509,51 @@
                 <ion-row>
                   <ion-col (click)="booleanToggle()">
                     <ion-row>
-                      <div class="boolean-auto" [style.color]="autoBolden ? 'white': default">Auto<br><br><br><br></div>
+                      <div
+                        class="boolean-auto"
+                        [style.color]="autoBolden ? 'white': default"
+                      >
+                        Auto<br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    <ion-row><img class="boolean-left" src="{{ booleanSwitchImageLeft }}"></ion-row>
+                    <ion-row
+                      ><img
+                        class="boolean-left"
+                        src="{{ booleanSwitchImageLeft }}"
+                    /></ion-row>
                     <ion-row>
-                      <div class="boolean-manual" [style.color]="manualBolden ? 'white': default"><br><br><br>Manual
+                      <div
+                        class="boolean-manual"
+                        [style.color]="manualBolden ? 'white': default"
+                      >
+                        <br /><br /><br />Manual
                       </div>
                     </ion-row>
                   </ion-col>
                   <ion-col>
                     <ion-row>
-                      <div class="boolean-on" [style.opacity]="manualBolden ? '1': '.5'"
-                        [style.color]="onBolden ? 'white': default">On<br><br><br><br></div>
+                      <div
+                        class="boolean-on"
+                        [style.opacity]="manualBolden ? '1': '.5'"
+                        [style.color]="onBolden ? 'white': default"
+                      >
+                        On<br /><br /><br /><br />
+                      </div>
                     </ion-row>
-                    <ion-row (click)="booleanValueToggle()"><img class="boolean-right" [style.opacity]="manualBolden ? '1': '.5'"
-                        src="{{ booleanSwitchImageRight }}"></ion-row>
+                    <ion-row (click)="booleanValueToggle()"
+                      ><img
+                        class="boolean-right"
+                        [style.opacity]="manualBolden ? '1': '.5'"
+                        src="{{ booleanSwitchImageRight }}"
+                    /></ion-row>
                     <ion-row>
-                      <div class="boolean-off" [style.opacity]="manualBolden ? '1': '.5'"
-                        [style.color]="offBolden ? 'white': default"><br><br><br>Off</div>
+                      <div
+                        class="boolean-off"
+                        [style.opacity]="manualBolden ? '1': '.5'"
+                        [style.color]="offBolden ? 'white': default"
+                      >
+                        <br /><br /><br />Off
+                      </div>
                     </ion-row>
                   </ion-col>
                 </ion-row>
@@ -272,26 +561,37 @@
             </div>
           </ion-item>
 
-
-
           <ion-card *ngIf="type == 'binProcess'">
             <ion-card-content *ngIf="entity">
-              <ion-row *ngFor="let bin of (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject">
+              <ion-row
+                *ngFor="let bin of (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject"
+              >
                 <!-- <ion-col col-3>
           <ion-input type="number" placeholder="100%" style="border: 1px solid black"></ion-input>
         </ion-col> -->
                 <ion-col col-2>
-                  <i *ngIf="bin.id != activeId" class="fa fa-circle-thin" style="font-size: 40px"
-                    (click)="toggleBin(bin)"></i>
-                  <i *ngIf="bin.id == activeId" class="fa fa-circle" style="font-size: 40px" (click)="toggleBin(bin)"
-                    color="online"></i>
+                  <i
+                    *ngIf="bin.id != activeId"
+                    class="fa fa-circle-thin"
+                    style="font-size: 40px"
+                    (click)="toggleBin(bin)"
+                  ></i>
+                  <i
+                    *ngIf="bin.id == activeId"
+                    class="fa fa-circle"
+                    style="font-size: 40px"
+                    (click)="toggleBin(bin)"
+                    color="online"
+                  ></i>
                 </ion-col>
-                <ion-col col-7 style="padding-top: .6em">
+                <ion-col col-7 style="padding-top: 0.6em">
                   <span style="font-size: 20px">{{ bin.name }}</span>
                 </ion-col>
-                <ion-col col-3 style="padding-top: .6em">
+                <ion-col col-3 style="padding-top: 0.6em">
                   <p style="text-align: right">
-                    {{ bin.openPercent }}%<br />{{ bin.massValue | LiveValueDisplay: ['sensor', 9, control] }}</p>
+                    {{ bin.openPercent }}%<br />{{ bin.massValue |
+                    LiveValueDisplay: ['sensor', 9, control] }}
+                  </p>
                 </ion-col>
                 <hr />
               </ion-row>
@@ -300,57 +600,162 @@
 
           <!-- Submit / Calibrate buttons -->
           <ion-item *ngIf="type != 'binProcess'" no-lines>
-            <button  large block #submitButton *ngIf="!activeRequest" ion-button outline style="margin-bottom: .8em;"
-              color='primary' [disabled]='disableSubmit()'
-              (click)="submit()">Submit</button>
-            <button large full style="border-radius: 3%; margin-bottom: .8em;" *ngIf="activeRequest" ion-button
-              color='online'>
+            <button
+              large
+              block
+              #submitButton
+              *ngIf="!activeRequest"
+              ion-button
+              outline
+              style="margin-bottom: 0.8em"
+              color="primary"
+              [disabled]="disableSubmit()"
+              (click)="submit()"
+            >
+              Submit
+            </button>
+            <button
+              large
+              full
+              style="border-radius: 3%; margin-bottom: 0.8em"
+              *ngIf="activeRequest"
+              ion-button
+              color="online"
+            >
               <ion-spinner></ion-spinner>
             </button>
             <div *ngIf="type == 'curtain2'; else resetBottom">
-              <button *ngIf="!resetRequest" large block
-                [disabled]="(this.mode == null) || (this.mode == 1 && this.value == null)" ion-button outline
-                style="margin-bottom: .8em !important;" color='primary' (click)="reset()">Reset</button>
-              <button *ngIf="resetRequest" large full style="border-radius: 3%; margin-bottom: .8em;" ion-button
-                color='online'>
+              <button
+                *ngIf="!resetRequest"
+                large
+                block
+                [disabled]="(this.mode == null) || (this.mode == 1 && this.value == null)"
+                ion-button
+                outline
+                style="margin-bottom: 0.8em !important"
+                color="primary"
+                (click)="reset()"
+              >
+                Reset
+              </button>
+              <button
+                *ngIf="resetRequest"
+                large
+                full
+                style="border-radius: 3%; margin-bottom: 0.8em"
+                ion-button
+                color="online"
+              >
                 <ion-spinner></ion-spinner>
               </button>
             </div>
             <ng-template #resetBottom>
-              <button *ngIf="!resetRequest" large block
-                [disabled]="(this.mode == null) || (this.mode == 1 && this.value == null)" ion-button outline
-                style="margin-bottom: 0em !important;" color='primary' (click)="reset()">Reset</button>
-              <button *ngIf="resetRequest" large full style="border-radius: 3%; margin-bottom: .8em;" ion-button
-                color='online'>
+              <button
+                *ngIf="!resetRequest"
+                large
+                block
+                [disabled]="(this.mode == null) || (this.mode == 1 && this.value == null)"
+                ion-button
+                outline
+                style="margin-bottom: 0em !important"
+                color="primary"
+                (click)="reset()"
+              >
+                Reset
+              </button>
+              <button
+                *ngIf="resetRequest"
+                large
+                full
+                style="border-radius: 3%; margin-bottom: 0.8em"
+                ion-button
+                color="online"
+              >
                 <ion-spinner></ion-spinner>
               </button>
             </ng-template>
-            <button large block
+            <button
+              large
+              block
               *ngIf="!activeRequest && type == 'curtain2' && (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.calibrationStatus != 1"
-              ion-button outline color='primary' [disabled]="calibrateClicked || mode != 0"
-              (click)="calibrate(1)">Calibrate</button>
-            <button large block
+              ion-button
+              outline
+              color="primary"
+              [disabled]="calibrateClicked || mode != 0"
+              (click)="calibrate(1)"
+            >
+              Calibrate
+            </button>
+            <button
+              large
+              block
               *ngIf="!activeRequest && type == 'curtain2' && (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.calibrationStatus == 1"
-              ion-button outline color='primary' [disabled]="calibrateClicked || mode != 0" (click)="calibrate(0)">Stop
-              Calibration</button>
+              ion-button
+              outline
+              color="primary"
+              [disabled]="calibrateClicked || mode != 0"
+              (click)="calibrate(0)"
+            >
+              Stop Calibration
+            </button>
 
-            <button large full *ngIf="activeRequest && type == 'curtain2'" ion-button color='online'>
+            <button
+              large
+              full
+              *ngIf="activeRequest && type == 'curtain2'"
+              ion-button
+              color="online"
+            >
               <ion-spinner></ion-spinner>
             </button>
           </ion-item>
           <!--binProcess to end-->
           <ion-item *ngIf="type == 'binProcess'" no-lines>
-            <button [disabled]='disableSubmit()' large block #submitButton *ngIf="!activeRequest" ion-button outline color='primary'
-              (click)="updateBinSlide()">Submit</button>
-            <button large full *ngIf="activeRequest" ion-button color='online' style="border-radius: 5%;">
+            <button
+              [disabled]="disableSubmit()"
+              large
+              block
+              #submitButton
+              *ngIf="!activeRequest"
+              ion-button
+              outline
+              color="primary"
+              (click)="updateBinSlide()"
+            >
+              Submit
+            </button>
+            <button
+              large
+              full
+              *ngIf="activeRequest"
+              ion-button
+              color="online"
+              style="border-radius: 5%"
+            >
               <ion-spinner></ion-spinner>
             </button>
           </ion-item>
           <ion-item *ngIf="type == 'binProcess'" no-lines>
-            <button large block class="remote-bottom-buttons" *ngIf="!activeRequest" ion-button outline
-              color='primary'>Reset</button>
-            <button large full class="remote-bottom-buttons" *ngIf="activeRequest" ion-button color='online'
-              style="border-radius: 5%;">
+            <button
+              large
+              block
+              class="remote-bottom-buttons"
+              *ngIf="!activeRequest"
+              ion-button
+              outline
+              color="primary"
+            >
+              Reset
+            </button>
+            <button
+              large
+              full
+              class="remote-bottom-buttons"
+              *ngIf="activeRequest"
+              ion-button
+              color="online"
+              style="border-radius: 5%"
+            >
               <ion-spinner></ion-spinner>
             </button>
           </ion-item>
@@ -361,10 +766,14 @@
     <ion-card>
       <ion-card-content>
         <div *ngIf="entity?.hideManualControl && type">
-          <h1 style="text-align: center; padding: 10px;">Remote Control has been disabled for this device.</h1>
+          <h1 style="text-align: center; padding: 10px">
+            Remote Control has been disabled for this device.
+          </h1>
         </div>
         <div *ngIf="!type">
-          <h1 style="text-align: center; padding: 10px">Remote control is not available for this device.</h1>
+          <h1 style="text-align: center; padding: 10px">
+            Remote control is not available for this device.
+          </h1>
         </div>
       </ion-card-content>
     </ion-card>
@@ -372,39 +781,49 @@
   </div>
 
   <!-- Info Card -->
-  <ion-card class="card card-md" *ngIf="entity" style="width: calc(100% - 24px); margin: 12px;">
+  <ion-card
+    class="card card-md"
+    *ngIf="entity"
+    style="width: calc(100% - 24px); margin: 12px"
+  >
     <div *ngIf="infoCollapsed; else notCollapsed">
-      <ion-card-header class="remote-info-font" (click)="collapseInfo()"><span>Device Information</span>
-        <ion-icon role="img" style="float: right;" class="icon icon-ios ion-ios-arrow-down" aria-label="arrow down"
-          ng-reflect-name="arrow-down"></ion-icon>
+      <ion-card-header class="remote-info-font" (click)="collapseInfo()"
+        ><span>Device Information</span>
+        <ion-icon
+          role="img"
+          style="float: right"
+          class="icon icon-ios ion-ios-arrow-down"
+          aria-label="arrow down"
+          ng-reflect-name="arrow-down"
+        ></ion-icon>
       </ion-card-header>
     </div>
     <ng-template #notCollapsed>
-      <ion-card-header class="remote-info-font" (click)="collapseInfo()"><span>Device Information</span>
-        <ion-icon role="img" style="float: right;" class="icon icon-ios ion-ios-arrow-up" aria-label="arrow up"
-          ng-reflect-name="arrow-up"></ion-icon>
+      <ion-card-header class="remote-info-font" (click)="collapseInfo()"
+        ><span>Device Information</span>
+        <ion-icon
+          role="img"
+          style="float: right"
+          class="icon icon-ios ion-ios-arrow-up"
+          aria-label="arrow up"
+          ng-reflect-name="arrow-up"
+        ></ion-icon>
       </ion-card-header>
       <ion-card-content>
         <ion-row>
-          <ion-col width-35 class="remote-info-font">
-            Type:
-          </ion-col>
+          <ion-col width-35 class="remote-info-font"> Type: </ion-col>
           <ion-col width-65 class="remote-info-font">
             {{ entity.deviceType | EntityType: ['device', entity.deviceType] }}
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col width-35 class="remote-info-font">
-            Site:
-          </ion-col>
+          <ion-col width-35 class="remote-info-font"> Site: </ion-col>
           <ion-col width-65 class="remote-info-font">
             {{ control.siteSiteName }}
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col width-35 class="remote-info-font">
-            Room:
-          </ion-col>
+          <ion-col width-35 class="remote-info-font"> Room: </ion-col>
           <ion-col width-65 class="remote-info-font">
             {{ entity.roomName }}
           </ion-col>
@@ -415,7 +834,9 @@
           </ion-col>
           <ion-col width-65 class="remote-info-font">
             <b>
-              {{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value | LiveValueDisplay: ['device', entity.deviceType, control] }}</b>
+              {{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.value
+              | LiveValueDisplay: ['device', entity.deviceType, control] }}</b
+            >
           </ion-col>
         </ion-row>
         <ion-row *ngIf="type != 'binProcess'">
@@ -423,7 +844,11 @@
             <b>Mode:</b>
           </ion-col>
           <ion-col width-65 class="remote-info-font">
-            <b>{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.mode | ModeDisplay: (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.mode }}</b>
+            <b
+              >{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.mode
+              | ModeDisplay: (liveValuesMap |
+              async)?.get(entity.deviceSerialNumber)?.mode }}</b
+            >
           </ion-col>
         </ion-row>
         <ion-row *ngIf="type != 'binProcess' && entity.deviceType < 268435456">
@@ -431,21 +856,29 @@
             <b>Amps:</b>
           </ion-col>
           <ion-col width-65 class="remote-info-font">
-            <b>{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.amps | number: '1.1-3'}}</b>
+            <b
+              >{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.amps
+              | number: '1.1-3'}}</b
+            >
           </ion-col>
         </ion-row>
         <ion-row *ngIf="type == 'curtain2'">
           <ion-col width-35 class="remote-info-font">
             <b>Calibration:</b>
           </ion-col>
-          <ion-col *ngIf="(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject != null" width-65
-            class="remote-info-font">
-            <b>{{ (liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject?.calibrationStatus | CalibrationStatus }}</b>
+          <ion-col
+            *ngIf="(liveValuesMap | async)?.get(entity.deviceSerialNumber)?.valueObject != null"
+            width-65
+            class="remote-info-font"
+          >
+            <b
+              >{{ (liveValuesMap |
+              async)?.get(entity.deviceSerialNumber)?.valueObject?.calibrationStatus
+              | CalibrationStatus }}</b
+            >
           </ion-col>
         </ion-row>
       </ion-card-content>
     </ng-template>
   </ion-card>
-
-
 </ion-content>

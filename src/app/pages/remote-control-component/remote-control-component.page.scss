@@ -1,0 +1,850 @@
+// works on all phones
+// default device: iPhone X
+// default card: variable/curtain2
+// other phones/tablets are at the bottom of the page (@media screen)
+
+.remote-icon {
+    font-size: 46px;
+    float: left;
+    margin-left: .25em;
+}
+
+.remote-icon-hidden {
+    margin: 1em 0 1em 0 !important;
+}
+
+.remote-title {
+    float: left;
+    text-align: left !important;
+    font-size: 20px !important;
+    font-weight: bold;
+    margin-left: .5em;
+    margin-top: .2em;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 55% !important;
+}
+
+.remote-value-badge {
+    float: right !important;
+    background-color: #b3ff1a;
+    border: 1px solid black;
+    box-shadow: 0 0 0 1px #aae632;
+    font-size: 3.5vw;
+    padding: .7vw 2vw .7vw 2vw !important;
+    margin: 1em 3em 0 0;
+    margin-bottom: 1.5em;
+}
+
+.boolean-color-on { //boolean
+    height: 18px;
+    width: 18px;
+    float: right !important;
+    border-radius: 60%;
+    border: 1px solid black;
+    margin-top: 0.3em;
+    margin-right: 2.6em;
+}
+
+.stop-row {
+    margin-top: -1.2em !important;
+    margin-bottom: -2.5em !important;
+}
+
+.remote-auto-stop-manual {
+  width: 85%;
+  height: 85%;
+  margin-left: 3.6em;
+  margin-bottom: -.7em !important;
+  margin-top: -.7em !important
+}
+
+.remote-auto {
+    margin: 3.7em 0 0em 4.9em;
+}
+
+.remote-manual {
+    margin: 0 0 2em 4.5em;
+}
+
+.rotate-stop {
+    margin: 3.5em 3em 0 0;
+    position: absolute;
+    -webkit-transform: rotate(-90deg) translateX(20px); 
+    -moz-transform:    rotate(-90deg) translateX(20px);
+    -ms-transform:     rotate(-90deg) translateX(20px);
+    -o-transform:      rotate(-90deg) translateX(20px); 
+    transform:         rotate(-90deg) translateX(20px); 
+}
+
+.remote-amps {
+    font-size: 3.7vw;
+    float: right !important;
+    text-align: right;
+    margin: -1.2em 2em 0 0;
+    z-index: 6;
+    padding: 0;
+    margin-right: 3em !important;
+}
+
+.slider-rect {
+    padding: 1px !important;
+    width: 55%;
+    border-radius: 4px;
+    margin-left: 32%;
+    float: right !important;
+   background-color: rgb(70, 63, 63) !important;
+   margin-bottom: 2em;
+}
+
+.slider-rect .item-inner {
+    padding-right: 1px !important;
+    padding-top: -10px !important;
+}
+
+.slider-rect .label {
+    margin: 0px !important;
+}
+
+.slider-plus-minus {
+    width: 87% !important;
+    height: 87% !important;
+    background-color: rgb(37, 36, 36);
+    padding: 30% !important;
+    margin: 6px !important;
+}
+
+.slider-plus-minus:active {
+    background-color: rgb(27, 26, 26);
+}
+
+.remote-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform:    rotate(-90deg);
+    -ms-transform:     rotate(-90deg);
+    -o-transform:      rotate(-90deg);
+    transform:         rotate(-90deg);
+    background: rgb(70, 63, 63);
+    background-position: center;
+    overflow: hidden;
+    outline: none;
+    width: auto;
+}
+
+.remote-slider::-webkit-slider-thumb {
+    content: "test" !important;
+    color: black !important;
+}
+
+.remote-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.7em;
+    height: 4.5em !important;
+    background: rgb(2, 219, 248);
+    position: relative;
+    z-index: 999;
+    border-radius: .3em;
+}
+
+.remote-slider-container {
+    width: 2em;
+    height: 5em;
+    margin-left: -1.15em !important;
+    margin-top: 1.25em !important;
+    margin-bottom: .8em !important;
+}
+
+//Boolean
+.boolean-auto {
+    margin: 3em 0 0em 3.95em;
+}
+
+.boolean-manual {
+    margin: 1em 0 2em 3.5em;
+}
+
+.boolean-on {
+    margin: 3em 0 0em 3.1em;
+}
+
+.boolean-off {
+    margin: 1em 0 2em 3.1em;
+}
+
+.boolean-left {
+    margin: -2em 0em -3em 3.3em;
+    width: 40%;
+    height: 40%;
+}
+
+.boolean-right {
+    width: 40%;
+    height: 40%;
+    margin: -2em 0em -3em 2em;
+}
+
+//Chain Disk
+.chain-disk-auto-stop-manual {
+    width: 40%;
+    margin-left: 3.4em;
+}
+
+.chain-disk-auto {
+    margin-left: 4em;
+    margin-top: 1.5em;
+    margin-bottom: -3em;
+}
+
+.chain-disk-off {
+    margin-left: 4.4em;
+    margin-top:  -3em;
+    margin-bottom: 2em;
+}
+
+.chain-disk-go-button {
+    margin-top: 5.2em;
+    margin-left: 1em;
+    width: 5em;
+    height: 3.6em;
+}
+
+//Curtain
+.remote-curtain-auto-stop-manual-left {
+    margin-top: -4em;
+    margin-left: 3.3em;
+    margin-bottom: -2em;
+    width: 35%;
+}
+
+.remote-curtain-auto {
+    margin-top: 2em;
+    margin-left: 3.7em;
+}
+
+.remote-curtain-manual {
+    margin-left: 3.3em;
+}
+
+.remote-curtain-auto-stop-manual-right {
+    margin-left: 2em;
+    width: 46%;
+    margin-top: -3.9em;
+    margin-bottom: -2em;
+}
+
+.remote-curtain-open {
+    margin-top: 2em;
+    margin-left: 3.4em;
+}
+
+.remote-curtain-close {
+    position: absolute;
+    -webkit-transform: rotate(-90deg) translateX(20px); 
+    -moz-transform:    rotate(-90deg) translateX(20px);
+    -ms-transform:     rotate(-90deg) translateX(20px);
+    -o-transform:      rotate(-90deg) translateX(20px); 
+    transform:         rotate(-90deg) translateX(20px); 
+    margin-top: 0em;
+    margin-left: -1em;
+}
+
+.remote-curtain-stop {
+    margin-left: 3.8em;
+    margin-bottom: 3em;
+}
+
+//ionic style overrides
+.remote-control ion-card-content {
+    padding: 0 !important;
+}
+.remote-control ion-item {
+    padding: 0 !important;
+}
+.remote-control ion-label {
+    margin: 0 !important;
+}
+.remote-control .item-inner {
+    padding: 0 !important;
+}
+.remote-control ion-col {
+    padding: 0 !important;
+}
+.remote-control ion-grid {
+    padding: 0 !important;
+}
+.remote-control ion-card {
+    margin-bottom: .1em !important;
+}
+
+
+//iPhone 5, Moto G4, and Galaxy S5
+@media screen and (max-width: 360px) and (min-width: 360px) {
+    .remote-title {
+        font-size: 160%;
+        margin-bottom: 0 !important;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 55%;
+    }
+    .boolean-color-on { //boolean
+        margin-right: 2.5em !important;
+    }
+    .remote-icon {
+        font-size: 350%;
+    }
+    .remote-auto {
+        margin-top: 3em;
+        margin-left: 4.5em !important;
+    }
+    .rotate-stop {
+        margin-left: -.5em;
+    }
+    .remote-auto-stop-manual {
+        margin-left: 2.7em;
+    }
+    .remote-manual {
+        margin-left: 3.2em;
+    }
+    .remote-value-badge {
+        margin-top: -1.6em !important;
+        margin-bottom: 1.5em;
+    }
+    .remote-slider::-webkit-slider-thumb {
+        height: 4.3em !important;
+    }
+    .remote-slider-container {
+        margin-left: -1.25em !important;
+        margin-top: 1.4em !important;
+        margin-bottom: .6em !important;
+    }
+}
+
+//Moto G4 and Galaxy S5
+@media screen and (width: 360px) {
+    .remote-value-badge {
+        margin-top: 1.7em !important;
+        margin-right: 3em !important;
+        font-size: 11px !important;
+        border-radius: 10px;
+        padding: 3px 4px !important;
+        margin-bottom: 1.5em;
+    }
+    .boolean-color-on { //boolean
+        margin-right: 2.5em !important;
+    }
+    .remote-slider::-webkit-slider-thumb {
+        width: 2em !important;
+        height: 5.3em !important;
+    }
+    .remote-slider-container {
+        margin-left: -1.48em !important;
+        margin-top: 1.8em !important;
+        margin-bottom: 2em !important;
+    }
+    .remote-auto {
+        margin-left: 4.5em;
+        margin-top: 4em !important;
+    }
+    .rotate-stop {
+        margin-left: .5em;
+    }
+    .remote-manual {
+        margin-left: 4.1em;
+    }
+    .remote-auto-stop-manual {
+        margin-left: 3.4em;
+    }
+    .boolean-off {
+        margin-left: 2.95em;
+    }
+    .boolean-on {
+        margin-left: 2.9em;
+    }
+    .remote-curtain-close {
+        margin-top: .2em;
+    }
+    .remote-curtain-auto-stop-manual-right {
+        width: 47%;
+    }
+    .chain-disk-auto {
+        margin-left: 4.1em;
+    }
+    .chain-disk-go-button {
+        margin-top: 4.8em;
+    }
+}
+
+//Pixel 2/2xl
+@media screen and (width: 411px) {
+    .remote-slider::-webkit-slider-thumb {
+        height: 6.2em !important;
+        width: 2em !important;
+    }
+    .remote-slider-container {
+        margin-left: -1.1em !important;
+        margin-bottom: 2.3em !important;
+        margin-top: 1.3em !important;
+        
+    }
+    .boolean-color-on { //boolean
+        margin-right: 3em !important;
+    }
+    .remote-value-badge {
+       border-radius: 10px;
+       margin-top: .5em;
+       padding: 2px 4px !important;
+       margin-bottom: 1.5em;
+       margin-right: 3em !important;
+    }
+    .remote-auto-stop-manual {
+        margin-bottom: -1em !important;
+    }
+    .remote-amps {
+        margin-right: 3em !important;
+        margin-top: -1em !important;
+    }
+    .rotate-stop {
+        margin-right: 1em !important;
+        margin-top: 3.4em !important;
+    }
+    .remote-auto {
+        margin-bottom: 0 !important;
+        margin-top: 5em !important;
+    }
+    .remote-manual {
+        margin-top: 0 !important;
+    }
+    .boolean-auto {
+        margin-left: 4.2em;
+    }
+    .boolean-manual {
+        margin-left: 3.7em;
+    }
+    .boolean-on {
+        margin-left: 4.2em;
+    }
+    .boolean-off {
+        margin-left: 4em;
+    }
+    .boolean-right {
+        margin-left: 2.9em;
+    }
+    .remote-curtain-close {
+        margin-top: .8em;
+    }
+    .remote-curtain-open {
+        margin-left: 4em;
+    }
+    .remote-curtain-stop {
+        margin-left: 4.1em;
+    }
+    .remote-curtain-auto {
+        margin-left: 4em;
+    }
+    .remote-curtain-manual {
+        margin-left: 3.5em;
+    }
+    .chain-disk-auto {
+        margin-left: 4.4em;
+    }
+    .chain-disk-off {
+        margin-left: 4.6em;
+    }
+}
+
+// Pixel 4 xl
+@media only screen and (min-width: 412px) and (max-width: 767px) {
+    .remote-slider::-webkit-slider-thumb {
+        height: 6.2em !important;
+        width: 2em !important;
+    }
+    .remote-slider-container {
+        margin-left: -1.1em !important;
+        margin-bottom: 2.3em !important;
+        margin-top: 1.3em !important;
+    }
+    .boolean-color-on { //boolean
+        margin-right: 3em !important;
+    }
+    .remote-value-badge {
+       border-radius: 10px;
+       margin-top: .5em;
+       padding: 2px 4px !important;
+       margin-bottom: 1.5em;
+    }
+    .remote-auto-stop-manual {
+        margin-bottom: -1em !important;
+    }
+    .remote-amps {
+        margin-right: 3em !important;
+        margin-top: -1em !important;
+    }
+    .rotate-stop {
+        margin-right: 1em !important;
+        margin-top: 3.4em !important;
+    }
+    .remote-auto {
+        margin-bottom: 0 !important;
+        margin-top: 5em !important;
+    }
+    .remote-manual {
+        margin-top: 0 !important;
+    }
+    .boolean-auto {
+        margin-left: 4.2em;
+    }
+    .boolean-manual {
+        margin-left: 3.7em;
+    }
+    .boolean-on {
+        margin-left: 4.2em;
+    }
+    .boolean-off {
+        margin-left: 4em;
+    }
+    .boolean-right {
+        margin-left: 2.9em;
+    }
+    .remote-curtain-close {
+        margin-top: .8em;
+    }
+    .remote-curtain-open {
+        margin-left: 4em;
+    }
+    .remote-curtain-stop {
+        margin-left: 4.1em;
+    }
+    .remote-curtain-auto {
+        margin-left: 4em;
+    }
+    .remote-curtain-manual {
+        margin-left: 3.5em;
+    }
+    .chain-disk-auto {
+        margin-left: 4.4em;
+    }
+    .chain-disk-off {
+        margin-left: 4.6em;
+    }
+ }
+
+//iPhone 5/SE
+@media screen and (width: 320px) {
+    .remote-title {
+        font-size: 25px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 55%;
+    }
+    .boolean-color-on { //boolean
+        margin-right: 1.5em !important;
+    }
+    .remote-value-badge {
+        margin-top: 2em !important;
+        margin-right: 1.8em !important;
+        font-size: 11px;
+        padding: 3px 4px !important;
+        margin-bottom: 1.5em;
+    }
+    .remote-amps {
+        margin-top: -1em !important;
+        text-align: right;
+        margin-right: 2em !important;
+    }
+    .slider-rect {
+        width: 65%;
+        height: 50%;
+    }
+    .remote-slider::-webkit-slider-thumb {
+        height: 3.2em;
+        width: 1.8em;
+    }
+    .remote-slider-container {
+        margin-left: -1.2em !important;
+        margin-bottom: .5em;
+        margin-top: 2.1em;
+    }
+    .remote-auto-stop-manual {
+        margin-left: 3em !important;
+    }
+    .remote-auto {
+        margin-top: 4em !important;
+        margin-left: 4em !important;
+    }
+    .remote-manual {
+        margin-left: 3.4em !important;
+        margin-bottom: -1em !important;
+    }
+    .rotate-stop {
+        margin-top: 3.2em !important;
+    }
+    .boolean-on {
+        margin-left: 2.7em;
+    }
+    .boolean-off {
+        margin-left: 2.7em;
+    }
+    .boolean-manual {
+        margin-left: 3.1em;
+    }
+    .boolean-auto {
+        margin-left: 3.6em;
+    }
+    .remote-curtain-close {
+        margin-top: -.3em;
+    }
+    .remote-curtain-auto {
+        margin-left: 3.5em;
+    }
+    .remote-curtain-manual {
+        margin-left: 3.05em;
+    }
+    .remote-curtain-stop {
+        margin-right: 2.5em;
+    }
+    .remote-curtain-open {
+        margin-right: 3em;
+    }
+    .remote-curtain-auto-stop-manual-left {
+        width: 41% !important;
+    }
+    .chain-disk-auto {
+        margin-left: 3.8em;
+    }
+    .chain-disk-off {
+        margin-left: 4.1em;
+    }
+    .chain-disk-go-button {
+        margin-top: 4.5em;
+    }
+}
+
+//iphone 6
+@media screen and (width: 375px) {
+    .remote-slider::-webkit-slider-thumb {
+        height: 3.5em;
+        width: 1.8em;
+    }
+    .remote-slider-container {
+        margin-left: -1.78em;
+        margin-bottom: .5em;
+        margin-top: 2em;
+    }
+ 
+}
+
+//iPhone 6+ etc.
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px)  {
+    .remote-title {
+        font-size: 34px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 55%;
+    }
+    .remote-value-badge {
+        margin-top: 2.8em !important;
+        margin-right: 3.9em !important;
+        font-size: 12px !important;
+        margin-bottom: 1.5em;
+    }
+    .remote-amps {
+        margin-top: -.1em !important;
+        margin-right: 2em !important;
+    }
+    .remote-auto-stop-manual {
+        width: 85%;
+        height: 85%;
+        margin-left: 4em;
+        margin-bottom: -1em !important;
+    }
+    .remote-auto {
+        font-size: 19px;
+        margin-left: 4.6em;
+        margin-top: 4em;
+    }
+    .remote-manual {
+        font-size: 19px;
+        margin-left: 4.2em;
+    }
+    .rotate-stop {
+        font-size: 19px;
+        margin-top: 3.2em;
+    }
+    .remote-slider::-webkit-slider-thumb {
+        height: 5em !important;
+    }
+    .remote-slider-container {
+        margin-left: -.85em !important;
+        margin-bottom: 1.05em !important;
+        margin-top: 1.05em !important;
+    }
+    .remote-left {
+        width: 35%;
+    }
+    .boolean-on {
+        margin-left: 4.3em;
+    }
+    .boolean-off {
+        margin-left: 4.3em;
+    }
+    .boolean-right {
+        margin-left: 3em;
+    }
+    .boolean-auto {
+        margin-left: 4.1em;
+    }
+    .remote-curtain-close {
+        margin-top: .4em;
+    }
+}
+
+//iPad
+@media screen and (min-width: 700px) {
+.remote-title {
+    font-size: 45px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 55%;
+}
+.remote-icon {
+    font-size: 72px;
+    margin-top: .05em;
+}
+.remote-info-font {
+    font-size: 20px;
+}
+.remote-value-badge {
+    border-radius: 25px;
+    font-size: 18px;
+    margin-top: 2.7em !important;
+    margin-bottom: .3em !important;
+    margin-right: 7.8em !important;
+    margin-bottom: 1.5em;
+}
+.remote-amps {
+    font-size: 21px;
+    margin-top: 0 !important;
+    margin-right: 6.3em;
+}
+.slider-rect {
+    width: 7em;
+    margin-top: 3em;
+    margin-bottom: 2em;
+}
+.remote-slider::-webkit-slider-thumb {
+    height: 6.25em !important;
+    width: 2.5em;
+}
+.remote-slider-container {
+    margin-left: -.3em !important;
+    margin-bottom: 1.75em !important;
+    margin-top: .4em !important;
+}
+.slider-plus-minus {
+    width: 90% !important;
+}
+.remote-auto-stop-manual {
+    width: 225%;
+    margin-left: 8.3em;
+    margin-bottom: -4em !important;
+}
+.remote-auto {
+    font-size: 28px;
+    margin-left: 7em;
+    margin-top: 2em;
+}
+.rotate-stop {
+    font-size: 28px;
+    margin-top: 3.5em;
+    margin-left: 2em;
+}
+.remote-manual {
+    font-size: 28px;
+    margin-left: 6.5em;
+    margin-bottom: 1em;
+}
+}
+
+//iPad Pro
+@media screen and (min-width: 1000px) {
+    .remote-info-font {
+        font-size: 28px;
+    }
+    .remote-title {
+        font-size: 55px;
+        margin-top: .5em;
+        
+    }
+    .remote-icon {
+        font-size: 100px;
+        margin: .2em;
+        margin-left: .3em !important;
+    }
+    .slider-rect {
+        width: 10em;
+    }
+
+    .remote-auto-stop-manual {
+        width: 150% !important;
+        margin-left: 12em;
+        margin-bottom: -6em !important;
+    }
+    .remote-auto {
+        font-size: 36px;
+        margin-left: 8em;
+        margin-top: 2em;
+        margin-bottom: -1em !important;
+    }
+    .rotate-stop {
+        font-size: 36px;
+        margin-top: 3.8em;
+        margin-left: 2em;
+    }
+    .remote-manual {
+        font-size: 36px;
+        margin-left: 7.4em;
+        margin-bottom: 3em;
+    }
+
+    .remote-value-badge {
+        font-size: 22px;
+        border-radius: 1.5em;
+        margin-right: 8.1em !important;
+        margin-top: 4em !important;
+        margin-bottom: 1.5em;
+    }
+    .remote-amps {
+        font-size: 24px;
+        margin-right: 7.2em !important;
+        margin-top: 0em !important;
+    }
+    
+    .remote-slider::-webkit-slider-thumb {
+        height: 9em !important;
+        width: 2.5em;
+    }
+    .remote-slider-container {
+        margin-left: 1.2em !important;
+        margin-bottom: 5em;
+        margin-top: -1.2em !important;
+    }
+    .slider-plus-minus {
+        width: 90% !important;
+        margin: .65em !important;
+    }
+}
+
+.rangeBadge{
+    height: 1.5em;
+    display: flex;
+    position: absolute;
+    z-index: 9999;
+    text-align: center;
+    left: 30%;
+    background-color: transparent;
+    pointer-events: none
+}
