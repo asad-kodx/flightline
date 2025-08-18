@@ -31,7 +31,7 @@ import {
   standalone: false
 })
 export class RemoteControlComponentPage implements OnInit {
-  public entity?: Device;
+  public entity!: Device;
   public controls!: Observable<Control[]>;
   public mode!: Mode;
   public value: number = 0;
@@ -100,8 +100,8 @@ deviceType: any;
     private gestureCtrl: GestureController
   ) {
     this.entity = this.navParams.data['data'];
-    if (this.entity?.entitySerialNumber) {
-      this.entity = this.roomData.getEntity(this.entity.entitySerialNumber);
+    if (this.entity.entitySerialNumber) {
+      this.entity = this.roomData.getEntity(this.entity.entitySerialNumber)!;
     }
     this.setButtons();
     this.liveValuesMap = this.lvService.getLiveValuesBinding();

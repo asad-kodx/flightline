@@ -72,7 +72,7 @@ export class AlarmListPage {
 
 
   ionViewDidLeave(){
-    this.sub.unsubscribe();
+    this.sub?.unsubscribe();
   }
 
 

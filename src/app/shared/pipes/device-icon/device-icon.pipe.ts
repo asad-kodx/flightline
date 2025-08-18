@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DeviceType } from '../../models';
 
 @Pipe({
-  name: 'deviceIcon',
+  name: 'DeviceDisplayIcon',
   standalone: false
 })
 export class DeviceIconPipe implements PipeTransform {

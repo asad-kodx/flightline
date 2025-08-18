@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Mode } from '../../models/types/mode';
 
 @Pipe({
-  name: 'mode',
+  name: 'ModeDisplay',
   standalone: false
 })
 export class ModePipe implements PipeTransform {

@@ -29,8 +29,8 @@ export class AppComponent {
 
   protected appPages: PageInterface[] = [
     { title: 'Dashboard', name: 'home-page', index: 1, icon: 'home' },
-    { title: 'Controls', name: 'controls-list', index: 2, icon: 'desktop' },
-    { title: 'Alarms', name: 'alarms-list', index: 3, icon: 'notifications' },
+    { title: 'Controls', name: 'control-list', index: 2, icon: 'desktop' },
+    { title: 'Alarms', name: 'alarm-list', index: 3, icon: 'notifications' },
     { title: 'Entities', name: 'rooms-page', index: 4, icon: 'speedometer' },
     { title: 'Offline Alerts', name: 'offline-alerts', index: 5, icon: 'alert' }
   ];
