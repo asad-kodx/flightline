@@ -18,6 +18,7 @@ import { UserDataProvider } from './core/providers/user-data.provider';
 import { LogLevel } from 'onesignal-cordova-plugin';
 import { PushMessageHandler } from './core/services/pushmessagehandler.service';
 import { ControlDataProvider } from './core/providers/control-data.provider';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,7 @@ import { ControlDataProvider } from './core/providers/control-data.provider';
 export class AppComponent {
 
   protected appPages: PageInterface[] = [
-    { title: 'Dashboard', name: 'home-page', index: 1, icon: 'home' },
+    { title: 'Dashboard', name: 'home', index: 1, icon: 'home' },
     { title: 'Controls', name: 'control-list', index: 2, icon: 'desktop' },
     { title: 'Alarms', name: 'alarm-list', index: 3, icon: 'notifications' },
     { title: 'Entities', name: 'rooms-page', index: 4, icon: 'speedometer' },
@@ -64,8 +65,8 @@ export class AppComponent {
     private signalRService: SignalRService,
     private platform: Platform,
     private statusBar: StatusBar,
+    private router: Router,
     private splashScreen: SplashScreen,
-
   ) {
 
      this.platform.ready().then(() => {
@@ -203,7 +204,6 @@ export class AppComponent {
 
   openPage(page: PageInterface) {
     this.navCtrl.navigateRoot(page.name);
-
     if (page.logsOut === true) {
       // Give the menu time to close before changing to logged out
       this.authService.logout();

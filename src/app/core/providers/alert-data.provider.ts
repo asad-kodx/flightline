@@ -3,7 +3,10 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { OfflineAlert } from 'src/app/shared/models';
 import { ConfigurationService } from '../services/configuration.service';
 import { HttpService } from '../services/http-service';
-
+import { Injectable } from '@angular/core';
+@Injectable({
+  providedIn: 'root'
+})
 export class AlertDataProvider {
   private config = ConfigurationService;
 

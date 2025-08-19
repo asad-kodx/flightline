@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, ModalController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 import { map, Observable } from 'rxjs';
 import { AlertDataProvider } from 'src/app/core/providers/alert-data.provider';
 import { ControlDataProvider } from 'src/app/core/providers/control-data.provider';
@@ -22,7 +22,6 @@ export class OfflineAlertsPage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
     private modalCtrl: ModalController,
     private auth: AuthService,
     protected controlData: ControlDataProvider,

@@ -40,7 +40,7 @@
 
         <p>{{ alarm.created | date: 'medium' }}</p>
 
-        <ng-container *ngIf="liveValuesMap | async as liveValues">
+        <ng-container *ngIf="liveValuioniesMap | async as liveValues">
           <p *ngIf="alarm.entityHardwareId">
             Current: {{ liveValues.get(alarm.entityHardwareId)?.value | LiveValueDisplay: [
               roomData.isSensorOrDevice(alarm.entityHardwareId),
