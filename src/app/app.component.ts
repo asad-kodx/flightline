@@ -18,6 +18,7 @@ import { UserDataProvider } from './core/providers/user-data.provider';
 import { LogLevel } from 'onesignal-cordova-plugin';
 import { PushMessageHandler } from './core/services/pushmessagehandler.service';
 import { ControlDataProvider } from './core/providers/control-data.provider';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -72,8 +73,10 @@ export class AppComponent {
       // Here you can do any higher level native things you might need.
       // this.statusBar.styleDefault();
       // this.statusBar.show();
-      StatusBar.setStyle({ style: Style.Light });
-      SplashScreen.hide();
+      if (Capacitor.isNativePlatform()) {
+        StatusBar.setStyle({ style: Style.Light });
+        SplashScreen.hide();
+      }
       var bigToken = localStorage.getItem('auth-tokens');
       if (bigToken) {
         var parsedToken = JSON.parse(bigToken);

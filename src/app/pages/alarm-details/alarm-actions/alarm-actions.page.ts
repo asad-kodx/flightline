@@ -167,7 +167,7 @@ export class AlarmActionsPage implements OnInit {
         remoteSettingType: RemoteSettingCommandType.AlarmSettings,
         entityType: type,
       };
-      this.navCtrl.navigateForward('remote-settings-page', sensorData);
+      this.navCtrl.navigateForward('remote-settings', sensorData);
     } else {
       var roomData: any = {
         entityNumber: this.alarm.hardwareId,
@@ -302,6 +302,6 @@ export class AlarmActionsPage implements OnInit {
 
   goToRemoteControl() {
     var device = this.roomData.getEntity(this.alarm.hardwareId);
-    this.navCtrl.navigateForward('remote-control-page', {queryParams: device});
+    this.navCtrl.navigateForward('remote-control-component', {queryParams: device});
   }
 }

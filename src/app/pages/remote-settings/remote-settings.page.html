@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="remote-settings-content">
-  <ion-refresher (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
     <ion-refresher-content pullingText="- Refresh -" refreshingText="Refreshing settings..."></ion-refresher-content>
   </ion-refresher>
 

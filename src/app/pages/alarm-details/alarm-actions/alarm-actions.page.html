@@ -81,7 +81,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm.entityHardwareId)!.deviceType < 268435456">
+        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm.entityHardwareId)?.deviceType ?? 0 < 268435456">
           <ion-col size="5">Amps:</ion-col>
           <ion-col size="7">
             {{ ((liveValuesMap | async)?.get(alarm.entityHardwareId)?.amps | number: '1.0-3') || '- -' }}
