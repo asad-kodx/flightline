@@ -34,7 +34,7 @@ export class AlarmListPage {
     private liveValues: LiveValuesSubscription
   ) {}
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.alarms = this.alarmData.getAlarmsBinding();
     this.sub = this.alarms?.subscribe((alarms) => {
       this.myAlarmsPresent = alarms.filter((a) => a.state <= 1).length > 0;

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Flightline</string>
+    <string name="title_activity_main">Flightline</string>
+    <string name="package_name">com.ionicframework.controltechionic546641</string>
+    <string name="custom_url_scheme">com.ionicframework.controltechionic546641</string>
+</resources>

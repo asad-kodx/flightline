@@ -3,9 +3,9 @@ import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { SignalRService } from './signalr.service';
 import { ControlDataProvider } from '../providers/control-data.provider';
 
-@Injectable(
-    {providedIn: 'root'}
-)
+@Injectable({
+    providedIn: 'root'
+})
 export class LiveValueService {
 
     private liveValuesMap: Map<string, {}>;

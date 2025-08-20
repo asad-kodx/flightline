@@ -12,8 +12,6 @@ import { OneSignal } from "@awesome-cordova-plugins/onesignal/ngx";
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { Badge } from '@awesome-cordova-plugins/badge/ngx';
 import { SharedModule } from './shared/shared.module';
-import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
-import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
 
 @NgModule({
@@ -24,8 +22,6 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
     OneSignal,
     Network,
     Badge,
-    StatusBar,
-    SplashScreen,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],

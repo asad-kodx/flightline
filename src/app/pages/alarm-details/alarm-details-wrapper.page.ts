@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-alarm-details-wrapper',
@@ -12,9 +12,12 @@ export class AlarmDetailsWrapperPage implements OnInit {
   protected tabTitle: string = '';
   protected alarm: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    console.log('Wrapper', this.navParams);
-    this.alarm = this.navParams.get('alarm');
+  constructor(private route: ActivatedRoute) {
+    // console.log('Wrapper', this.navParams);
+    // this.alarm = this.navParams.get('alarm');
+    this.route.queryParams.subscribe((params) => {
+      this.alarm = params['alarm'];
+    });
   }
 
   onTabChange(tabTitle: string) {
