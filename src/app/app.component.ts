@@ -66,14 +66,14 @@ export class AppComponent {
 
   ) {
 
-     this.platform.ready().then(async () => {
+     this.platform.ready().then(() => {
 
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       // this.statusBar.styleDefault();
       // this.statusBar.show();
-      await StatusBar.setStyle({ style: Style.Light });
-      await SplashScreen.hide();
+      StatusBar.setStyle({ style: Style.Light });
+      SplashScreen.hide();
       var bigToken = localStorage.getItem('auth-tokens');
       if (bigToken) {
         var parsedToken = JSON.parse(bigToken);

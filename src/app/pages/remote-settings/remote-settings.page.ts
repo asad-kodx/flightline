@@ -164,13 +164,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
   //#region Page Lifecycle events
 
   /**
-   * Fired only when a view is stored in memory. This event is NOT fired on entering a view that is already cached
-   */
-  ionViewDidLoad() {
-    //console.log("did load");
-  }
-
-  /**
    * Fired when entering a page, after it becomes the active page
    */
   ionViewDidEnter() {

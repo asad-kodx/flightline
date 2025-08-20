@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Subscription, Observable } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -15,6 +15,7 @@ import {
   RemoteSettingCommandType,
   DBKeys,
 } from 'src/app/shared/models';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-alarm-actions',
   templateUrl: './alarm-actions.page.html',
@@ -23,7 +24,7 @@ import {
 
 })
 export class AlarmActionsPage implements OnInit {
-  public alarm: ControlAlarm;
+  public alarm!: ControlAlarm;
   private sub!: Subscription;
   protected liveValuesMap: Observable<Map<string, any>>;
   public pullMax = window.innerHeight * 0.7;
@@ -38,7 +39,6 @@ export class AlarmActionsPage implements OnInit {
   private resolvePressed!: boolean;
 
   constructor(
-    private navParams: NavParams,
     private alarmDataProvider: AlarmDataProvider,
     private signalr: SignalRService,
     private liveValues: LiveValuesSubscription,
@@ -46,12 +46,16 @@ export class AlarmActionsPage implements OnInit {
     private liveValuesService: LiveValueService,
     public controlData: ControlDataProvider,
     // private events: Events,
+    private route: ActivatedRoute,
     public navCtrl: NavController
   ) {
-    this.alarm = this.navParams.data['alarm'];
+    // this.alarm = this.navParams.data['alarm'];
 
-    if (!this.alarm.state) this.alarm = this.navParams.data['alarm'];
-    this.nav = this.navParams.data['nav'];
+    // if (!this.alarm.state) this.alarm = this.navParams.data['alarm'];
+    // this.nav = this.navParams.data['nav'];
+    this.route.queryParams.subscribe((params) => {
+      this.alarm = params['alarm'];
+    });
 
     this.liveValuesMap = this.liveValuesService.getLiveValuesBinding();
   }
@@ -63,9 +67,9 @@ export class AlarmActionsPage implements OnInit {
         .subscribe(),
         1000;
     });
-    console.log('Loaded alarm actions', this.alarm, this.navParams);
+    // console.log('Loaded alarm actions', this.alarm, this.navParams);
     if (!this.alarm) return;
-    if (!this.alarm.description) this.alarm = this.navParams.data['alarm'];
+    // if (!this.alarm.description) this.alarm = this.navParams.data['alarm'];
     if (!this.alarm.transactions || this.alarm.transactions.length == 0) {
       this.alarmDataProvider
         .getSingleAlarm(this.alarm.fusionAlarmKey)
