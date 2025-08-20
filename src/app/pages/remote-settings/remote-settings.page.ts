@@ -34,9 +34,7 @@ import {
   AlarmState,
   EntityType,
   RemoteSettingCommandType,
-  RemoteSettingsInputType,
-  LiveValueData,
-  StatusCode
+  RemoteSettingsInputType
 } from '../../shared/models/index';
 import { isNumber } from 'lodash';
 
@@ -391,24 +389,27 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
    */
   showPageLoader() {
     this.statusMessage = "Requesting control settings...";
-    this.pageLoader = this.loadingController.create({
+    this.loadingController.create({
       spinner: "crescent",
       message: this.statusMessage,
       showBackdrop: true,
       backdropDismiss: true
+    }).then((loader) => {
+      this.pageLoader = loader;
+      this.pageLoader?.present();
     });
     setTimeout(() => {
-      this.pageLoader.dismiss();
+      this.pageLoader?.dismiss();
       this.isPageLoading = false;
       this.displayRequestTimeout();
 
     }, this.pageLoadTimeout)
 
     //#region Alternate Pageloader dismiss logic
-    // this.pageLoader.onDidDismiss(() => {
-    //     //this.pageLoader.present().then(() => {
+    // this.pageLoader?.onDidDismiss(() => {
+    //     //this.pageLoader?.present().then(() => {
     //       if(isNullOrUndefined(this.remoteSettings)) {
-    //         //this.pageLoader.dismiss();
+    //         //this.pageLoader?.dismiss();
     //         this.isPageLoading = false;
     //         this.displayRequestTimeout();
     //       }
@@ -417,7 +418,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     //#endregion
 
     this.isPageLoading = true;
-    this.pageLoader.present();
   }
 
   /**
@@ -454,20 +454,22 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
    */
   showApplySettingsToast() {
     this.statusMessage = "Applying changed settings to the control..";
-    this.pageLoader = this.loadingController.create({
+    this.loadingController.create({
       spinner: "crescent",
       message: this.statusMessage,
       showBackdrop: true,
       backdropDismiss: true,
       duration: this.pageLoadTimeout
+    }).then((loader) => {
+      this.pageLoader = loader;
+      this.pageLoader?.present();
     });
     this.applySettingsTimer = setTimeout(() => {
-      this.pageLoader.dismiss();
+      this.pageLoader?.dismiss();
       this.isPageLoading = false;
       this.showToast("Applying settings failed. Please check network connection", 10000, true);
     }, this.pageLoadTimeout)
     this.isPageLoading = true;
-    this.pageLoader.present();
   }
 
   /**
@@ -658,11 +660,11 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     //   //Deserializing value JSON
     //   if (!isNullOrUndefined(data)) {
     //     //Check if the response belongs to this request
-    //     this.pageLoader.data.content = "Received & processing control settings"
+    //     this.pageLoader?.data.content = "Received & processing control settings"
     //     //Dismiss the page loader        
     //     if (this.isPageLoading) {
-    //       this.pageLoader.present().then(() => {
-    //         this.pageLoader.dismiss();
+    //       this.pageLoader?.present().then(() => {
+    //         this.pageLoader?.dismiss();
     //         this.isPageLoading = false;
     //         this.btnApplyDisabled = true;
     //       })
@@ -726,8 +728,8 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     //     this.settingUpdateAcknowledgement = data;
     //     if (this.settingUpdateAcknowledgement.statusCode == 0) {
     //       if (this.isPageLoading) {
-    //         this.pageLoader.present().then(() => {
-    //           this.pageLoader.dismiss();
+    //         this.pageLoader?.present().then(() => {
+    //           this.pageLoader?.dismiss();
     //           this.isPageLoading = false;
     //         })
     //       }
