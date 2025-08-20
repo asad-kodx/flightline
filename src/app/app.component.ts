@@ -11,8 +11,8 @@ import OneSignal from 'onesignal-cordova-plugin';
 
 import { ConfigurationService } from "./core/services/configuration.service";
 
-import { StatusBar } from "@awesome-cordova-plugins/status-bar/ngx";
-import { SplashScreen } from "@awesome-cordova-plugins/splash-screen/ngx";
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { SignalRService } from './core/services/signalr.service';
 import { UserDataProvider } from './core/providers/user-data.provider';
 import { LogLevel } from 'onesignal-cordova-plugin';
@@ -62,19 +62,18 @@ export class AppComponent {
     private pushMessageHandler: PushMessageHandler,
     private authService: AuthService,
     private signalRService: SignalRService,
-    private platform: Platform,
-    private statusBar: StatusBar,
-    private splashScreen: SplashScreen,
+    private platform: Platform
 
   ) {
 
-     this.platform.ready().then(() => {
+     this.platform.ready().then(async () => {
 
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.statusBar.show();
-      splashScreen.hide();
+      // this.statusBar.styleDefault();
+      // this.statusBar.show();
+      await StatusBar.setStyle({ style: Style.Light });
+      await SplashScreen.hide();
       var bigToken = localStorage.getItem('auth-tokens');
       if (bigToken) {
         var parsedToken = JSON.parse(bigToken);
