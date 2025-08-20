@@ -4,7 +4,7 @@ import * as moment from 'moment';
 
 @Pipe({ name: 'OnlineFilter', standalone: false })
 export class OnlineFilter implements PipeTransform {
-  transform(value: Control[] | null): Control[] {
+  transform(value: Control[] | null, args?: any): Control[] {
     if (!value) return [];
     return value.filter(ctrl => {
       const httpDiff = moment().diff(moment(ctrl.lastHttpPing), 'minutes');
@@ -29,7 +29,7 @@ export class OfflineFilter implements PipeTransform {
 
 @Pipe({ name: 'FavoriteFilter', standalone: false })
 export class FavoriteFilter implements PipeTransform {
-  transform(value: Control[] | null): Control[] {
+  transform(value: Control[] | null, args?: any): Control[] {
     if (!value) return [];
     return value.filter(ctrl => ctrl.isFavorite);
   }
@@ -37,7 +37,7 @@ export class FavoriteFilter implements PipeTransform {
 
 @Pipe({ name: 'NonFavoriteFilter', standalone: false })
 export class NonFavoriteFilter implements PipeTransform {
-  transform(value: Control[] | null): Control[] {
+  transform(value: Control[] | null, args?: any): Control[] {
     if (!value) return [];
     return value.filter(ctrl => !ctrl.isFavorite);
   }

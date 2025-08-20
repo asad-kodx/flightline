@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -23,7 +24,7 @@ export class ControlListPage implements OnInit {
   public pullMin = window.innerHeight * .12
 
   constructor(
-    private controlData: ControlDataProvider, private navCtrl: NavController, public alarmData: AlarmDataProvider, private siteContext: SiteContextService
+    private controlData: ControlDataProvider, private router: Router, private navCtrl: NavController, public alarmData: AlarmDataProvider, private siteContext: SiteContextService
   ) { }
 
   ngOnInit() {
@@ -40,7 +41,7 @@ export class ControlListPage implements OnInit {
   }
 
   navigateToDetails(control: Control) {
-      this.navCtrl.navigateForward('control-details-tabs', {state: { control: control }});
+      this.navCtrl.navigateForward(['/control-details/control-detail-tabs'], {state: { control: control }});
   }
 
 

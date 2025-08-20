@@ -40,32 +40,37 @@
 
   <!-- Switch Content -->
   <ng-container [ngSwitch]="segmentSelected">
-
     <!-- ALL -->
     <ion-list *ngSwitchCase="'all'">
       <ion-list-header *ngIf="hasFavorites('all', controls | async)">
         Favorites
       </ion-list-header>
-      <!-- <ng-container *ngFor="let control of controls | FavoriteFilter:(control | async) | async">
+      <ng-container
+        *ngFor="let control of (controls | async) | FavoriteFilter:(controls | async)"
+      >
         <control
           [control]="control"
+          class="control"
           [searchText]="searchText"
           (controlClicked)="navigateToDetails(control)"
           (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
-      </ng-container> -->
+      </ng-container>
 
       <ion-list-header *ngIf="hasNormal('all', controls | async)">
         Controls
       </ion-list-header>
-      <!-- <ng-container *ngFor="let control of controls | NonFavoriteFilter:(control | async) | async">
+      <ng-container
+        *ngFor="let control of (controls | async) | NonFavoriteFilter"
+      >
         <control
           [control]="control"
+          class="control"
           [searchText]="searchText"
           (controlClicked)="navigateToDetails(control)"
           (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
-      </ng-container> -->
+      </ng-container>
     </ion-list>
 
     <!-- ONLINE -->
@@ -73,26 +78,29 @@
       <ion-list-header *ngIf="hasFavorites('online', controls | async)">
         Favorites
       </ion-list-header>
-      <!-- <ng-container *ngFor="let control of controls | FavoriteFilter:(control | async) | OnlineFilter:(control | async) | async">
+      <ng-container *ngFor="let control of (controls | async) | FavoriteFilter:(controls | async) | OnlineFilter:(controls| async)">
         <control
-          [control]="control"
-          [searchText]="searchText"
-          (controlClicked)="navigateToDetails(control)"
-          (toggleFavoriteClicked)="toggleFavorite(control)"
+        [control]="control"
+        [searchText]="searchText"
+        (controlClicked)="navigateToDetails(control)"
+        (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
-      </ng-container> -->
+      </ng-container>
 
       <ion-list-header *ngIf="hasNormal('online', controls | async)">
         Controls
       </ion-list-header>
-      <!-- <ng-container *ngFor="let control of controls | NonFavoriteFilter:(control | async) | OnlineFilter:(control | async) | async">
+      <ng-container
+        *ngFor="let control of (controls | async) | NonFavoriteFilter:(controls | async) | OnlineFilter:(controls | async)"
+      >
         <control
           [control]="control"
+          class="control"
           [searchText]="searchText"
           (controlClicked)="navigateToDetails(control)"
           (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
-      </ng-container> -->
+      </ng-container>
     </ion-list>
 
     <!-- OFFLINE -->
@@ -100,11 +108,14 @@
       <ion-list-header *ngIf="hasFavorites('offline', controls | async)">
         Favorites
       </ion-list-header>
-      <ng-container *ngFor="let control of (controls | async) | FavoriteFilter | OfflineFilter">
+      <ng-container
+        *ngFor="let control of (controls | async) | FavoriteFilter | OfflineFilter"
+      >
         <control
           [control]="control"
           [searchText]="searchText"
           (controlClicked)="navigateToDetails(control)"
+          class="control"
           (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
       </ng-container>
@@ -112,15 +123,17 @@
       <ion-list-header *ngIf="hasNormal('offline', controls | async)">
         Controls
       </ion-list-header>
-      <ng-container *ngFor="let control of (controls | async) | NonFavoriteFilter | OfflineFilter">
+      <ng-container
+        *ngFor="let control of (controls | async) | NonFavoriteFilter | OfflineFilter"
+      >
         <control
           [control]="control"
           [searchText]="searchText"
+          class="control"
           (controlClicked)="navigateToDetails(control)"
           (toggleFavoriteClicked)="toggleFavorite(control)"
         ></control>
       </ng-container>
     </ion-list>
-
   </ng-container>
 </ion-content>
