@@ -13,6 +13,7 @@ import { Sensor, Device, Control } from 'src/app/shared/models';
   selector: 'app-entity-graphs',
   templateUrl: './entity-graphs.page.html',
   styleUrls: ['./entity-graphs.page.scss'],
+  standalone: false
 })
 export class EntityGraphsPage implements OnInit {
 

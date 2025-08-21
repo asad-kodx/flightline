@@ -13,6 +13,7 @@ import { Control, ControlAlarm, AlarmState } from 'src/app/shared/models';
   selector: 'app-alarm-list-tabs',
   templateUrl: './alarm-list-tabs.page.html',
   styleUrls: ['./alarm-list-tabs.page.scss'],
+  standalone: false
 })
 export class AlarmListTabsPage implements OnInit {
   private control: Control;

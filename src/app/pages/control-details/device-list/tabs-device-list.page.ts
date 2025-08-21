@@ -11,6 +11,7 @@ import { Room, RemoteSettingCommandType, EntityType, Device, DeviceType } from '
   selector: 'app-tabs-device-list',
   templateUrl: './tabs-device-list.page.html',
   styleUrls: ['./tabs-device-list.page.scss'],
+  standalone: false
 })
 export class TabsDeviceListPage implements OnInit {
 

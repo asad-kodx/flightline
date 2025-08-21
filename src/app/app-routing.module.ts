@@ -116,6 +116,10 @@ const routes: Routes = [
   {
     path: 'alarm-item',
     loadChildren: () => import('./pages/alarm-list/alarm-item/alarm-item.module').then( m => m.AlarmItemPageModule)
+  },
+  {
+    path: 'control-details',
+    loadChildren: () => import('./pages/control-details/control-details-wrapper.module').then( m => m.ControlDetailsWrapperPageModule)
   }
 ];
 

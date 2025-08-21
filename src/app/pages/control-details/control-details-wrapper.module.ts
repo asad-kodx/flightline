@@ -7,14 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ControlDetailsWrapperPageRoutingModule } from './control-details-wrapper-routing.module';
 
 import { ControlDetailsWrapperPage } from './control-details-wrapper.page';
+import { ControlDetailTabsPageModule } from './control-detail-tabs/control-detail-tabs.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ControlDetailsWrapperPageRoutingModule,
-    ControlDetailsWrapperPage
+    ControlDetailTabsPageModule,
+    ControlDetailsWrapperPageRoutingModule
   ],
   declarations: [ControlDetailsWrapperPage]
 })

@@ -17,6 +17,7 @@ import {
   selector: 'app-entity-alarms',
   templateUrl: './entity-alarms.page.html',
   styleUrls: ['./entity-alarms.page.scss'],
+  standalone: false
 })
 export class EntityAlarmsPage implements OnInit {
   private entity: Sensor & Device;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Control } from 'src/app/shared/models';
 
 @Component({
@@ -11,11 +12,14 @@ import { Control } from 'src/app/shared/models';
 export class ControlDetailsWrapperPage {
 
     protected tabTitle: string = '';
-    protected control: Control;
+    protected control!: Control;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams){
-        console.log('Wrapper', this.navParams);
-        this.control = this.navParams.get('control');
+    constructor(public navCtrl: NavController, private route: ActivatedRoute){
+        // console.log('Wrapper', this.navParams);
+        // this.control = this.navParams.get('control');
+        this.route.queryParams.subscribe((params) => {
+            this.control = params['control'];
+        });
     }
 
     onTabChange(tabTitle: string){

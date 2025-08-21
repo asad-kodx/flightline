@@ -12,6 +12,7 @@ import { Room, RemoteSettingCommandType, EntityType, Sensor, SensorType } from '
   selector: 'app-tab-sensor-list',
   templateUrl: './tab-sensor-list.page.html',
   styleUrls: ['./tab-sensor-list.page.scss'],
+  standalone: false
 })
 export class TabSensorListPage implements OnInit {
 

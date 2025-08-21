@@ -26,9 +26,9 @@
       <ion-icon name="notifications-outline"></ion-icon>
       <ion-label>Alarms</ion-label>
       <ion-badge color="danger">
-        {{ alarmData.getAlarmCounts(control.serialNumber, null).activeCount +
-        alarmData.getAlarmCounts(control.serialNumber, null).acknowledgedCount +
-        alarmData.getAlarmCounts(control.serialNumber, null).silentCount }}
+        {{ alarmData.getAlarmCounts(control.serialNumber, undefined).activeCount +
+        alarmData.getAlarmCounts(control.serialNumber, undefined).acknowledgedCount +
+        alarmData.getAlarmCounts(control.serialNumber, undefined).silentCount }}
       </ion-badge>
     </ion-tab-button>
   </ion-tab-bar>
