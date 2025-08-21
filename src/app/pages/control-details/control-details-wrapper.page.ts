@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Event } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Control } from 'src/app/shared/models';
 
@@ -11,7 +11,7 @@ import { Control } from 'src/app/shared/models';
 })
 export class ControlDetailsWrapperPage {
 
-    protected tabTitle: string = '';
+    protected tabTitle: string | Event = '';
     protected control!: Control;
 
     constructor(public navCtrl: NavController, private route: ActivatedRoute){
@@ -22,8 +22,7 @@ export class ControlDetailsWrapperPage {
         });
     }
 
-    onTabChange(tabTitle: string){
+    onTabChange(tabTitle: string | Event){
         this.tabTitle = tabTitle;
     }
-
 }

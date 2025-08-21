@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EntityAlarmsPageRoutingModule } from './entity-alarms-routing.module';
 
 import { EntityAlarmsPage } from './entity-alarms.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EntityAlarmsPageRoutingModule
+    EntityAlarmsPageRoutingModule,
+    SharedModule
   ],
   declarations: [EntityAlarmsPage]
 })

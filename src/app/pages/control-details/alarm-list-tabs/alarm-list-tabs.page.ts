@@ -16,7 +16,7 @@ import { Control, ControlAlarm, AlarmState } from 'src/app/shared/models';
   standalone: false
 })
 export class AlarmListTabsPage implements OnInit {
-  private control: Control;
+  public control: Control;
 
   protected alarms: Observable<ControlAlarm[]>;
   protected searchText: string = '';

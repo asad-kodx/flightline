@@ -17,9 +17,9 @@ import { Room, RemoteSettingCommandType, EntityType, Sensor, SensorType } from '
 export class TabSensorListPage implements OnInit {
 
 
- public control: any;
+    public control: any;
     protected rooms: any;
-    protected searchText: string = ''
+    protected searchText = new FormControl('')
     protected searchControl: FormControl = new FormControl();
     protected liveValuesMap!: Observable<Map<string, any>>;
     public pullMax = window.innerHeight * .7;
@@ -190,9 +190,9 @@ export class TabSensorListPage implements OnInit {
     }
     shouldShow(sensor: Sensor): boolean {
         if (sensor.sensorType == SensorType.RemoteSensor) return false;
-        if (!this.searchText || this.searchText.trim() == "") return true;
-        return (sensor.sensorName.toLocaleLowerCase().indexOf(this.searchText.toLocaleLowerCase()) > -1 ||
-            sensor.sensorSerialNumber.toLocaleLowerCase().indexOf(this.searchText.toLocaleLowerCase()) > -1);
+        if (!this.searchText || this.searchText.toString().trim() == "") return true;
+        return (sensor.sensorName.toLocaleLowerCase().indexOf(this.searchText.toString().toLocaleLowerCase()) > -1 ||
+            sensor.sensorSerialNumber.toLocaleLowerCase().indexOf(this.searchText.toString().toLocaleLowerCase()) > -1);
     }
     shouldShowBadge(sensor: Sensor) {
         var ac = this.alarmData.getAlarmCounts(null, sensor.sensorSerialNumber, null);

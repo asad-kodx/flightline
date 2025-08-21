@@ -44,7 +44,8 @@ export class AlarmListPage {
       this.myAlarmsPresent = alarms.length > 0;
       let entityIds: string[] = [];
       alarms.forEach((a) => {
-        entityIds.push(a.entityHardwareId);
+        entityIds.push(a.entityHardwareId || ''
+        );
       });
       entityIds = _.union(entityIds);
       this.liveValues.requestLiveValuesList(entityIds).subscribe();

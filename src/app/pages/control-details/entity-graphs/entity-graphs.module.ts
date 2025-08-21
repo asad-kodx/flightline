@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { EntityGraphsPageRoutingModule } from './entity-graphs-routing.module';
 
 import { EntityGraphsPage } from './entity-graphs.page';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EntityGraphsPageRoutingModule
+    EntityGraphsPageRoutingModule,
+    NgxChartsModule,
+    SharedModule
   ],
   declarations: [EntityGraphsPage]
 })

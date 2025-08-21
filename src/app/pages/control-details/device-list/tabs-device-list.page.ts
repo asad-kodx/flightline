@@ -15,7 +15,7 @@ import { Room, RemoteSettingCommandType, EntityType, Device, DeviceType } from '
 })
 export class TabsDeviceListPage implements OnInit {
 
- private control: any;
+    public control: any;
     protected rooms: any;
     protected searchText: string = '';
     protected searchControl: FormControl = new FormControl();
