@@ -46,7 +46,7 @@ export class AlarmItemPage {
 
     public navigateToDetails(alarm: ControlAlarm) {
         console.log('Navigate to Details', alarm);
-        this.navCtrl.navigateForward('alarm-details-wrapper/alarm-actions', { queryParams: { alarm }});
+        this.navCtrl.navigateForward('alarm-details/alarm-actions', { queryParams: { alarm }});
     }
 
     shouldShow(alarm: ControlAlarm): boolean {

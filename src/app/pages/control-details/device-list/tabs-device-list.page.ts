@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, ActionSheetController, ToastController } from '@ionic/angular';
+import { NavController, ActionSheetController, ToastController, ViewWillEnter } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
+import { ControlDataProvider } from 'src/app/core/providers/control-data.provider';
 import { RoomDataProvider } from 'src/app/core/providers/room-data.provider';
 import { LiveValueService } from 'src/app/core/services/live-value.service';
 import { Room, RemoteSettingCommandType, EntityType, Device, DeviceType } from 'src/app/shared/models';
@@ -13,7 +14,7 @@ import { Room, RemoteSettingCommandType, EntityType, Device, DeviceType } from '
   styleUrls: ['./tabs-device-list.page.scss'],
   standalone: false
 })
-export class TabsDeviceListPage implements OnInit {
+export class TabsDeviceListPage implements ViewWillEnter {
 
     public control: any;
     protected rooms: any;
@@ -22,14 +23,13 @@ export class TabsDeviceListPage implements OnInit {
     protected liveValuesMap!: Observable<Map<string, any>>;
     public pullMax = window.innerHeight * .7
     public pullMin = window.innerHeight * .12
-    private nav: NavController;
+    // private nav: NavController;
 
-    constructor(private navParams: NavParams, private roomData: RoomDataProvider, private lvService: LiveValueService, public navCtrl: NavController, private actionSheet: ActionSheetController, public alarmData: AlarmDataProvider, private toastCtrl: ToastController) {
-            this.control = this.navParams.get('control');;
-            this.nav = this.navParams.get('nav');
+    constructor(private roomData: RoomDataProvider, private controlData: ControlDataProvider, private lvService: LiveValueService, public navCtrl: NavController, private actionSheet: ActionSheetController, public alarmData: AlarmDataProvider, private toastCtrl: ToastController) {
+            this.control = this.controlData.getSelectedControl();
     }
-    ngOnInit() {
-        this.rooms = JSON.parse(localStorage.getItem(`devices_${103}` ) || '');
+    ionViewWillEnter() {
+        this.rooms = JSON.parse(localStorage.getItem(`devices_${103}` ) || '[]');
         this.roomData.getDevicesForControl(this.control.serialNumber).subscribe((rooms) => {
             this.rooms = rooms;
         });
@@ -84,7 +84,7 @@ export class TabsDeviceListPage implements OnInit {
                 }
                 var roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: '', remoteSettingType: RemoteSettingCommandType.EntitySettings, entityType: EntityType.Room };
                 console.log('Navigating to room settings', roomData);
-                this.nav.navigateForward('remote-settings-page', roomData);
+                this.navCtrl.navigateForward('remote-settings-page', roomData);
               }
             },
             {
@@ -103,7 +103,7 @@ export class TabsDeviceListPage implements OnInit {
                 //Navigate to room alarm settings
                 var roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, roomId: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: '', remoteSettingType: RemoteSettingCommandType.AlarmSettings, entityType: EntityType.Room };
                 console.log('Navigating to room alarm settings', roomData);
-                this.nav.navigateForward('remote-settings-page', roomData);
+                this.navCtrl.navigateForward('remote-settings-page', roomData);
               }
             }
           ]
@@ -117,14 +117,14 @@ export class TabsDeviceListPage implements OnInit {
             {
               text: 'Alarms',
               handler: () => {
-                this.nav.navigateForward('entity-alarms-page', { queryParams: { device } });
+                this.navCtrl.navigateForward('entity-alarms-page', { queryParams: { device } });
               }
             },
             {
               text: 'Remote Control',
               handler: () => {
                 console.log("Nav to remote control", device);
-                this.nav.navigateForward('remote-control-page', { queryParams: { device } });
+                this.navCtrl.navigateForward('remote-control-page', { queryParams: { device } });
               }
             },
             {
@@ -142,7 +142,7 @@ export class TabsDeviceListPage implements OnInit {
                 }
                 var deviceData: any = { entityNumber: device.deviceSerialNumber, roomId: device.controlSerialNumber + "." + device.roomProgramId, controlSerialNumber: device.controlSerialNumber, controlName: this.control.name, deviceName: device.deviceName, remoteSettingType: RemoteSettingCommandType.EntitySettings, entityType: EntityType.Device };
                 console.log("Nav to device settings", deviceData);
-                this.nav.navigateForward('remote-settings-page', deviceData);
+                this.navCtrl.navigateForward('remote-settings-page', deviceData);
               }
             },
             {
@@ -160,7 +160,7 @@ export class TabsDeviceListPage implements OnInit {
                 }
                 var deviceData: any = { entityNumber: device.deviceSerialNumber, roomId: device.controlSerialNumber + "." + device.roomProgramId, controlSerialNumber: device.controlSerialNumber, controlName: this.control.name, deviceName: device.deviceName, remoteSettingType: RemoteSettingCommandType.AlarmSettings, entityType: EntityType.Device };
                 console.log("Nav to Device alarm settings", deviceData);
-                this.nav.navigateForward('remote-settings-page', deviceData);
+                this.navCtrl.navigateForward('remote-settings-page', deviceData);
               }
             },
             {

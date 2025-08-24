@@ -37,16 +37,18 @@
 
   /* Cards */
   --ion-card-background: #242424;
-  --ion-card-color: var(--ion-text-color);
+  // --ion-card-color: var(--ion-text-color);
 
   /* Toast */
   --ion-toast-background: #019875;
   --ion-toast-color: var(--ion-text-color);
 
   /* Searchbar */
-  --ion-searchbar-background: #313131;
-  --ion-searchbar-color: #bdc3c7;
-  --ion-placeholder-color: #A3A8AC;
+  ion-searchbar {
+    --background: #313131;
+    --color: #bdc3c7;
+    --placeholder-color: #A3A8AC;
+  }
 
   /* Toggle */
   --ion-toggle-background: #696969;

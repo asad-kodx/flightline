@@ -7,8 +7,10 @@ import { SensorType } from '../../models/types/sensor-type';
 })
 export class SensorDisplayIconPipe implements PipeTransform {
   transform(value: SensorType, args: any[]) {
-    if(value == null) return null;
-    switch (value) {
+    let sensType = (<SensorType>args[0])
+
+    // if(value == null) return null;
+    switch (sensType) {
       case SensorType.AbstractSensor:
         return 'custom-sensor-default';
       case SensorType.Humidity:

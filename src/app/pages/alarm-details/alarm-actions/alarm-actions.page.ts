@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, RefresherCustomEvent } from '@ionic/angular';
 import * as moment from 'moment';
 import { Subscription, Observable } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -118,14 +118,14 @@ export class AlarmActionsPage implements OnInit {
     if (this.sub) this.sub.unsubscribe();
   }
 
-  public handleRefresh(event: any) {
+  public handleRefresh(event: RefresherCustomEvent) {
     this.alarmDataProvider.getSingleAlarm(this.alarm.fusionAlarmKey).subscribe(
       (alarm: ControlAlarm) => {
         if (alarm) this.alarm = alarm;
-        window.setTimeout(() => event.complete(), 500);
+        window.setTimeout(() => event.target.complete(), 500);
       },
       (err) => {
-        window.setTimeout(() => event.complete(), 500);
+        window.setTimeout(() => event.target.complete(), 500);
       }
     );
   }

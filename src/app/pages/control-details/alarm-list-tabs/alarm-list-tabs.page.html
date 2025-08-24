@@ -1,18 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-        Back
-      </ion-button>
+      <ion-back-button defaultHref="/control-list"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ control.name }}</ion-title>
+    <ion-title>{{ control?.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-refresher (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
     <ion-refresher-content pullingText="- Refresh -" refreshingText="Loading Alarms">
     </ion-refresher-content>
   </ion-refresher>
@@ -64,7 +61,7 @@
               {{ controlData.getControl(alarm.controlSerialNumber)?.name || controlData.getControl(alarm.controlSerialNumber)?.serialNumber }}
             </ion-col>
             <ion-col size="1">
-              <ion-icon name="contact"></ion-icon>
+              <ion-icon name="person"></ion-icon>
             </ion-col>
             <ion-col size="5" class="text-truncate">
               Assigned To:<br>

@@ -38,6 +38,8 @@ export class ControlDataProvider extends BaseDataProvider<Control[]> {
     private get controlsBySnoUrl(): string { return this.configurations.baseUrl + this._controlBySno; }
     private get checkSerialNumberUrl(): string { return this.configurations.baseUrl + this._checkSerialNumberUrl; }
 
+    private selectedControl?: Control;
+
     constructor(http: HttpClient, private orgContext: OrgContextService, private signalr: SignalRService) {
         super(http, orgContext);
 
@@ -165,4 +167,11 @@ export class ControlDataProvider extends BaseDataProvider<Control[]> {
         return this.http.post<T>(endpointUrl, null);
     }
 
+    setSelectedControl(control: Control) {
+        this.selectedControl = control;
+    }
+
+    getSelectedControl(): Control | undefined {
+        return this.selectedControl
+    }
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { ControlDetailTabsPage } from './pages/control-details/control-detail-tabs/control-detail-tabs.page';
 
 const routes: Routes = [
   {
@@ -96,7 +97,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'alarm-details-wrapper',
+    path: 'alarm-details',
     loadChildren: () =>
       import('./pages/alarm-details/alarm-details-wrapper.module').then(
         (m) => m.AlarmDetailsWrapperPageModule
@@ -119,7 +120,18 @@ const routes: Routes = [
   },
   {
     path: 'control-details',
-    loadChildren: () => import('./pages/control-details/control-details-wrapper.module').then( m => m.ControlDetailsWrapperPageModule)
+    loadChildren: () => import('./pages/control-details/control-detail-tabs/control-detail-tabs.module')
+      .then(m => m.ControlDetailTabsPageModule)
+  },
+  {
+    path: 'entity-alarms',
+    loadChildren: () => import('./pages/control-details/entity-alarms/entity-alarms.module')
+      .then(m => m.EntityAlarmsPageModule)
+  },
+  {
+    path: 'entity-graphs',
+    loadChildren: () => import('./pages/control-details/entity-graphs/entity-graphs.module')
+      .then(m => m.EntityGraphsPageModule)
   }
 ];
 

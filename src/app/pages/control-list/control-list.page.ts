@@ -41,7 +41,8 @@ export class ControlListPage implements OnInit {
   }
 
   navigateToDetails(control: Control) {
-      this.navCtrl.navigateForward(['/control-details/control-detail-tabs'], {state: { control: control }});
+      this.controlData.setSelectedControl(control);
+      this.navCtrl.navigateForward(['/control-details']);
   }
 
 

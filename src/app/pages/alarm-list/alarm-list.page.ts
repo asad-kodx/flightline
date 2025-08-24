@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, RefresherCustomEvent } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { AlarmState, ControlAlarm } from 'src/app/shared/models';
@@ -56,10 +56,10 @@ export class AlarmListPage {
     this.getAlarmData();
   }
 
-  handleRefresh(event: any) {
+  handleRefresh(event: RefresherCustomEvent) {
     this.getAlarmData()?.subscribe({
       next: (unused) => {
-        window.setTimeout(() => event.complete(), 500);
+        window.setTimeout(() => event.target.complete(), 500);
       },
       error: (err) => {
         console.error(err);

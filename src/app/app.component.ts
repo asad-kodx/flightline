@@ -210,6 +210,7 @@ export class AppComponent {
       // Give the menu time to close before changing to logged out
       this.authService.logout();
     }
+    this.menuCtrl.close();
   }
 
   isActive(page: PageInterface) {
