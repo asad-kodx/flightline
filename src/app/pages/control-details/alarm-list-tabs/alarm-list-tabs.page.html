@@ -28,7 +28,7 @@
       <ion-list-header>
         Active Alarms
       </ion-list-header>
-      <ng-container *ngFor="let alarm of alarmList | AlarmStateActive: searchText">
+      <ng-container *ngFor="let alarm of alarmList | AlarmStateActive">
 
         <ion-item *ngIf="shouldShow(alarm)" button (click)="navigateToDetails(alarm)">
           

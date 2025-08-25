@@ -80,7 +80,7 @@ export class AlarmListTabsPage implements OnInit {
 
   public navigateToDetails(alarm: ControlAlarm) {
     this.navCtrl.navigateForward('alarm-details/alarm-actions', {
-      queryParams: { alarm },
+      state: { alarm },
     });
     // this.events.publish("AlarmNav", alarm)
   }

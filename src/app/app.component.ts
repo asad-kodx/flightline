@@ -294,7 +294,7 @@ export class AppComponent {
   }
 
   navToSiteAlarms(site: Site) {
-    this.navCtrl.navigateRoot('site-alarms-list', { state: site })
+    this.navCtrl.navigateRoot('site-alarms-list', { state: { site } })
     this.menuCtrl.close();
   }
 

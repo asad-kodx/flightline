@@ -29,7 +29,7 @@
     </ion-list-header>
 
     <ion-item 
-      *ngFor="let alarm of (alarms | async) | AlarmStateActive:(alarms | async)" 
+      *ngFor="let alarm of (alarms | async) | AlarmStateActive" 
       button
       (click)="navigateToDetails(alarm)">
       

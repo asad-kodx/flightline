@@ -1,5 +1,5 @@
 <div *ngIf="!resolved">
-  <div *ngFor="let alarm of ( alarms | async) | AlarmStateActive: (alarms | async )">
+  <div *ngFor="let alarm of ( alarms | async) | AlarmStateActive">
     <ion-item button detail="false" style="zoom:.85" *ngIf="shouldShow(alarm)" (click)="navigateToDetails(alarm)">
       <ion-icon name="radio-button-on" slot="start" style="zoom:0.5; line-height:2.5em" [color]="alarmStateColor(alarm)">
       </ion-icon>

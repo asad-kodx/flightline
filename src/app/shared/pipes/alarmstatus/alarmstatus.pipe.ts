@@ -8,7 +8,7 @@ import { AlarmState, ControlAlarm } from '../../models';
 })
 export class AlarmStateActivePipe implements PipeTransform {
 
-  transform(value: ControlAlarm[] | null, args: any) {
+  transform(value: ControlAlarm[] | null) {
     if (value) {
         return value.filter(a =>
             a.state === AlarmState.Active ||
