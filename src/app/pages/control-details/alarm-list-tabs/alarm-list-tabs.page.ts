@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController, RefresherCustomEvent } from '@ionic/angular';
 import { from, map, Observable } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -16,7 +16,7 @@ import { Control, ControlAlarm, AlarmState } from 'src/app/shared/models';
   standalone: false
 })
 export class AlarmListTabsPage implements OnInit {
-  private control: Control;
+  public control?: Control;
 
   protected alarms: Observable<ControlAlarm[]>;
   protected searchText: string = '';
@@ -26,19 +26,16 @@ export class AlarmListTabsPage implements OnInit {
   public pullMax = window.innerHeight * 0.7;
   public pullMin = window.innerHeight * 0.12;
   private sub!: Subscription;
-  private nav: NavController;
 
   constructor(
     public navCtrl: NavController,
     private liveValuesService: LiveValueService,
     private alarmData: AlarmDataProvider,
     public roomData: RoomDataProvider,
-    public controlData: ControlDataProvider,
-    private navParams: NavParams
+    public controlData: ControlDataProvider
   ) {
     this.alarms = from([]);
-    this.control = this.navParams.get('control');
-    this.nav = this.navParams.get('nav');
+    this.control = this.controlData.getSelectedControl();
     this.liveValuesMap = this.liveValuesService.getLiveValuesBinding();
   }
 
@@ -47,7 +44,7 @@ export class AlarmListTabsPage implements OnInit {
       map((alarms: any) => {
         return alarms.filter(
           (a: any) =>
-            a.state <= 1 && a.controlSerialNumber == this.control.serialNumber
+            a.state <= 1 && a.controlSerialNumber == this.control?.serialNumber
         );
       })
     );
@@ -55,15 +52,15 @@ export class AlarmListTabsPage implements OnInit {
       this.activeAlarmsPresent =
         alarms.filter(
           (a) =>
-            a.state <= 1 && a.controlSerialNumber == this.control.serialNumber
+            a.state <= 1 && a.controlSerialNumber == this.control?.serialNumber
         ).length > 0;
     });
     this.alarmData.getAlarms().subscribe();
   }
 
-  handleRefresh(event: any) {
+  handleRefresh(event: RefresherCustomEvent) {
     this.alarmData.getAlarms().subscribe((alarms) => {
-      window.setTimeout(() => event.complete(), 500);
+      window.setTimeout(() => event.target.complete(), 500);
     });
   }
 
@@ -82,8 +79,8 @@ export class AlarmListTabsPage implements OnInit {
   }
 
   public navigateToDetails(alarm: ControlAlarm) {
-    this.nav.navigateForward('alarm-actions-page', {
-      queryParams: { alarm: alarm },
+    this.navCtrl.navigateForward('alarm-details/alarm-actions', {
+      state: { alarm },
     });
     // this.events.publish("AlarmNav", alarm)
   }

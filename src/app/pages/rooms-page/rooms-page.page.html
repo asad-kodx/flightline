@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button>
-        <ion-icon name="menu"></ion-icon>
+        
         <!-- <span><alarm-count></alarm-count></span> -->
       </ion-menu-button>
     </ion-buttons>
@@ -23,7 +23,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-select interface="popover" placeholder="Select A Type" style="width: 100%; max-width: 100%;" (ionChange)="onSelected($event)">
+  <ion-select class="ion-padding-horizontal" label-placement="floating" interface="popover" label="Select A Type" (ionChange)="onSelected($event)">
     <ion-select-option *ngFor="let item of searchData" [value]="item">{{item}}</ion-select-option>
   </ion-select>
 

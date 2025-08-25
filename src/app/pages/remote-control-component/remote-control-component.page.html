@@ -11,7 +11,7 @@
       <ion-card-content>
         <ion-icon
           class="remote-icon"
-          [name]="entity.deviceType | DeviceDisplayIcon"
+          [name]="entity.deviceType | DeviceDisplayIcon: [entity.deviceType]"
         ></ion-icon>
         <span class="remote-title">{{ entity.deviceName }}</span>
         <span *ngIf="type != 'binProcess' && intialLv">

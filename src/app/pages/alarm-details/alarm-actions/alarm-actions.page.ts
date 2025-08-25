@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, RefresherCustomEvent } from '@ionic/angular';
 import * as moment from 'moment';
 import { Subscription, Observable } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -15,7 +15,7 @@ import {
   RemoteSettingCommandType,
   DBKeys,
 } from 'src/app/shared/models';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 @Component({
   selector: 'app-alarm-actions',
   templateUrl: './alarm-actions.page.html',
@@ -46,16 +46,18 @@ export class AlarmActionsPage implements OnInit {
     private liveValuesService: LiveValueService,
     public controlData: ControlDataProvider,
     // private events: Events,
-    private route: ActivatedRoute,
+    private router: Router,
     public navCtrl: NavController
   ) {
     // this.alarm = this.navParams.data['alarm'];
 
     // if (!this.alarm.state) this.alarm = this.navParams.data['alarm'];
     // this.nav = this.navParams.data['nav'];
-    this.route.queryParams.subscribe((params) => {
-      this.alarm = params['alarm'];
-    });
+    // this.route.queryParams.subscribe((params) => {
+    //   this.alarm = params['alarm'];
+    // });
+
+    this.alarm = (this.router.currentNavigation()?.extras.state as any).alarm;
 
     this.liveValuesMap = this.liveValuesService.getLiveValuesBinding();
   }
@@ -118,14 +120,14 @@ export class AlarmActionsPage implements OnInit {
     if (this.sub) this.sub.unsubscribe();
   }
 
-  public handleRefresh(event: any) {
+  public handleRefresh(event: RefresherCustomEvent) {
     this.alarmDataProvider.getSingleAlarm(this.alarm.fusionAlarmKey).subscribe(
       (alarm: ControlAlarm) => {
         if (alarm) this.alarm = alarm;
-        window.setTimeout(() => event.complete(), 500);
+        window.setTimeout(() => event.target.complete(), 500);
       },
       (err) => {
-        window.setTimeout(() => event.complete(), 500);
+        window.setTimeout(() => event.target.complete(), 500);
       }
     );
   }
@@ -302,6 +304,11 @@ export class AlarmActionsPage implements OnInit {
 
   goToRemoteControl() {
     var device = this.roomData.getEntity(this.alarm.hardwareId);
-    this.navCtrl.navigateForward('remote-control-component', {queryParams: device});
+    const extras: NavigationExtras = {
+      state: {
+        device,
+      },
+    };
+    this.navCtrl.navigateForward('remote-control-component', extras);
   }
 }

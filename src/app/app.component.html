@@ -9,14 +9,15 @@
 
     <ion-content class="outer-content">
       <ion-list style="margin-bottom: 0px">
+
         <ion-list-header style="zoom: 0.8" color="primary">
           {{ currentUser }}
-          <ion-icon
-            slot="end"
+          <ion-button
             (click)="logout()"
-            style="color: red; margin-right: 15px; font-size: 2.5em; font-weight: 600"
-            name="log-out"
-          ></ion-icon>
+            style="color: red; font-size: 2.0em; font-weight: 600; margin-left: auto;"
+          >
+            <ion-icon slot="icon-only" name="log-out"></ion-icon>
+          </ion-button>
         </ion-list-header>
 
         <ion-list-header style="zoom: 0.8" color="primary" (click)="changeOrg()">
@@ -29,11 +30,9 @@
           >
             {{ alarmData.getAllAlarmsNotInOrg(orgId) }}
           </ion-badge>
-          <ion-icon
-            slot="end"
-            name="settings"
-            style="color: white; margin-right: 15px; font-size: 3em"
-          ></ion-icon>
+          <ion-button style="color: white; margin-right: 15px; font-size: 2em; margin-left: auto;">
+            <ion-icon slot="icon-only" name="settings"></ion-icon>
+          </ion-button>
         </ion-list-header>
 
         <ion-list-header

@@ -29,7 +29,7 @@
     </ion-list-header>
 
     <ion-item 
-      *ngFor="let alarm of alarms | AlarmStateActive:(alarm | async) | async" 
+      *ngFor="let alarm of (alarms | async) | AlarmStateActive" 
       button
       (click)="navigateToDetails(alarm)">
       
@@ -63,7 +63,7 @@
                     roomData.isSensorOrDevice(alarm.entityHardwareId),
                     roomData.getEntity(alarm.entityHardwareId)?.sensorType || roomData.getEntity(alarm.entityHardwareId)?.deviceType,
                     controlData.getControl(alarm.controlSerialNumber),
-                    (liveValuesMap | async)?.get(alarm?.entityHardwareId)?.label
+                    (liveValuesMap | async)?.get(alarm.entityHardwareId)?.label
                   ]
               )
             }}

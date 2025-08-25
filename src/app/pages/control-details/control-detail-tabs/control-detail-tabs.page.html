@@ -2,7 +2,6 @@
   <ion-tab-bar slot="bottom">
     <ion-tab-button
       tab="sensors"
-      [routerLink]="['/control-details-tabs/sensors']"
       (click)="onTab('Sensors List')"
     >
       <ion-icon name="thermometer"></ion-icon>
@@ -11,7 +10,6 @@
 
     <ion-tab-button
       tab="devices"
-      [routerLink]="['/control-details-tabs/devices']"
       (click)="onTab('Device List')"
     >
       <ion-icon name="nuclear"></ion-icon>
@@ -20,12 +18,11 @@
 
     <ion-tab-button
       tab="alarms"
-      [routerLink]="['/control-details-tabs/alarms']"
       (click)="onTab('Alarms List')"
     >
       <ion-icon name="notifications-outline"></ion-icon>
       <ion-label>Alarms</ion-label>
-      <ion-badge color="danger">
+      <ion-badge color="danger" *ngIf="control">
         {{ alarmData.getAlarmCounts(control.serialNumber, undefined).activeCount +
         alarmData.getAlarmCounts(control.serialNumber, undefined).acknowledgedCount +
         alarmData.getAlarmCounts(control.serialNumber, undefined).silentCount }}

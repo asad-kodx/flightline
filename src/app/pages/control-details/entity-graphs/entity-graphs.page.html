@@ -50,7 +50,7 @@
                     <b>Live:</b>
                 </ion-col>
                 <ion-col width-66>
-                    <b>{{ (liveValuesMap | async)?.get(entity.sensorSerialNumber)?.value | LiveValueDisplay: ['sensor', entity.sensorType, control, (liveValuesMap | async)?.get(entity.sensorSerialNumber)?.label] || '- -' }}</b>
+                    <b>{{ ((liveValuesMap | async)?.get(entity.sensorSerialNumber)?.value ?? '_ _') | LiveValueDisplay: ['sensor', entity.sensorType, control, (liveValuesMap | async)?.get(entity.sensorSerialNumber)?.label] }}</b>
                 </ion-col>
             </ion-row>
         </ion-card-content>
