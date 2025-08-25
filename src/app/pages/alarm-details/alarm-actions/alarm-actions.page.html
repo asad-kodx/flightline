@@ -24,7 +24,7 @@
 
   <!-- Actions Card -->
   <ion-card>
-    <ion-card-header (click)="toggleCard('actions')" class="ion-align-items-center" style="height: 3.2em">
+    <ion-card-header (click)="toggleCard('actions')" style="height: 3.2em">
       Actions
       <ion-icon *ngIf="!actionsExpanded" name="arrow-forward" style="font-size:1.7em; margin-top:-.1em;"></ion-icon>
       <ion-icon *ngIf="actionsExpanded" name="arrow-down" style="font-size:1.7em; margin-top:-.1em;"></ion-icon>
@@ -81,7 +81,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm.entityHardwareId)?.deviceType ?? 0 < 268435456">
+        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm?.entityHardwareId || '')?.deviceType ?? 0 < 268435456">
           <ion-col size="5">Amps:</ion-col>
           <ion-col size="7">
             {{ ((liveValuesMap | async)?.get(alarm.entityHardwareId)?.amps | number: '1.0-3') || '- -' }}

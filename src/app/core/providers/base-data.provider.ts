@@ -11,7 +11,7 @@ export class BaseDataProvider<T> {
 
     public data!: Observable<T>;
     public _data$!: BehaviorSubject<T>;
-    protected dataStore?: {
+    protected dataStore!: {
         values: T;
     }
 

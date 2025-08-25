@@ -7,80 +7,69 @@ import { DeviceType } from '../../models';
 })
 export class DeviceIconPipe implements PipeTransform {
 
-  private readonly iconMap: Record<DeviceType, string> = {
-    // Fan Devices
-    [DeviceType.DualRelayCardBooleanFanDevice]: 'custom-device-fan',
-    [DeviceType.OctoRelayCardBooleanFanDevice]: 'custom-device-fan',
-    [DeviceType.QuadRelayCardBooleanFanDevice]: 'custom-device-fan',
-    [DeviceType.VariableCardVariableFanDevice]: 'custom-device-fan',
-    [DeviceType.VariableCurrentCardVariableFanDevice]: 'custom-device-fan',
-    [DeviceType.FanGroupDevice]: 'custom-device-fan',
-    [DeviceType.BooleanRelayFanDevice]: 'custom-device-fan',
+  transform(value: any, args: any[]): any {
 
-    // Fogger Devices
-    [DeviceType.DualRelayCardBooleanFoggerDevice]: 'custom-device-fogger',
-    [DeviceType.QuadRelayCardBooleanFoggerDevice]: 'custom-device-fogger',
-    [DeviceType.BooleanRelayFoggerDevice]: 'custom-device-fogger',
-
-    // Motor Devices
-    [DeviceType.QuadRelayCardBooleanMotorDevice]: 'custom-device-feed-motor',
-    [DeviceType.DualRelayCardBooleanMotorDevice]: 'custom-device-feed-motor',
-    [DeviceType.BooleanRelayMotorDevice]: 'custom-device-feed-motor',
-    [DeviceType.GenericBooleanMotorDevice]: 'custom-device-feed-motor',
-
-    // Process Devices
-    [DeviceType.GenericProcessDevice]: 'custom-device-feed-process',
-    [DeviceType.MixingProcessDevice]: 'custom-device-mixing',
-    [DeviceType.BatchTankProcessDevice]: 'custom-device-batch-tank',
-
-    // Special
-    [DeviceType.BallDropDevice]: 'custom-device-ball-drop',
-
-    // Heater Devices
-    [DeviceType.QuadRelayCardBooleanHeaterDevice]: 'custom-device-heater',
-    [DeviceType.DualRelayCardBooleanHeaterDevice]: 'custom-device-heater',
-    [DeviceType.OctoRelayCardBooleanHeaterDevice]: 'custom-device-heater',
-    [DeviceType.VariableCardHeatLampDevice]: 'custom-device-heater',
-    [DeviceType.VariableCurrentCardVariableHeaterDevice]: 'custom-device-heater',
-    [DeviceType.BooleanRelayHeaterDevice]: 'custom-device-heater',
-
-    // Lights
-    [DeviceType.LightDevice]: 'custom-device-light',
-
-    // Curtains
-    [DeviceType.CurtainCardCurtainDevice]: 'custom-device-curtain',
-    [DeviceType.CurtainDeviceV2]: 'custom-device-curtain',
-
-    // SMS
-    [DeviceType.SingleSmsDevice]: 'custom-device-smsy',
-
-    // Timers
-    [DeviceType.ClockDevice]: 'custom-device-clock',
-    [DeviceType.DayTimerDevice]: 'custom-device-clock',
-    [DeviceType.CycleTimerDevice]: 'custom-device-clock',
-    [DeviceType.PercentCycleTimerDevice]: 'custom-device-clock',
-
-    // Switch / Alarm
-    [DeviceType.AlarmDevice]: 'custom-device-switch-on',
-    [DeviceType.SwitchDevice]: 'custom-device-switch-on',
-    [DeviceType.ChainDiskDevice]: 'custom-device-switch-on',
-
-    // Slide
-    [DeviceType.SlideDevice]: 'custom-device-bin-slide',
-    [DeviceType.BinSlideDevice]: 'custom-device-slide-process',
-
-    // Valves
-    [DeviceType.BooleanValveDevice]: 'custom-device-valve',
-
-    // Dosers
-    [DeviceType.BooleanDoserDevice]: 'custom-device-doser',
-    [DeviceType.VariableDoserDevice]: 'custom-device-doser',
-    [DeviceType.AbstractDevice]: '',
-    [DeviceType.VirtualDeviceMask]: '',
-    [DeviceType.RemoteDevice]: ''
-  };
-
-  transform(value: DeviceType): string | null {
-    return this.iconMap[value] || null;
+      let devType = (<DeviceType>args[0])
+      switch (devType) {
+          case DeviceType.DualRelayCardBooleanFanDevice:
+          case DeviceType.OctoRelayCardBooleanFanDevice:
+          case DeviceType.QuadRelayCardBooleanFanDevice:
+          case DeviceType.VariableCardVariableFanDevice:
+          case DeviceType.VariableCurrentCardVariableFanDevice:
+          case DeviceType.FanGroupDevice:
+          case DeviceType.BooleanRelayFanDevice:
+              return 'custom-device-fan'
+          case DeviceType.DualRelayCardBooleanFoggerDevice:
+          case DeviceType.QuadRelayCardBooleanFoggerDevice:
+          case DeviceType.BooleanRelayFoggerDevice:
+              return 'custom-device-fogger'
+          case DeviceType.QuadRelayCardBooleanMotorDevice:
+          case DeviceType.DualRelayCardBooleanMotorDevice:
+          case DeviceType.BooleanRelayMotorDevice:
+          case DeviceType.GenericBooleanMotorDevice:
+              return 'custom-device-feed-motor'
+          case DeviceType.GenericProcessDevice:
+              return 'custom-device-feed-process'
+          case DeviceType.BallDropDevice:
+              return 'custom-device-ball-drop'
+          case DeviceType.QuadRelayCardBooleanHeaterDevice:
+          case DeviceType.DualRelayCardBooleanHeaterDevice:
+          case DeviceType.OctoRelayCardBooleanHeaterDevice:
+          case DeviceType.VariableCardHeatLampDevice:
+          case DeviceType.VariableCurrentCardVariableHeaterDevice:
+          case DeviceType.BooleanRelayHeaterDevice:
+              return 'custom-device-heater'
+          case DeviceType.LightDevice:
+              return 'custom-device-light'
+          case DeviceType.CurtainCardCurtainDevice:
+          case DeviceType.CurtainDeviceV2:
+              return 'custom-device-curtain'
+          case DeviceType.SingleSmsDevice:
+              return 'custom-device-smsy'
+          case DeviceType.ClockDevice:
+          case DeviceType.DayTimerDevice:
+          case DeviceType.CycleTimerDevice:
+          case DeviceType.PercentCycleTimerDevice:
+              return 'custom-device-clock';
+          case DeviceType.AlarmDevice:
+          case DeviceType.SwitchDevice:
+          case DeviceType.ChainDiskDevice:
+              return 'custom-device-switch-on'
+          case DeviceType.SlideDevice:
+              return 'custom-device-bin-slide';
+          case DeviceType.BinSlideDevice:
+              return 'custom-device-slide-process';
+          case DeviceType.BooleanValveDevice:
+              return 'custom-device-valve';
+          case DeviceType.MixingProcessDevice:
+              return 'custom-device-mixing';
+          case DeviceType.BooleanDoserDevice:
+          case DeviceType.VariableDoserDevice:
+              return 'custom-device-doser';
+          case DeviceType.BatchTankProcessDevice:
+              return 'custom-device-batch-tank'
+          default:
+              return
+      }
   }
 }

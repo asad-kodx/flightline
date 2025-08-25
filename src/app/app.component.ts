@@ -210,6 +210,7 @@ export class AppComponent {
       // Give the menu time to close before changing to logged out
       this.authService.logout();
     }
+    this.menuCtrl.close();
   }
 
   isActive(page: PageInterface) {
@@ -293,7 +294,7 @@ export class AppComponent {
   }
 
   navToSiteAlarms(site: Site) {
-    this.navCtrl.navigateRoot('site-alarms-list', { state: site })
+    this.navCtrl.navigateRoot('site-alarms-list', { state: { site } })
     this.menuCtrl.close();
   }
 

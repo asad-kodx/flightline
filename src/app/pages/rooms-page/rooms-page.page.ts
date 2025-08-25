@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
+import * as _ from 'lodash';
 
 // Import models and types
 import {
@@ -11,13 +12,9 @@ import {
   ModeDisplayType,
   EntityType
 } from '../../shared/models/index';
+import { EntitiesDataProvider } from 'src/app/core/providers/entities-data.provider';
+import { RoomDataProvider } from 'src/app/core/providers/room-data.provider';
 
-// Import services (these may need to be created or imported from correct paths)
-// import { EntitiesDataProvider } from '../../core/providers/entities-data.provider';
-// import { LiveValueService } from '../../core/services/live-value.service';
-// import { LiveValuesSubscription } from '../../core/providers/livevalues-subscription.provider';
-// import { RoomDataProvider } from '../../core/providers/room-data.provider';
-// import { SiteContextService } from '../../core/services/site-context.service';
 
 @Component({
   selector: 'app-rooms-page',
@@ -76,7 +73,9 @@ export class RoomsPagePage implements OnInit, OnDestroy {
   public modeType: ModeDisplayType = ModeDisplayType.All;
   public alarmCount: Observable<Map<string, AlarmCount>> | undefined;
 
-  constructor() {
+  constructor(private entityData: EntitiesDataProvider,
+    private roomData: RoomDataProvider
+  ) {
     this.searchType = RoomSearchType.None;
     this.buttonsDisplayType = ButtonsDisplayType.All;
     this.entArray = [
@@ -132,16 +131,16 @@ export class RoomsPagePage implements OnInit, OnDestroy {
     this.modeType = ModeDisplayType.All;
     this.liveValueDisplay = LiveValueDisplay.LiveValues;
     this.refreshing = false;
-    var splitItem = event.split(" ");
-    this.searchTerm = splitItem[1];
+    var splitItem = event.detail.value.split(" ");
+    this.searchTerm = splitItem[0];
     console.log(splitItem, this.searchTerm)
     var entityType;
-    if (splitItem[2] == "Sensors") {
+    if (splitItem[1] == "Sensors") {
       entityType = EntityType.Sensor;
       this.allEntities = false;
       this.buttonsDisplayType = ButtonsDisplayType.Sensors;
     }
-    else if (splitItem[2] == "Devices") {
+    else if (splitItem[1] == "Devices") {
       entityType = EntityType.Device;
       this.allEntities = false;
       this.buttonsDisplayType = ButtonsDisplayType.Devices;
@@ -152,18 +151,29 @@ export class RoomsPagePage implements OnInit, OnDestroy {
       this.buttonsDisplayType = ButtonsDisplayType.All;
     }
 
-    // Mock data for now - replace with actual service call when available
-    this.entArray = [
-      {
-        entityName: `Sample ${this.searchTerm}`,
-        entitySerialNumber: '12345',
-        controlName: 'Sample Control',
-        roomName: 'Sample Room',
-        controlSerialNumber: '67890',
-        entityType: entityType,
-        siteId: 1
-      } as Entity
-    ];
+    this.entityData.getEntities(this.searchTerm, entityType).subscribe((data) => {
+      this.entArray = data;
+      var group = Object.keys(_.groupBy(data, 'controlSerialNumber'));
+      group.forEach(serial => {
+        if(!this.roomData.controlsPulled.has(serial)){
+          this.roomData.getDevicesForControl(serial)
+          .pipe(
+            catchError(() => {
+              return of(null);
+            })
+          )
+          .subscribe();
+          this.roomData.getSensorsForControl(serial)
+          .pipe(
+            catchError(() => {
+              return of(null);
+            })
+          )
+          .subscribe();
+        }
+      })
+      console.log(group);
+    });
   }
 
   refreshLiveValues() {

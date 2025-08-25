@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AlarmListTabsPageRoutingModule } from './alarm-list-tabs-routing.module';
 
 import { AlarmListTabsPage } from './alarm-list-tabs.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AlarmListTabsPageRoutingModule
+    AlarmListTabsPageRoutingModule,
+    SharedModule
   ],
   declarations: [AlarmListTabsPage]
 })

@@ -20,13 +20,13 @@ import {
   standalone: false
 })
 export class EntityAlarmsPage implements OnInit {
-  private entity: Sensor & Device;
+  public entity: Sensor & Device;
 
   protected alarms: Observable<ControlAlarm[]>;
   protected searchText: string = '';
   protected searchControl: FormControl = new FormControl();
   protected activeAlarmsPresent: boolean = true;
-  protected liveValuesMap: Observable<Map<string, any>>;
+  protected liveValuesMap?: Observable<Map<string, any> | undefined>
   public pullMax = window.innerHeight * 0.7;
   public pullMin = window.innerHeight * 0.12;
 

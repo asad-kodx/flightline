@@ -1,0 +1,152 @@
+ion-icon {
+    &[class*="custom-"] {
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: currentColor;
+        width: 1em;
+        height: 1em;
+    }   
+  
+    &[class*="custom-sensor-ammonia"] {
+      mask-image: url(../assets/device/ammonia.svg);
+    }
+    &[class*="custom-sensor-bin"] {
+    mask-image: url(../assets/device/bin.svg);
+    }
+    &[class*="custom-sensor-CO"] {
+    mask-image: url(../assets/device/CO.svg);
+    }
+    &[class*="custom-sensor-CO2"] {
+    mask-image: url(../assets/device/CO2.svg);
+    }
+    &[class*="custom-sensor-current"] {
+    mask-image: url(../assets/device/current.svg);
+    }
+    &[class*="custom-sensor-humidity"] {
+    mask-image: url(../assets/device/humidity.svg);
+    }
+    &[class*="custom-sensor-oxygen"] {
+    mask-image: url(../assets/device/oxygen.svg);
+    }
+    &[class*="custom-sensor-pressure-guage"] {
+    mask-image: url(../assets/device/pressure-guage.svg);
+    }
+    &[class*="custom-sensor-static-pressure"] {
+    mask-image: url(../assets/device/static_pressure.png);
+    }
+    &[class*="custom-sensor-switch-off"] {
+    mask-image: url(../assets/device/switch-off.svg);
+    }
+    &[class*="custom-sensor-switch-on"] {
+    mask-image: url(../assets/device/switch-on.svg);
+    }
+    &[class*="custom-sensor-temperature"] {
+    mask-image: url(../assets/device/temperature.svg);
+    }
+    &[class*="custom-sensor-voltage"] {
+    mask-image: url(../assets/device/voltage.svg);
+    }
+    &[class*="custom-sensor-water-level"] {
+    mask-image: url(../assets/device/water-level.svg);
+    }
+    &[class*="custom-sensor-water-meter"] {
+    mask-image: url(../assets/device/water-meter.svg);
+    }
+    &[class*="custom-sensor-wind-direction"] {
+    mask-image: url(../assets/device/wind-direction.svg);
+    }
+    &[class*="custom-sensor-wind-speed"] {
+    mask-image: url(../assets/device/wind-speed.svg);
+    }
+    &[class*="custom-sensor-electric-meter"] {
+    mask-image: url(../assets/device/electric-meter.svg);
+    }
+    &[class*="custom-sensor-gas-meter"] {
+    mask-image: url(../assets/device/gas-meter.svg);
+    }
+    &[class*="custom-sensor-orp"] {
+      mask-image: url(../assets/device/orp.svg);
+      }
+    &[class*="custom-sensor-weight"] {
+    mask-image: url(../assets/device/weight.svg);
+    }
+    &[class*="custom-sensor-ppm"] {
+    mask-image: url(../assets/device/ppm.svg);
+    }
+    &[class*="custom-sensor-rain-precipitation"] {
+    mask-image: url(../assets/device/rain-precipitation.svg);
+    }
+    &[class*="custom-sensor-ec"] {
+      mask-image: url(../assets/device/ec.svg);
+      }
+    &[class*="custom-sensor-ph"] {
+    mask-image: url(../assets/device/ph.svg);
+    }
+    &[class*="custom-device-ball-drop"] {
+    mask-image: url(../assets/device/ball-drop.svg);
+    }
+    &[class*="custom-device-bin-slide"] {
+    mask-image: url(../assets/device/bin-slide.svg);
+    }
+    &[class*="custom-device-chain-disk"] {
+    mask-image: url(../assets/device/chain-disk.svg);
+    }
+    &[class*="custom-device-clock"] {
+    mask-image: url(../assets/device/clock.svg);
+    }
+    &[class*="custom-device-curtain"] {
+    mask-image: url(../assets/device/curtain.svg);
+    }
+    &[class*="custom-device-dual-fan"] {
+    mask-image: url(../assets/device/dual-fan.svg);
+    }
+    &[class*="custom-device-fan"] {
+    mask-image: url(../assets/device/fan.svg);
+    }
+    &[class*="custom-device-fan-group"] {
+    mask-image: url(../assets/device/fan-group.svg);
+    }
+    &[class*="custom-device-feed-motor"] {
+    mask-image: url(../assets/device/feed-motor.svg);
+    }
+    &[class*="custom-device-feed-process"] {
+    mask-image: url(../assets/device/feed-process.svg);
+    }
+    &[class*="custom-device-fogger"] {
+    mask-image: url(../assets/device/fogger.svg);
+    }
+    &[class*="custom-device-heater"] {
+    mask-image: url(../assets/device/heater.svg);
+    }
+    &[class*="custom-device-light"] {
+    mask-image: url(../assets/device/light.svg);
+    }
+    &[class*="custom-device-slide-process"] {
+    mask-image: url(../assets/device/slide-process.svg);
+    }
+    &[class*="custom-device-sms"] {
+    mask-image: url(../assets/device/sms.svg);
+    }
+    &[class*="custom-device-switch-off"] {
+    mask-image: url(../assets/device/manual_white.svg);
+    }
+    &[class*="custom-device-switch-on"] {
+    mask-image: url(../assets/device/switch-on.svg);
+    }
+    &[class*="custom-device-valve"] {
+    mask-image: url(../assets/device/valve_white.svg);
+    }
+    &[class*="custom-device-doser"] {
+    mask-image: url(../assets/device/variable_doser.svg);
+    }
+    &[class*="custom-device-mixing"] {
+    mask-image: url(../assets/device/dosing_system.svg);
+    }
+    &[class*="custom-device-batch-tank"] {
+      mask-image: url(../assets/device/batch-tank.svg);
+      }
+    // &[class*="manual-fire-hand"] {
+    //   mask-image: url(../assets/others/hand-left.svg);
+    // }
+}

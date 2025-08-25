@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 30 30"
+   height="30"
+   width="30">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1">
+    <rect
+       rx="1"
+       y="0.5"
+       x="4.5"
+       height="29"
+       width="20"
+       id="outline"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       rx="1"
+       y="14"
+       x="10.5"
+       height="8"
+       width="8"
+       id="pump"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       rx="0"
+       y="3.5"
+       x="8"
+       height="4"
+       width="13"
+       id="display"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <g
+       id="hoseA">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="stemA"
+         width="3"
+         height="2.5"
+         x="13"
+         y="12"
+         rx="0" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="knobA"
+         width="4"
+         height="3"
+         x="12.5"
+         y="9"
+         rx="0" />
+    </g>
+    <g
+       id="hoseB">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="stemB"
+         width="3"
+         height="2.5"
+         x="13"
+         y="21.5"
+         rx="0" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="knobB"
+         width="4"
+         height="3"
+         x="12.5"
+         y="24"
+         rx="0" />
+    </g>
+    <g
+       id="hoseC"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-9.3691649,14.576233)">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="stemC"
+         width="3"
+         height="2.5"
+         x="13"
+         y="12"
+         rx="0" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="knobC"
+         width="4"
+         height="3"
+         x="12.5"
+         y="9"
+         rx="0" />
+    </g>
+  </g>
+</svg>

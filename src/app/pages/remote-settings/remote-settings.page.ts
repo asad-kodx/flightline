@@ -1,25 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { NavController, ToastController, LoadingController, Platform } from '@ionic/angular';
+import diff from "microdiff";
+import { NavController, ToastController, LoadingController, Platform, RefresherCustomEvent } from '@ionic/angular';
 import { RemoteSettingsService } from '../../core/services/remote-settings-service';
-// import { RemoteSettings, Settings, SettingItem } from '../../models/remote-setting-model';
-// import { Option } from '../../models/remote-setting-model';
 import { ControlDataProvider } from '../../core/providers/control-data.provider';
-// import { RemoteSettingsInputType } from '../../models/types/remote-setting-input-type';
-// import { isNullOrUndefined, isNumber } from 'util';
-// import { RemoteHeader } from '../../models/remote-header-model';
-// import { Setting } from '../../models/remote-setting-update-model';
-// import { RemoteSettingUpdateAcknowledgement } from '../../models/remote-setting-update-acknowledge-model';
-// import { StatusCode } from '../../models/types/status-code';
-// import { RemoteSettingCommandType } from '../../models/types/remote-settings-command-type';
-// import { EntityType } from '../../models/types/entity-type';
 import { AlarmDataProvider } from '../../core/providers/alarm-data.provider';
-// import { ControlAlarm } from '../../models/control-alarm-model';
-// import { AlarmState } from '../../models/types/alarm-state';
-// import { Observable, Subscription } from 'rxjs';
-// import { LiveValueData } from '../../models/live-valiue-data.model';
 import { ConfigurationService } from '../../core/services/configuration.service';
-// import { Keyboard } from '@ionic-native/keyboard';
 
 // Import models and types
 import {
@@ -37,6 +23,7 @@ import {
   RemoteSettingsInputType
 } from '../../shared/models/index';
 import { isNumber } from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-remote-settings',
@@ -44,79 +31,67 @@ import { isNumber } from 'lodash';
   styleUrls: ['./remote-settings.page.scss'],
   standalone: false,
 })
-export class RemoteSettingsPage implements OnInit, OnDestroy {
-  //User-defined datatype variables declaration
+export class RemoteSettingsPage {
   private pageLoadTimeout: number = 30000; //page load timeout set to 30 seconds
-  public remoteSettings: RemoteSettings | null = null;
-  private preprocessedRemoteSettings: RemoteSettings | null = null;
-  private settingUpdateAcknowledgement: RemoteSettingUpdateAcknowledgement | null = null;
+  public remoteSettings?: RemoteSettings;
+  private preprocessedRemoteSettings?: RemoteSettings;
+  private settingUpdateAcknowledgement?: RemoteSettingUpdateAcknowledgement;
   private remoteSettingHeader: RemoteHeader;
-  public alarms: Observable<ControlAlarm[]> | null = null;
+  public alarms?: Observable<ControlAlarm[]>;
 
 
-  //Any datatype variables declaration
-  private remoteSettingChanges: any = null;
-  public remoteSettingsInputType: any = null;
-  private pageLoader: any = null;
-  public entityData: any = null;
-  private applySettingsTimer: any = null;
+  private remoteSettingChanges: any;
+  public remoteSettingsInputType: any;
+  private pageLoader: any;
+  public entityData: any;
+  private applySettingsTimer: any;
   public pullMax = window.innerHeight * .7
   public pullMin = window.innerHeight * .12
 
-  //String datatype variables declaration
   public statusMessage: string = '';
-  private backupRemoteSettings: string = '';
-  public pageLoadErrorMessage: string = '';
-  public pageLoadErrorTitle: string = '';
-  private getActiveRequestId: string = '';
-  private applyActiveRequestId: string = '';
-  public expandCollapseBtnTxt: string = '';
-  public settingsType: string = '';
+  private backupRemoteSettings: string = "";
+  private pageLoadErrorMessage: string;
+  private pageLoadErrorTitle: string;
+  private getActiveRequestId: string = "";
+  private applyActiveRequestId: string = "";
+  public expandCollapseBtnTxt: string = "Expand all";
+  public settingsType: string = "";
 
-  //Number datatype variables declaration
-  private oldValue: string = '';
-  private changedSettings: Array<number> = [];
+  private oldValue: string = "";
+  private changedSettings: Array<number>;
 
-  //Boolean datatype variables declaration
-  public loadHasErrors: boolean = false;
-  public hideApplyResetButtons: boolean = false;
-  public showErrorInfoTemplate: boolean = false;
-  private isPageRefreshRequested: boolean = false;
-  private isPageLoading: boolean = false;
-  private isValueChanged: boolean = false;
-  private isManualFireClicked: boolean = false;
-  private isPageRefreshAfterApply: boolean = false;
-  public btnApplyDisabled: boolean = false;
-  private activeRequest: boolean = false;
-  public isEmptySettingReceived: boolean = false;
-  private isAllSettingsExpanded: boolean = false;
+  private loadHasErrors: boolean;
+  public hideApplyResetButtons: boolean;
+  private showErrorInfoTemplate: boolean;
+  private isPageRefreshRequested: boolean;
+  private isPageLoading: boolean;
+  private isValueChanged: boolean;
+  private isManualFireClicked: boolean;
+  private isPageRefreshAfterApply: boolean;
+  public btnApplyDisabled: boolean;
+  private activeRequest: boolean;
+  public isEmptySettingReceived: boolean;
+  private isAllSettingsExpanded: boolean;
   public isKeyboardOpen: boolean = false;
-  private keyboardOpenSub: Subscription | null = null;
-  private keyboardClosedSub: Subscription | null = null;
+  private keyboardOpenSub?: Subscription;
+  private keyboardClosedSub?: Subscription;
 
-  //arrow key icon for setting expand/collapse
   private expandCollapseIcon: string = "arrow-down";
   private toggleClassName: string = "settings-card-content-min";
 
-  /**
-   * Creates a new instance of this page
-   */
   constructor(
     private navCtrl: NavController,
     private platform: Platform,
     private toastController: ToastController,
-    private loadingController: LoadingController
-    // TODO: Add these services when they become available:
-    // public renderer: Renderer2,
-    // private events: Events,
-    // public navParams: NavParams,
-    // private controlData: ControlDataProvider,
-    // private keyboard: Keyboard,
-    // public remoteSettingsService: RemoteSettingsService,
-    // private alarmData: AlarmDataProvider
+    private loadingController: LoadingController,
+    private router: Router,
+    private controlData: ControlDataProvider,
+    public remoteSettingsService: RemoteSettingsService,
+    private alarmData: AlarmDataProvider
   ) {
-    this.remoteSettingHeader = {} as RemoteHeader; // Initialize as empty object for now
-    this.entityData = {}; // Mock data for now
+    this.remoteSettingHeader = new RemoteHeader();
+    console.log(this.router.currentNavigation()?.extras)
+    this.entityData = this.router.currentNavigation()?.extras;
     console.log(this.entityData)
     this.btnApplyDisabled = true;
     this.pageLoadErrorMessage = '';
@@ -137,11 +112,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     this.applySettingsTimer = null;
   }
 
-  ngOnInit() {
-    // Initialize component
-    console.log('RemoteSettingsPage initialized');
-  }
-
   ngOnDestroy() {
     // Clean up subscriptions
     if (this.keyboardOpenSub) {
@@ -158,44 +128,14 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     cssClass: 'ion-drop-down-menu'
   };
 
-
-  //#region Page Lifecycle events
-
-  /**
-   * Fired when entering a page, after it becomes the active page
-   */
-  ionViewDidEnter() {
-    //console.log("Did enter");
-  }
-
-  /**
-   * Fired when a view is going to be completely removed (after leaving a non-cached view)
-   */
-  ionViewWillUnload() {
-    //console.log("will unload");
-  }
-
-  /**
-   * Fired when you leave a page, after it stops being the active one
-   */
-  ionViewDidLeave() {
-    //console.log("did leave")    
-    // this.navCtrl.pop();
-  }
-
-  /**
-   * Fired when you leave a page, before it stops being the active one
-   */
   ionViewWillLeave() {
-    //console.log("will leave")
-    // TODO: Uncomment when services are available
     // this.events.unsubscribe('receiveRemoteSettings');
     // this.events.unsubscribe('receivedRemoteSettingsAcknowledgement');
     // this.events.unsubscribe('receiveRequestSettingsAcknowledgement');
     // this.events.unsubscribe('receiveApplySettingsAcknowledgement');
     // this.events.unsubscribe('AlarmControlTabs');
-    // this.remoteSettingsService.activeApplyRequests.clear();
-    // this.remoteSettingsService.activeGetRequests.clear();
+    this.remoteSettingsService.activeApplyRequests.clear();
+    this.remoteSettingsService.activeGetRequests.clear();
     if (this.keyboardOpenSub) {
       this.keyboardOpenSub.unsubscribe();
     }
@@ -205,19 +145,13 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     // this.events.unsubscribe('AlarmSwitch');
   }
 
-
-  /**
-   *  Fired when entering a page, before it becomes the active one
-   */
   ionViewWillEnter() {
     this.remoteSettingsInputType = RemoteSettingsInputType;
     this.processReceivedRemoteSettings();
     this.processSettingsUpdateAcknowledgement();
     this.showPageLoader();
     this.getRemoteSettings();
-
-    // TODO: Uncomment when services are available
-    // this.alarms = this.alarmData.getAllAlarmsBinding();
+    this.alarms = this.alarmData.getAllAlarmsBinding();
     // this.events.subscribe('AlarmSwitch', () => {
     //   this.navCtrl.navigateBack('/');
     // });
@@ -235,16 +169,10 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     //   this.isKeyboardOpen = false;
     // })
   }
-  //#endregion
 
-  /**
-   * 
-   * Handles the refresh event when user refreshes the page
-   * @param event 
-   */
-  handleRefresh(event: any) {
+  handleRefresh(event: RefresherCustomEvent) {
     //reset the already rendered page
-    this.remoteSettings = null;
+    this.remoteSettings = undefined;
     this.isPageRefreshRequested = true;
     //reset error flags and templates
     this.isEmptySettingReceived = false;
@@ -259,34 +187,9 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     this.getRemoteSettings();
     this.showPageLoader();
 
-    //#region Timer code for possible future use - DONOT Delete
-    // this.sub = Observable.interval(this.pageLoadTimeout).subscribe((val) => {
-    //   if(isNullOrUndefined(this.remoteSettings)) {
-    //     this.displayRequestTimeout();
-    //   }
-    //   this.sub.unsubscribe();
-    // })
-    // var source = timer(0, 1000);
-
-    // this.sub = source.subscribe(val => {
-    //   //console.log(val, '-');
-    //   var diff = (this.pageLoadTimeout/1000) - val;
-    //   if(this.sub == 30) {
-    //     this.sub.unsubscribe();
-    //     this.displayRequestTimeout();
-    //   }
-    //   this.sub.unsubscribe();
-    // });
-    //#endregion
-
-    window.setTimeout(() => event.complete(), 500);
+    window.setTimeout(() => event.target.complete(), 500);
   }
-
-  /**
-   * Checks and returns true if the relevant alarm is active and not silent
-   * @param alarms List of triggered alarms
-   * @param setting Current setting
-   */
+  
   alarmIsActive(alarms: ControlAlarm[], setting: SettingItem): boolean {
     const alarm = alarms.find(a => a.hardwareId == this.entityData.entityNumber && a.type == setting.secondarySettingId && a.state == AlarmState.Active && a.roomProgramId == this.entityData.roomId);
     if (alarm != null) {
@@ -300,20 +203,10 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     return false;
   }
 
-  /**
-   * Checks and returns true if the relevant alarm is acknowledged
-   * @param alarms List of triggered alarms
-   * @param setting Current setting
-   */
   alarmIsAcked(alarms: ControlAlarm[], setting: SettingItem) {
     return alarms.find(a => a.hardwareId == this.entityData.entityNumber && a.type == setting.secondarySettingId && a.state == AlarmState.Acknowledged && a.roomProgramId == this.entityData.roomId) != null
   }
 
-  /**
-   * Checks and returns true if the relevant alarm is active and silent
-   * @param alarms List of triggered alarms
-   * @param setting Current setting
-   */
   alarmIsSilent(alarms: ControlAlarm[], setting: SettingItem): boolean {
     const alarm = alarms.find(a => a.hardwareId == this.entityData.entityNumber && a.type == setting.secondarySettingId && a.state == AlarmState.Active);
     if (alarm != null) {
@@ -327,23 +220,14 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     return false;
   }
 
-  /**
-   * This event is fired when manual fire button is clicked
-   * @param setting setting inside which manual fire button is clicked
-   */
   manualFire(setting: any) {
     this.changedSettings.push(setting.secondarySettingId);
     this.isManualFireClicked = true;
     this.constructRemoteSettingHeader();
-    // TODO: Implement when service is available
-    // this.remoteSettingsService.postUpdatedRemoteSettings(this.remoteSettingHeader, this.constructManualFireApply(setting), this.entityData.remoteSettingType, this.entityData.entityType);
+    this.remoteSettingsService.postUpdatedRemoteSettings(this.remoteSettingHeader, this.constructManualFireApply(setting), this.entityData.remoteSettingType, this.entityData.entityType);
     console.log('Manual fire triggered for setting:', setting);
   }
 
-  /**
-   * Constructs the manual fire apply request
-   * @param currentSetting setting inside which manual fire button is clicked
-   */
   constructManualFireApply(currentSetting: SettingItem): Setting[] {
     var updatedSettingsList: Setting[] = [];
     var manualFireOption: Setting = {} as Setting;
@@ -352,7 +236,7 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     manualFireOption.secondarySettingId = currentSetting.secondarySettingId;
 
     // TODO: Implement when ConfigurationService is available
-    const manualFireOption_option = currentSetting.options?.find(op => op.label.trim().toUpperCase() == 'MANUAL FIRE');
+    const manualFireOption_option = currentSetting.options.find(op => op.label.trim().toUpperCase() == ConfigurationService.manualFireButtonName.trim().toUpperCase());
     if (manualFireOption_option) {
       manualFireOption.id = manualFireOption_option.id;
     }
@@ -361,32 +245,16 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     return updatedSettingsList;
   }
 
-  /**
-   * Acknowledges the relevant alarm
-   * @param setting Current setting
-   */
   ackAlarm(setting: SettingItem) {
-    // TODO: Implement when alarmData service is available
-    // var alarm = this.alarmData.getAlarmBySetting(this.entityData.entityNumber, setting.secondarySettingId);
-    // this.alarmData.acknowledgeAlarm(alarm).subscribe();
-    console.log('Acknowledging alarm for setting:', setting);
+    var alarm = this.alarmData.getAlarmBySetting(this.entityData.entityNumber, setting.secondarySettingId);
+    alarm && this.alarmData.acknowledgeAlarm(alarm).subscribe();
   }
 
-  /**
-   * Resolves the relevant alarm
-   * @param setting Current setting
-   */
   resolveAlarm(setting: SettingItem) {
-    // TODO: Implement when alarmData service is available
-    // var alarm = this.alarmData.getAlarmBySetting(this.entityData.entityNumber, setting.secondarySettingId);
-    // this.alarmData.resolveAlarm(alarm).subscribe();
-    console.log('Resolving alarm for setting:', setting);
+    var alarm = this.alarmData.getAlarmBySetting(this.entityData.entityNumber, setting.secondarySettingId);
+    alarm && this.alarmData.resolveAlarm(alarm).subscribe();
   }
 
-
-  /**
-   * Shows the page loader when getting settings
-   */
   showPageLoader() {
     this.statusMessage = "Requesting control settings...";
     this.loadingController.create({
@@ -405,27 +273,10 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
 
     }, this.pageLoadTimeout)
 
-    //#region Alternate Pageloader dismiss logic
-    // this.pageLoader?.onDidDismiss(() => {
-    //     //this.pageLoader?.present().then(() => {
-    //       if(isNullOrUndefined(this.remoteSettings)) {
-    //         //this.pageLoader?.dismiss();
-    //         this.isPageLoading = false;
-    //         this.displayRequestTimeout();
-    //       }
-    //     //})
-    // });
-    //#endregion
-
     this.isPageLoading = true;
   }
 
-  /**
-   * Toggles the expand/collapse of loaded entity/alarm settings
-   * @param currentSetting Setting being processed currently
-   */
   toggleExpandCollapseSettings(currentSetting: SettingItem) {
-    //console.log("toggleExpandCollapseSettings");
     if (currentSetting.isSettingExpanded) {
       currentSetting.cssClass = "settings-card-content-min"
     }
@@ -436,9 +287,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     currentSetting.expandCollapseIcon = currentSetting.expandCollapseIcon == "arrow-down" ? "arrow-up" : "arrow-down"
   }
 
-  /**
-   * Displays the request timeout card if control didn't respond with settings
-   */
   displayRequestTimeout() {
     if (!this.loadHasErrors && !this.isEmptySettingReceived && (this.remoteSettings == null || this.remoteSettings == undefined)) {
       this.loadHasErrors = false;
@@ -449,9 +297,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Shows the page loader when applying settings
-   */
   showApplySettingsToast() {
     this.statusMessage = "Applying changed settings to the control..";
     this.loadingController.create({
@@ -472,31 +317,20 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     this.isPageLoading = true;
   }
 
-  /**
-   * Makes a call to the server to send get settings request to fusion
-   */
   getRemoteSettings() {
     this.getSettingsType();
     this.constructRemoteSettingHeader();
-    // TODO: Implement when remoteSettingsService is available
-    // this.remoteSettingsService.requestRemoteSettings(this.remoteSettingHeader, this.entityData.remoteSettingType, this.entityData.entityType);
+    this.remoteSettingsService.requestRemoteSettings(this.remoteSettingHeader, this.entityData.remoteSettingType, this.entityData.entityType);
     console.log('Getting remote settings for:', this.entityData);
   }
 
-  /**
-   * Makes a call to the server to send the apply settings message
-   */
   applySettings() {
     this.showApplySettingsToast();
     this.constructRemoteSettingHeader();
-    // TODO: Implement when remoteSettingsService is available
-    // this.remoteSettingsService.postUpdatedRemoteSettings(this.remoteSettingHeader, this.constructUpdatedRemoteSettings(), this.entityData.remoteSettingType, this.entityData.entityType);
+    this.remoteSettingsService.postUpdatedRemoteSettings(this.remoteSettingHeader, this.constructUpdatedRemoteSettings(), this.entityData.remoteSettingType, this.entityData.entityType);
     console.log('Applying settings:', this.constructUpdatedRemoteSettings());
   }
 
-  /**
-   * Get the settings type requested from devices/sensors list page
-   */
   getSettingsType() {
     if (this.entityData.remoteSettingType == RemoteSettingCommandType.EntitySettings) {
       if (this.entityData.entityType == EntityType.Room) {
@@ -514,9 +348,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Constructs the header for get/apply remote settings requests
-   */
   constructRemoteSettingHeader() {
     //console.log("Entity Data", this.entityData);
     if (this.entityData != null && this.entityData != undefined) {
@@ -538,9 +369,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     this.remoteSettingHeader.userId = '';
   }
 
-  /**
-   * Constructs the apply settings request based on the settings changed by user on the page
-   */
   constructUpdatedRemoteSettings(): Setting[] {
     var settingChanges = this.remoteSettingChanges;
     //console.log("Remote setting changes", this.remoteSettingChanges);
@@ -580,12 +408,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     return updatedSettingsList;
   }
 
-  /**
-   * Gets only the updated values by the user for different settings
-   * @param updatedRemoteSettings settings changed by user
-   * @param difference difference between orginal settings and changed settings
-   * @param backupSettings backup of unchanged original settings received from control
-   */
   getChangedSettings(updatedRemoteSettings: SettingItem[], backupSettings: SettingItem[], difference: any): Setting | null {
     //console.log("get changed settings", difference);
     if (updatedRemoteSettings.length > 0) {
@@ -627,9 +449,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Gets and saves the get settings response GUID from server
-   */
   processGetResponseId() {
     // this.events.subscribe('receiveRequestSettingsAcknowledgement', data => {
     //   //console.log("Get settings Request Id from server", data);
@@ -639,9 +458,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     // })
   }
 
-  /**
-   * Gets and saves the apply settings response GUID from server
-   */
   processApplyResponseId() {
     // this.events.subscribe('receiveApplySettingsAcknowledgement', data => {
     //   //console.log('Apply settings Request Id from server', data);
@@ -651,9 +467,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     // })
   }
 
-  /**
-   * Processes the remote settings received from fusion
-   */
   processReceivedRemoteSettings() {
     // this.events.subscribe('receiveRemoteSettings', data => {
     //   //console.log('JSON from control', data);
@@ -716,9 +529,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
 
   }
 
-  /**
-   * Processes the apply settings response from fusion
-   */
   processSettingsUpdateAcknowledgement() {
     // this.events.subscribe('receivedRemoteSettingsAcknowledgement', data => {
     //   this.btnApplyDisabled = true;
@@ -757,38 +567,7 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     // })
   }
 
-  //#region Donot delete - checkbox color change logic after toggle
-  //toggleCheckBoxColor(checkBoxElement: any) {
-  //   if(checkBoxElement.target.parentElement.parentElement.firstElementChild.getAttribute("style")) {      
-  //     if(checkBoxElement.target.parentElement.parentElement.firstElementChild.getAttribute("style") == "border-color: red") {
-  //       //console.log("red")
-  //       checkBoxElement.target.parentElement.parentElement.firstElementChild.setAttribute("style","border-color: #03a9f4")
-  //     }
-  //     else if(checkBoxElement.target.parentElement.parentElement.firstElementChild.getAttribute("style") == "border-color: #03a9f4") {
-  //       //console.log("blue")
-  //       checkBoxElement.target.parentElement.parentElement.firstElementChild.setAttribute("style","border-color: red")
-  //     }
-  //   }
-  //   else {
-  //     //console.log("null")
-  //     checkBoxElement.target.parentElement.parentElement.firstElementChild.setAttribute("style","border-color: red")
-  //   }
-  // }
-  //#endregion
-
-  /**
-   * Enables/Disables options on a setting based on clicking the related checkbox options 
-   * @param currentSetting setting object that contains the checkbox option which is clicked
-   * @param currentOption checkbox option that was clicked
-   */
   toggleCheckbox(currentSetting: SettingItem, currentOption: Option) {
-    //#region Donot delete - checkbox color change logic after toggle
-    // this.toggleCheckBoxColor(checkBoxElement);
-    //#endregion
-
-    //console.log("Current Setting", currentSetting);
-    //console.log("Current Option", currentOption);
-    //get the original value for this option
     var originalValue;
     if (this.entityData.remoteSettingType == RemoteSettingCommandType.EntitySettings) {
       originalValue = this.getUnchangedOptionValue(JSON.parse(this.backupRemoteSettings).settings.entitySettings, currentSetting.settingId, currentOption.id, true);
@@ -894,47 +673,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     }
   }
 
-  //#region Expand/Collapse settings - Alternate version - Donot delete
-  // expandAllSettings(unProcessedSettings: Settings) {
-  //   if (unProcessedSettings.entitySettings != null && this.entityData.remoteSettingType == RemoteSettingCommandType.EntitySettings) {
-  //     unProcessedSettings.entitySettings.forEach(function (settingItem) {
-  //       settingItem.isSettingExpanded = true;
-  //       settingItem.cssClass = "settings-card-content-max";
-  //       settingItem.expandCollapseIcon = "arrow-up";
-  //     })
-  //   }
-  //   else if (unProcessedSettings.alarmSettings != null && this.entityData.remoteSettingType == RemoteSettingCommandType.AlarmSettings) {
-  //     unProcessedSettings.alarmSettings.forEach(function (settingItem) {
-  //       settingItem.isSettingExpanded = true;
-  //       settingItem.cssClass = "settings-card-content-max";
-  //       settingItem.expandCollapseIcon = "arrow-up";
-  //     })
-  //   }
-  // }
-
-  // collapseAllSettings(unProcessedSettings: Settings) {
-  //   if (unProcessedSettings.entitySettings != null && this.entityData.remoteSettingType == RemoteSettingCommandType.EntitySettings) {
-  //     unProcessedSettings.entitySettings.forEach(function (settingItem) {
-  //       settingItem.isSettingExpanded = false;
-  //       settingItem.cssClass = "settings-card-content-min";
-  //       settingItem.expandCollapseIcon = "arrow-down";
-  //     })
-  //   }
-  //   else if (unProcessedSettings.alarmSettings != null && this.entityData.remoteSettingType == RemoteSettingCommandType.AlarmSettings) {
-  //     unProcessedSettings.alarmSettings.forEach(function (settingItem) {
-  //       settingItem.isSettingExpanded = false;
-  //       settingItem.cssClass = "settings-card-content-min";
-  //       settingItem.expandCollapseIcon = "arrow-down";
-  //     })
-  //   }
-  // }
-  //#endregion
-
-
-  /**
-   * Initializes the expand/collpase, roundoff and border color of all received settings before rendering controls 
-   * @param unProcessedSettings settings to be modified before rendering UI
-   */
   processEntityOrAlarmSettings(unProcessedSettings: SettingItem[]): SettingItem[] {
     unProcessedSettings.forEach((setting) => {
       //initializing values for the cssClass and expandCollapseIcon
@@ -1029,10 +767,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     return unProcessedSettings;
   }
 
-  /**
-   * First level validation of received settings before pre-processing
-   * @param unProcessedData  settings to be modified before rendering UI
-   */
   preProcessReceivedSettings(unProcessedData: RemoteSettings): RemoteSettings {
     //console.log("Unprocessed JSON", unProcessedData);
     var processedSettings = null;
@@ -1069,37 +803,24 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     return processedSettings;
   }
 
-
-  /**
-   * Creates a backup of unprocessed received settings object for future comparisons
-   * @param controlSettings unmodified settings received from control
-   */
   createRemoteSettingsBackup(controlSettings: RemoteSettings) {
     this.backupRemoteSettings = JSON.stringify(controlSettings);
   }
 
-
-  /**
-   * Logic to enable/disable apply & reset buttons
-   */
   enableApplyButton() {
     // var diff = require('deep-diff');
-    // this.remoteSettingChanges = diff(this.sortRemoteSettings(JSON.parse(this.backupRemoteSettings)), this.remoteSettings, (path: any, key: any) => path.length != 0 && ~['cssClass', 'expandCollapseIcon', 'isSettingExpanded'].indexOf(key));
+    this.remoteSettingChanges = diff(this.sortRemoteSettings(JSON.parse(this.backupRemoteSettings)), this.remoteSettings!);
     // //console.log("differences", this.remoteSettingChanges);
     // //console.log("Remote Settings", this.remoteSettings);
-    // //console.log("Backup settings", this.sortRemoteSettings(JSON.parse(this.backupRemoteSettings)));
-    // if (this.remoteSettingChanges) {
-    //   this.btnApplyDisabled = false;
-    // }
-    // else {
-    //   this.btnApplyDisabled = true;
-    // }
+    //console.log("Backup settings", this.sortRemoteSettings(JSON.parse(this.backupRemoteSettings)));
+    if (this.remoteSettingChanges) {
+      this.btnApplyDisabled = false;
+    }
+    else {
+      this.btnApplyDisabled = true;
+    }
   }
 
-  /**
-   * Checks user access level for settings and showing messages if user doesn't have edit access
-   * @param currentSetting setting clicked by the user 
-   */
   checkIsSettingEnabled(currentSetting: SettingItem) {
     if (currentSetting.editable == false) {
       this.showToast("You do not have proper access level", 3000, true);
@@ -1277,41 +998,6 @@ export class RemoteSettingsPage implements OnInit, OnDestroy {
     this.btnApplyDisabled = true;
     this.showToast('Successfully reset to original settings', 3000, true);
   }
-
-
-  //#region Confirmation alert - deemed un-necessary after demo - can stay until final build
-  // async PresentAlert(alertTitle: string, alertSubTitle: string, alertMessage: string, alertConfirmationMessage: string = null) {
-  //   const remoteSettingsAlert = await this.alertController.create({
-  //     title: alertTitle,
-  //     subTitle: alertSubTitle,
-  //     message: alertMessage,
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         role: 'cancel'
-  //       }, {
-  //         text: 'Okay',
-  //         role: 'okay',
-  //         handler: () => {
-  //           if (alertTitle == 'Apply Settings') {
-  //             //submit success toast message
-  //             this.applySettings();
-  //             // setTimeout(() => {
-  //             //  this.showToast(alertConfirmationMessage, 3000);
-  //             // }, 5000);
-  //           }
-  //           else {
-  //             //reset success toast message
-  //             this.resetToOriginal();              
-  //           }
-
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   await remoteSettingsAlert.present();
-  // }
-  //#endregion
 
   /**
    * Shows different types of notification messages for various user actions

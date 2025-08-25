@@ -35,7 +35,7 @@
       Active Alarms
     </ion-list-header>
 
-    <ng-container *ngFor="let alarm of (alarms | async) | AlarmStateActive: (alarms | async)">
+    <ng-container *ngFor="let alarm of (alarms | async) | AlarmStateActive">
       <ion-item *ngIf="shouldShow(alarm)" style="zoom:.85" (click)="navigateToDetails(alarm)" button>
         <ion-icon slot="start" name="radio-button-on" style="zoom: 0.5; line-height:2.5em" [color]="alarmStateColor(alarm)"></ion-icon>
 
@@ -75,7 +75,7 @@
               {{ controlData.getControl(alarm.controlSerialNumber)?.name || controlData.getControl(alarm.controlSerialNumber)?.serialNumber }}
             </ion-col>
             <ion-col size="1">
-              <ion-icon name="contact" style="zoom:0.8;"></ion-icon>
+              <ion-icon name="person" style="zoom:0.8;"></ion-icon>
             </ion-col>
             <ion-col size="5" style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
               <span>Assigned To:</span>

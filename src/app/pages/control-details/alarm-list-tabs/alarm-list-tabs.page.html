@@ -1,18 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-        Back
-      </ion-button>
+      <ion-back-button defaultHref="/control-list"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ control.name }}</ion-title>
+    <ion-title>{{ control?.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-refresher (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [pullMax]="pullMax" [pullMin]="pullMin" [snapbackDuration]="500">
     <ion-refresher-content pullingText="- Refresh -" refreshingText="Loading Alarms">
     </ion-refresher-content>
   </ion-refresher>
@@ -25,32 +22,35 @@
     </ion-list-header>
   </div>
 
-  <div *ngIf="activeAlarmsPresent" *ngIf="alarms | async as alarmList">
-    <ion-list-header>
-      Active Alarms
-    </ion-list-header>
+  <div *ngIf="activeAlarmsPresent">
+    <div *ngIf="alarms | async as alarmList">
 
-    <ion-item *ngFor="let alarm of alarmList | AlarmStateActive: searchText" button (click)="navigateToDetails(alarm)" *ngIf="shouldShow(alarm)">
-      
-      <ion-icon slot="start" name="radio-button-on" [color]="alarmStateColor(alarm)"></ion-icon>
+      <ion-list-header>
+        Active Alarms
+      </ion-list-header>
+      <ng-container *ngFor="let alarm of alarmList | AlarmStateActive">
 
-      <ion-label>
-        <h2 *ngIf="alarm.entityType === 3">{{ alarm.roomName }}: {{ alarm.description }}</h2>
-        <h2 *ngIf="alarm.entityType === 1 || alarm.entityType === 2">{{ alarm.entityName }}: {{ alarm.description }}</h2>
-
-        <p>{{ alarm.created | date: 'medium' }}</p>
-
-        <ng-container *ngIf="liveValuioniesMap | async as liveValues">
-          <p *ngIf="alarm.entityHardwareId">
-            Current: {{ liveValues.get(alarm.entityHardwareId)?.value | LiveValueDisplay: [
-              roomData.isSensorOrDevice(alarm.entityHardwareId),
-              roomData.getEntity(alarm.entityHardwareId)?.sensorType || roomData.getEntity(alarm.entityHardwareId)?.deviceType,
-              controlData.getControl(alarm.controlSerialNumber),
-              liveValues.get(alarm.entityHardwareId)?.label
-            ] }}
+        <ion-item *ngIf="shouldShow(alarm)" button (click)="navigateToDetails(alarm)">
+          
+          <ion-icon slot="start" name="radio-button-on" [color]="alarmStateColor(alarm)"></ion-icon>
+          
+          <ion-label>
+            <h2 *ngIf="alarm.entityType === 3">{{ alarm.roomName }}: {{ alarm.description }}</h2>
+            <h2 *ngIf="alarm.entityType === 1 || alarm.entityType === 2">{{ alarm.entityName }}: {{ alarm.description }}</h2>
+            
+            <p>{{ alarm.created | date: 'medium' }}</p>
+            
+            <ng-container *ngIf="liveValuesMap | async as liveValues">
+              <p *ngIf="alarm.entityHardwareId">
+                Current: {{ liveValues.get(alarm.entityHardwareId)?.value | LiveValueDisplay: [
+                  roomData.isSensorOrDevice(alarm.entityHardwareId),
+                  roomData.getEntity(alarm.entityHardwareId)?.sensorType || roomData.getEntity(alarm.entityHardwareId)?.deviceType,
+                  controlData.getControl(alarm.controlSerialNumber),
+                  liveValues.get(alarm.entityHardwareId)?.label
+                ] }}
           </p>
         </ng-container>
-
+        
         <ion-grid>
           <ion-row>
             <ion-col size="1">
@@ -61,7 +61,7 @@
               {{ controlData.getControl(alarm.controlSerialNumber)?.name || controlData.getControl(alarm.controlSerialNumber)?.serialNumber }}
             </ion-col>
             <ion-col size="1">
-              <ion-icon name="contact"></ion-icon>
+              <ion-icon name="person"></ion-icon>
             </ion-col>
             <ion-col size="5" class="text-truncate">
               Assigned To:<br>
@@ -69,11 +69,13 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-
+        
       </ion-label>
-
+      
     </ion-item>
-
+  </ng-container>
+    
   </div>
-
+  </div>
+  
 </ion-content>

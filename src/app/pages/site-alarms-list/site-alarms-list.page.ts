@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { NavController, RefresherCustomEvent } from '@ionic/angular';
 import { from, Observable, Subscription, map } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
 import { ControlDataProvider } from 'src/app/core/providers/control-data.provider';
@@ -29,32 +30,35 @@ export class SiteAlarmsListPage implements OnInit {
 
   constructor(
     private navCtrl: NavController, private liveValueService: LiveValueService, private alarmData: AlarmDataProvider, 
-    public roomData: RoomDataProvider, public controlData: ControlDataProvider, private navParams: NavParams
+    public roomData: RoomDataProvider, public controlData: ControlDataProvider, private router: Router
   ) {
         this.alarms = from([]);
         this.liveValuesMap = this.liveValueService.getLiveValuesBinding();
+
+        this.site = (this.router.currentNavigation()?.extras.state as any)?.site;
    }
 
   ngOnInit() {
   }
 
 
-  ionViewWillLoad() {
-      this.site = this.navParams.data['site'];
-      this.alarmData.getAlarmsBinding()?.pipe(
+  ionViewWillEnter() {
+    console.log("Site", this.site);
+      this.alarms = this.alarmData.getAlarmsBinding()?.pipe(
         map((alarms: any) => {
-          this.alarms = alarms.filter((a:any) => a.state <=1 && a.siteId == this.site!.siteId);
+          return alarms.filter((a:any) => a.state <=1 && a.siteId == this.site!.siteId);
       })
-      )
+      );
+    // this.alarms = this.alarmData.getAlarmsBinding().pipe();
       this.sub = this.alarms.subscribe(alarms => {
           this.activeAlarmsPresent = alarms.filter(a => a.state <=1 && a.siteId == this.site!.siteId).length > 0;
       });
       this.alarmData.getAlarms();
   }
 
-  handleRefresh(event: any) {
+  handleRefresh(event: RefresherCustomEvent) {
       this.alarmData.getAlarms()?.subscribe(alarms => {
-          window.setTimeout(() => event.complete(), 500)
+          window.setTimeout(() => event.target.complete(), 500)
       })
   }
 
@@ -77,7 +81,7 @@ export class SiteAlarmsListPage implements OnInit {
 
   public navigateToDetails(alarm: ControlAlarm) {
       console.log('Navigate to Details', alarm, this.navCtrl);
-      this.navCtrl.navigateForward('alarm-actions-page', {state: { alarm: alarm }})
+      this.navCtrl.navigateForward('alarm-details/alarm-actions', { state: { alarm }})
   }
 
   shouldShow(alarm: ControlAlarm): boolean {

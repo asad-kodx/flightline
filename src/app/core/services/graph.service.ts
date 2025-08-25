@@ -5,7 +5,9 @@ import * as moment from 'moment';
 
 import { Control, Sensor, SensorType } from "../../shared/models/index";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GraphService {
 
     public liveHistoryReceived: EventEmitter<any>;

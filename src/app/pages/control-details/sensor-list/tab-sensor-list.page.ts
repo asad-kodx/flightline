@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, ModalController, ToastController, ActionSheetController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { NavController, ModalController, ToastController, ActionSheetController } from '@ionic/angular';
 import { catchError, Observable, of } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
+import { ControlDataProvider } from 'src/app/core/providers/control-data.provider';
 import { LiveValuesSubscription } from 'src/app/core/providers/livevalues-subscription.provider';
 import { RoomDataProvider } from 'src/app/core/providers/room-data.provider';
 import { LiveValueService } from 'src/app/core/services/live-value.service';
@@ -17,20 +19,17 @@ import { Room, RemoteSettingCommandType, EntityType, Sensor, SensorType } from '
 export class TabSensorListPage implements OnInit {
 
 
- public control: any;
+    public control: any;
     protected rooms: any;
     protected searchText: string = ''
     protected searchControl: FormControl = new FormControl();
     protected liveValuesMap!: Observable<Map<string, any>>;
     public pullMax = window.innerHeight * .7;
     public pullMin = window.innerHeight * .12;
-    private nav: NavController;
 
-    constructor(private navParams: NavParams, public navCtrl: NavController, private roomData: RoomDataProvider, private liveValuesService: LiveValueService, private liveValueSub: LiveValuesSubscription,
-    private lvSub: LiveValuesSubscription, private modalCtrl: ModalController, private toastCtrl: ToastController, private actionSheet: ActionSheetController, public alarmData: AlarmDataProvider) {
-        this.control = this.navParams.get('control');;
-        this.nav = this.navParams.get('nav');
-        console.log(this.control, this.nav)
+    constructor( public navCtrl: NavController, private roomData: RoomDataProvider, private liveValuesService: LiveValueService, private liveValueSub: LiveValuesSubscription, private router: Router,
+    private lvSub: LiveValuesSubscription, private modalCtrl: ModalController, private toastCtrl: ToastController, private actionSheet: ActionSheetController, public alarmData: AlarmDataProvider, private controlData: ControlDataProvider) {
+        this.control = this.controlData.getSelectedControl();
     }
     ngOnInit() {
         if (!this.control.serialNumber) return;
@@ -100,7 +99,7 @@ export class TabSensorListPage implements OnInit {
                 }
                 var roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: "", remoteSettingType: RemoteSettingCommandType.EntitySettings, entityType: EntityType.Room };
                 console.log('Navigating to room settings', roomData);
-                this.nav.navigateForward('remote-settings-page', roomData);
+                this.navCtrl.navigateForward('remote-settings-page', roomData);
               }
             },
             {
@@ -119,7 +118,7 @@ export class TabSensorListPage implements OnInit {
                 //Navigate to room alarm settings
                 var roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, roomId: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: "", remoteSettingType: RemoteSettingCommandType.AlarmSettings, entityType: EntityType.Room };
                 console.log('Navigating to room alarm settings', roomData);
-                this.nav.navigateForward('remote-settings-page', roomData);
+                this.navCtrl.navigateForward('remote-settings-page', roomData);
               }
             }
           ]
@@ -136,7 +135,7 @@ export class TabSensorListPage implements OnInit {
            {
              text: 'Alarms',
              handler: () => {
-               this.nav.navigateForward('entity-alarms-page', {queryParams: {sensor}});
+               this.navCtrl.navigateForward('entity-alarms-page', {queryParams: {sensor}});
              }
            },
            {
@@ -152,7 +151,7 @@ export class TabSensorListPage implements OnInit {
                  await toastController.present()
                  return;
                }
-               this.nav.navigateForward('entity-graphs-page', { queryParams: { sensor } });
+               this.navCtrl.navigateForward('entity-graphs-page', { queryParams: { sensor } });
              }
            },
            // {
@@ -177,7 +176,7 @@ export class TabSensorListPage implements OnInit {
                }
                var sensorData: any = { entityNumber: sensor.sensorSerialNumber, roomId: sensor.controlSerialNumber + "." + sensor.roomProgramId, controlSerialNumber: sensor.controlSerialNumber, controlName: this.control.name, deviceName: sensor.sensorName, remoteSettingType: RemoteSettingCommandType.AlarmSettings, entityType: EntityType.Sensor };
                console.log('Navigating to Sensor alarm settings', sensorData);
-               this.nav.navigateForward('remote-settings-page', sensorData);
+               this.navCtrl.navigateForward('remote-settings-page', sensorData);
              }
            },
            {
@@ -190,9 +189,9 @@ export class TabSensorListPage implements OnInit {
     }
     shouldShow(sensor: Sensor): boolean {
         if (sensor.sensorType == SensorType.RemoteSensor) return false;
-        if (!this.searchText || this.searchText.trim() == "") return true;
-        return (sensor.sensorName.toLocaleLowerCase().indexOf(this.searchText.toLocaleLowerCase()) > -1 ||
-            sensor.sensorSerialNumber.toLocaleLowerCase().indexOf(this.searchText.toLocaleLowerCase()) > -1);
+        if (!this.searchText || this.searchText.toString().trim() == "") return true;
+        return (sensor.sensorName.toLocaleLowerCase().indexOf(this.searchText.toString().toLocaleLowerCase()) > -1 ||
+            sensor.sensorSerialNumber.toLocaleLowerCase().indexOf(this.searchText.toString().toLocaleLowerCase()) > -1);
     }
     shouldShowBadge(sensor: Sensor) {
         var ac = this.alarmData.getAlarmCounts(null, sensor.sensorSerialNumber, null);

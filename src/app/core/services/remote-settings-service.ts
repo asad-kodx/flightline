@@ -5,15 +5,8 @@
  *********************************************************************/
 
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import { SignalRService } from './signalr.service';
-// import { RemoteSettingCommandType } from '../models/types/remote-settings-command-type';
-// import { RemoteSettingsProvider } from '../providers/remote-settings-provider';
-// import { EntityType } from '../models/types/entity-type';
-// import { RemoteHeader } from '../models/remote-header-model';
-// import { Setting } from '../models/remote-setting-update-model';
-// import { RemoteSettings } from '../models/remote-setting-model'
 
 import {
   RemoteSettingCommandType,
@@ -26,7 +19,9 @@ import { RemoteSettingsProvider } from "../providers/remote-settings-provider";
 
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class RemoteSettingsService {
 
     public activeGetRequests: Map<string, any>;

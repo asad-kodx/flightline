@@ -42,7 +42,7 @@ export class AlarmDetailsTabPage implements OnInit {
   }
   ngOnInit() {
     this.liveValues
-      .requestLiveValuesList([this.alarm.entityHardwareId])
+      .requestLiveValuesList([this.alarm.entityHardwareId!])
       .subscribe();
     // this.events.subscribe('AlarmSwitch', (alarm) => {
     //   if (this.alarm.fusionAlarmKey != alarm.fusionAlarmKey) {
