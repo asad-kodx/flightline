@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { OneSignal } from "@awesome-cordova-plugins/onesignal/ngx";
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { Badge } from '@awesome-cordova-plugins/badge/ngx';
@@ -18,7 +17,6 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, SharedModule],
   providers: [
-    InAppBrowser,
     OneSignal,
     Network,
     Badge,

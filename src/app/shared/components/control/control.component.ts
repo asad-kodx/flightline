@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { AndroidAnimation, AndroidViewStyle, InAppBrowser, iOSAnimation, iOSViewStyle } from '@capacitor/inappbrowser';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
 import { catchError, Observable, of, Subscription, timeout } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -31,7 +31,6 @@ export class ControlComponent  implements OnInit {
     private siteContext: SiteContextService,
     private auth: AuthService,
     private controlData: ControlDataProvider,
-    private iab: InAppBrowser,
     private platform: Platform,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
@@ -85,16 +84,30 @@ export class ControlComponent  implements OnInit {
     }
   }
 
-  startWebRemoteControlFusionLight(serialNumber: number) {
+  async startWebRemoteControlFusionLight(serialNumber: number) {
   
     console.log(this.platform.is('cordova'))
     const url =  `${ConfigurationService.fusionLightWebUrl}?serialNo=${this.control.serialNumber}&authToken=${this.auth.getAuthToken()}`
     if(this.platform.is('cordova')) {
-      const browser = this.iab.create(url, '_system', 'location=no,toolbar=no');
-      browser.on('loadstop').subscribe(() => {
-        browser.close();
-      })
-      browser.close();
+      await InAppBrowser.openInSystemBrowser({ 
+        url,
+        options: {
+          android: {
+            showTitle: false,
+            hideToolbarOnScroll: false,
+            viewStyle: AndroidViewStyle.FULL_SCREEN,
+            startAnimation: AndroidAnimation.SLIDE_IN_LEFT,
+            exitAnimation: AndroidAnimation.SLIDE_OUT_RIGHT
+          },
+          iOS: {
+            closeButtonText: 'Close' as any,
+            viewStyle: iOSViewStyle.FULL_SCREEN,
+            animationEffect: iOSAnimation.COVER_VERTICAL,
+            enableBarsCollapsing: false,
+            enableReadersMode: false
+          }
+        }
+      });
     }
     else window.open(url);
   }
@@ -128,12 +141,39 @@ export class ControlComponent  implements OnInit {
         )
         // .timeout(10000)
         // .catch((err) => loader.dismiss())
-        .subscribe((port: any) => {
+        .subscribe(async (port: any) => {
           var connectionUrl = `http://flightline-control.com/assets/novnc/vnc.html?host=52.165.42.127&port=7000&password=ou812vncfusionconnect&path=%2Fwebsockify%3Ftoken%3D${port.tokenPort}&autoconnect=1&resize=none`;
-          setTimeout(() => {
+          setTimeout(async () => {
             //console.log("replacing with conneciton url")
             loading?.dismiss();
-            this.iab.create(connectionUrl);
+            await InAppBrowser.openInWebView({ 
+              url: connectionUrl,
+              options: {
+                showURL: false,
+                showToolbar: false,
+                clearCache: false,
+                clearSessionCache: false,
+                mediaPlaybackRequiresUserAction: false,
+                closeButtonText: 'Close' as any,
+                toolbarPosition: 'top' as any,
+                showNavigationButtons: false,
+                leftToRight: false,
+                android: {
+                  allowZoom: false,
+                  hardwareBack: true,
+                  pauseMedia: false
+                },
+                iOS: {
+                  viewStyle: iOSViewStyle.FULL_SCREEN,
+                  animationEffect: iOSAnimation.COVER_VERTICAL,
+                  allowsBackForwardNavigationGestures: false,
+                  allowOverScroll: false,
+                  enableViewportScale: false,
+                  allowInLineMediaPlayback: false,
+                  surpressIncrementalRendering: false,
+                }
+              }
+            });
           }, 4000);
         });
     }
