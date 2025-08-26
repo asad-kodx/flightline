@@ -13,6 +13,7 @@ import { ConfigurationService } from "./core/services/configuration.service";
 
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { Keyboard } from '@capacitor/keyboard';
 import { SignalRService } from './core/services/signalr.service';
 import { UserDataProvider } from './core/providers/user-data.provider';
 import { LogLevel } from 'onesignal-cordova-plugin';
@@ -152,9 +153,9 @@ export class AppComponent {
       // this.initDeeplinks();
       this.initPush();
       this.hookPlatformEvents();
-      // document.onkeypress = (e => {
-      //   if (e.keyCode == 13) this.keyboard.hide();
-      // });
+      document.addEventListener('keypress', (e: KeyboardEvent) => {
+        if (e.key === 'Enter') Keyboard.hide();
+      });
       // if (this.platform.is('cordova')) this.screen.lock('portrait');
       //Handling for deeplinks
     });

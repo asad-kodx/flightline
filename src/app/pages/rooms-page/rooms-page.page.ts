@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import * as _ from 'lodash';
+import { Keyboard } from '@capacitor/keyboard';
 
 // Import models and types
 import {
@@ -288,16 +289,14 @@ export class RoomsPagePage implements OnInit, OnDestroy {
     this.filterList();
   }
 
-  handleKeyUp(event: any) {
-    if (event.keyCode == 13) {
-      // Close keyboard - implement keyboard close logic here
-      console.log('Enter key pressed, closing keyboard');
+  handleKeyUp(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      Keyboard.hide();
     }
   }
 
   closeKeyboard() {
-    // Close keyboard - implement keyboard close logic here
-    console.log('Closing keyboard');
+    Keyboard.hide();
   }
 
   shouldShow(_entity: Entity): boolean {
