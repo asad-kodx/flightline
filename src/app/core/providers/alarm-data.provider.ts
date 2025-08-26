@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import { SiteContextService } from "../services/site-context.service";
 import { DBKeys, AlarmCount, ControlAlarm, AlarmState } from "../../shared/models/index";
 import { AlertController } from "@ionic/angular";
-import { Badge } from "@awesome-cordova-plugins/badge/ngx";
+import { Badge } from '@capawesome/capacitor-badge';
 
 @Injectable({
     providedIn: 'root'
@@ -56,7 +56,7 @@ export class AlarmDataProvider extends BaseDataProvider<ControlAlarm[]> {
     private lastCount?: number;
 
     constructor(http: HttpClient, private orgService: OrgContextService, private signalrService: SignalRService, private siteContext: SiteContextService,
-        private alertCtrl: AlertController, private badge: Badge) {
+        private alertCtrl: AlertController) {
         super(http, orgService)
 
         this.signalrService.alarmDataReceivedEvent$.subscribe((data: ControlAlarm) => {
@@ -189,7 +189,7 @@ export class AlarmDataProvider extends BaseDataProvider<ControlAlarm[]> {
             localStorage.setItem('allAlarms', JSON.stringify(alarms));
 
             var count = this.getAllAlarmsCount();
-            this.badge.set(count.active + count.acked);
+            Badge.set({ count: count.active + count.acked });
             this.lastCount = count.active + count.acked;
 
             this.$allAlarms.next(this.allAlarmsData);
@@ -221,13 +221,13 @@ export class AlarmDataProvider extends BaseDataProvider<ControlAlarm[]> {
         }
 
         var count = this.getAllAlarmsCount();
-        this.badge.set(count.active + count.acked);
+        Badge.set({ count: count.active + count.acked });
 
     }
 
     rehandleAlarmCountBadge(){
         var count = this.getAllAlarmsCount();
-        this.badge.set(count.active + count.acked);
+        Badge.set({ count: count.active + count.acked });
         this.lastCount = count.active + count.acked;
     }
 
@@ -255,12 +255,12 @@ export class AlarmDataProvider extends BaseDataProvider<ControlAlarm[]> {
         
         if (this.lastCount == null) {
             this.lastCount = count.active + count.acked;
-            this.badge.set(count.active + count.acked);
+            Badge.set({ count: count.active + count.acked });
         }
 
         if (count.active + count.acked != this.lastCount) {
             console.log(this.lastCount, count.active + count.acked)
-            this.badge.set(count.active + count.acked);
+            Badge.set({ count: count.active + count.acked });
             this.lastCount = count.active + count.acked;
         }
 
