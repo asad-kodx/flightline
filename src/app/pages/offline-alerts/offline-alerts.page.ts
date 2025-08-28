@@ -5,6 +5,7 @@ import { AlertDataProvider } from 'src/app/core/providers/alert-data.provider';
 import { ControlDataProvider } from 'src/app/core/providers/control-data.provider';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { OfflineAlert } from 'src/app/shared/models';
+import { IgnoredControlsPage } from '../ignored-controls/ignored-controls.page';
 
 
 @Component({
@@ -52,8 +53,11 @@ export class OfflineAlertsPage implements OnInit {
       );
   }
 
-  public openIgnoredControlsModal() {
-    // var modal = this.modalCtrl.create(IgnoredControlsPage).present();
+  async openIgnoredControlsModal() {
+    const modal = await this.modalCtrl.create({
+      component: IgnoredControlsPage,
+    });
+    await modal.present();
   }
 
   public handleRefresh(event: any) {

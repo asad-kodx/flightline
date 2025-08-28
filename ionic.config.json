@@ -1,7 +1,7 @@
 {
   "name": "flightline",
   "integrations": {
-    "cordova": {}
+    "capacitor": {}
   },
   "type": "angular"
 }

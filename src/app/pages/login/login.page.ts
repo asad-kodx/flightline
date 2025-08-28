@@ -4,7 +4,7 @@ import { LocalStorageHelper } from 'src/app/core/providers/storage-helper.provid
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ConfigurationService } from 'src/app/core/services/configuration.service';
 
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { AndroidAnimation, AndroidViewStyle, DismissStyle, InAppBrowser, iOSAnimation, iOSViewStyle } from '@capacitor/inappbrowser';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +22,7 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
     private authSvc: AuthService,
-    private localstorage: LocalStorageHelper,
-    private iab: InAppBrowser
+    private localstorage: LocalStorageHelper
   ) { }
 
   ngOnInit() {
@@ -50,7 +49,25 @@ export class LoginPage implements OnInit {
 
   async launchPasswordReset() {
     try{
-        this.iab.create(this.configurations.baseUrl + '/account/forgotpassword');
+        await InAppBrowser.openInSystemBrowser({ 
+          url: this.configurations.baseUrl + '/account/forgotpassword',
+          options: {
+            android: {
+              showTitle: false,
+              hideToolbarOnScroll: false,
+              viewStyle: AndroidViewStyle.FULL_SCREEN,
+              startAnimation: AndroidAnimation.SLIDE_IN_LEFT,
+              exitAnimation: AndroidAnimation.SLIDE_OUT_RIGHT
+            },
+            iOS: {
+              closeButtonText: DismissStyle.CLOSE,
+              viewStyle: iOSViewStyle.FULL_SCREEN,
+              animationEffect: iOSAnimation.COVER_VERTICAL,
+              enableBarsCollapsing: false,
+              enableReadersMode: false
+            }
+          }
+        });
     }
     catch{
         window.open(this.configurations.baseUrl + '/account/forgotpassword', '_system');
