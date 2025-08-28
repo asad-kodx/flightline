@@ -1,14 +1,26 @@
 import { Component } from '@angular/core';
-import { PageInterface, Site, Organization, DBKeys, User } from './shared/models/index';
-import { AlertController, MenuController, NavController, Platform, ToastController } from '@ionic/angular';
+import {
+  PageInterface,
+  Site,
+  Organization,
+  DBKeys,
+  User,
+} from './shared/models/index';
+import {
+  AlertController,
+  MenuController,
+  NavController,
+  Platform,
+  ToastController,
+} from '@ionic/angular';
 import { AuthService } from './core/services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { AlarmDataProvider } from './core/providers/alarm-data.provider';
-import { OrganizationDataProvider  } from "./core/providers/org-data.provider";
+import { OrganizationDataProvider } from './core/providers/org-data.provider';
 import { SiteContextService } from './core/services/site-context.service';
 import { SiteDataProvider } from './core/providers/site-data.provider';
 
-import { ConfigurationService } from "./core/services/configuration.service";
+import { ConfigurationService } from './core/services/configuration.service';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -27,13 +39,17 @@ import { Capacitor } from '@capacitor/core';
   standalone: false,
 })
 export class AppComponent {
-
   protected appPages: PageInterface[] = [
     { title: 'Dashboard', name: 'home', index: 1, icon: 'home' },
     { title: 'Controls', name: 'control-list', index: 2, icon: 'desktop' },
     { title: 'Alarms', name: 'alarm-list', index: 3, icon: 'notifications' },
     { title: 'Entities', name: 'rooms-page', index: 4, icon: 'speedometer' },
-    { title: 'Offline Alerts', name: 'offline-alerts', index: 5, icon: 'alert' }
+    {
+      title: 'Offline Alerts',
+      name: 'offline-alerts',
+      index: 5,
+      icon: 'alert',
+    },
   ];
 
   currentUser?: string;
@@ -46,7 +62,7 @@ export class AppComponent {
 
   protected loggedInPages: PageInterface[] = [
     { title: 'Settings', name: 'user-settings-page', index: 3, icon: 'cog' },
-    { title: 'Logout', name: 'home-page', icon: 'log-out', logsOut: true }
+    { title: 'Logout', name: 'home-page', icon: 'log-out', logsOut: true },
   ];
 
   constructor(
@@ -63,12 +79,11 @@ export class AppComponent {
     private pushMessageHandler: PushMessageHandler,
     private authService: AuthService,
     private signalRService: SignalRService,
-    private platform: Platform
+    private platform: Platform,
+    private router: Router
 
   ) {
-
-     this.platform.ready().then(() => {
-
+    this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       // this.statusBar.styleDefault();
@@ -80,22 +95,22 @@ export class AppComponent {
       var bigToken = localStorage.getItem('auth-tokens');
       if (bigToken) {
         var parsedToken = JSON.parse(bigToken);
-        console.log("Parsed Token", parsedToken);
-        this.authService.setAuthToken(parsedToken.access_token)
+        console.log('Parsed Token', parsedToken);
+        this.authService.setAuthToken(parsedToken.access_token);
         localStorage.setItem('refresh_token', parsedToken.refresh_token);
       }
       var token = localStorage.getItem('auth_token');
       if (!token) {
         this.menuCtrl.enable(false, 'loggedInMenu');
         this.navCtrl.navigateRoot('login');
-      }
-      else {
+      } else {
         this.menuCtrl.enable(true, 'loggedInMenu');
         this.navCtrl.navigateRoot('home');
       }
       // this.checkForUpdate();
       var startup = true;
-      if(localStorage.getItem('username')) this.currentUser = localStorage.getItem('username')!.trim();
+      if (localStorage.getItem('username'))
+        this.currentUser = localStorage.getItem('username')!.trim();
       this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
       this.orgId = localStorage.getItem(DBKeys.SELECTED_ORG_ID);
       this.startupAuth();
@@ -117,8 +132,7 @@ export class AppComponent {
           this.menuCtrl.enable(false, 'loggedInMenu');
           this.navCtrl.navigateRoot('login');
           signalRService.disconnect();
-        }
-        else if (status) {
+        } else if (status) {
           this.currentUser = localStorage.getItem('username')!.trim();
           console.debug('User is logged in...');
           // this.events.publish('login');
@@ -126,13 +140,12 @@ export class AppComponent {
           this.menuCtrl.enable(true, 'loggedInMenu');
           this.getOrgs();
           this.userData.getUserInfo().subscribe((data: User) => {
-            localStorage.setItem("user_info", JSON.stringify(data));
-          })
+            localStorage.setItem('user_info', JSON.stringify(data));
+          });
 
-          if(!startup) signalRService.connect();
+          if (!startup) signalRService.connect();
           startup = false;
-        }
-        else {
+        } else {
           startup = false;
         }
       });
@@ -162,7 +175,6 @@ export class AppComponent {
       // const modal = this.app._appRoot._modalPortal.getActive();
       // const actionSheet = this.app._appRoot._overlayPortal.getActive()
       // const nav = this.app.getActiveNav();
-
       // if (actionSheet && actionSheet.dismiss()) {
       //   actionSheet.dismiss();
       // }
@@ -182,11 +194,10 @@ export class AppComponent {
       //   if (this.nav.getActive().id == 'login-page') return;
       //   this.nav.setRoot('home-page')
       // }
-
     });
   }
 
-   private hookPlatformEvents() {
+  private hookPlatformEvents() {
     this.platform.resume.subscribe(() => {
       this.authService.startRefreshTimer();
       this.alarmData.getMinimalAlarms();
@@ -200,11 +211,12 @@ export class AppComponent {
       this.pushMessageHandler.pausePushQueue();
       this.authService.stopRefreshTimer();
       this.alarmData.rehandleAlarmCountBadge();
-    })
+    });
   }
 
   openPage(page: PageInterface) {
     this.navCtrl.navigateRoot(page.name);
+    this.menuCtrl.close();
     if (page.logsOut === true) {
       // Give the menu time to close before changing to logged out
       this.authService.logout();
@@ -231,26 +243,26 @@ export class AppComponent {
     // if (this.nav.getActive() && this.nav.getActive().name === page.name) {
     //   return 'primary';
     // }
-    return 'primary';
+    return this.router.url.includes(page.name) ? 'primary' : 'white';
   }
 
-
   startupAuth() {
-    this.authService.refreshToken()
-      .subscribe({
-        error: (err) => {
-          window.setTimeout(() => this.startupAuth(), 5000);
-        }
-      });
+    this.authService.refreshToken().subscribe({
+      error: (err) => {
+        window.setTimeout(() => this.startupAuth(), 5000);
+      },
+    });
   }
 
   getOrgs() {
     this.organizations = this.orgData.getOrganizationsBinding();
     this.organizations?.subscribe((orgs: any[]) => {
       if (orgs && orgs.length > 0) {
-
         if (!localStorage.getItem(DBKeys.SELECTED_ORG_ID)) {
-          localStorage.setItem(DBKeys.SELECTED_ORG_ID, orgs[0].organizationId.toString());
+          localStorage.setItem(
+            DBKeys.SELECTED_ORG_ID,
+            orgs[0].organizationId.toString()
+          );
           localStorage.setItem(DBKeys.SELECTED_ORG_NAME, orgs[0].name);
         }
         this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
@@ -272,23 +284,23 @@ export class AppComponent {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel'
+          role: 'cancel',
         },
         {
           text: 'Logout',
           handler: () => {
             this.navCtrl.navigateRoot('login-page');
             this.authService.logout();
-            this.currentUser = "";
-            localStorage.removeItem("username")
+            this.currentUser = '';
+            localStorage.removeItem('username');
             // this.events.publish('logout');
             this.siteContext.clearSitesMap();
             this.orgName = null;
             this.orgId = null;
-          }
-        }
-      ]
-    })
+          },
+        },
+      ],
+    });
     alert.present();
   }
 
@@ -348,8 +360,8 @@ export class AppComponent {
       //     //     OneSignal.setAppId(ConfigurationService.oneSignalAppId);
       //         if(this.currentUser) OneSignal.sendTag("username", this.currentUser.trim())
       //       })
-             
-          // })
+
+      // })
 
       // });
       // this.events.subscribe('logout', () => {
@@ -358,7 +370,7 @@ export class AppComponent {
     });
   }
 
-  public goToPushSettings(){
+  public goToPushSettings() {
     // OneSignal.Notifications.promptForPushNotificationsWithUserResponse().then((accepted) => {
     //   // if (accepted) {
     //   //   this.pushEnabled = true;
