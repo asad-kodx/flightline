@@ -1,9 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject, BehaviorSubject } from "rxjs";
 import { DBKeys, Site } from "../../shared/models/index";
-// import { DBKeys } from "../models/dbkeys.static";
-// import { Site } from "../models/site.model";
-// import { Events } from "ionic-angular";
 
 
 
