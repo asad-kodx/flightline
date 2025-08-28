@@ -4,6 +4,11 @@ const config: CapacitorConfig = {
   appId: 'com.ionicframework.controltechionic546641',
   appName: 'Flightline',
   webDir: 'www',
+  plugins: {
+    Keyboard: {
+      resizeOnFullScreen: false
+    }
+  }, 
   cordova: {
     preferences: {
       ScrollEnabled: 'false',
