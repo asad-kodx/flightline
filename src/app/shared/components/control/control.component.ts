@@ -86,9 +86,9 @@ export class ControlComponent  implements OnInit {
 
   async startWebRemoteControlFusionLight(serialNumber: number) {
   
-    console.log(this.platform.is('cordova'))
+    console.log(this.platform.is('capacitor'))
     const url =  `${ConfigurationService.fusionLightWebUrl}?serialNo=${this.control.serialNumber}&authToken=${this.auth.getAuthToken()}`
-    if(this.platform.is('cordova')) {
+    if(this.platform.is('capacitor')) {
       await InAppBrowser.openInSystemBrowser({ 
         url,
         options: {
@@ -123,7 +123,7 @@ export class ControlComponent  implements OnInit {
       }).then(toast => toast.present());
       return;
      }
-     if(this.platform.is('cordova')){
+     if(this.platform.is('capacitor')){
       let loading: any = null;
       this.loadingCtrl.create(
         {message: 'Starting Remote VNC connection'}

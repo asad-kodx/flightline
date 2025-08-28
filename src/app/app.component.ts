@@ -7,7 +7,6 @@ import { AlarmDataProvider } from './core/providers/alarm-data.provider';
 import { OrganizationDataProvider  } from "./core/providers/org-data.provider";
 import { SiteContextService } from './core/services/site-context.service';
 import { SiteDataProvider } from './core/providers/site-data.provider';
-import OneSignal from 'onesignal-cordova-plugin';
 
 import { ConfigurationService } from "./core/services/configuration.service";
 
@@ -16,7 +15,6 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Keyboard } from '@capacitor/keyboard';
 import { SignalRService } from './core/services/signalr.service';
 import { UserDataProvider } from './core/providers/user-data.provider';
-import { LogLevel } from 'onesignal-cordova-plugin';
 import { PushMessageHandler } from './core/services/pushmessagehandler.service';
 import { ControlDataProvider } from './core/providers/control-data.provider';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -156,7 +154,7 @@ export class AppComponent {
       document.addEventListener('keypress', (e: KeyboardEvent) => {
         if (e.key === 'Enter') Keyboard.hide();
       });
-      // if (this.platform.is('cordova')) this.screen.lock('portrait');
+      // if (this.platform.is('capacitor')) this.screen.lock('portrait');
       //Handling for deeplinks
     });
 
@@ -313,31 +311,31 @@ export class AppComponent {
   }
 
    private initPush() {
-    console.log("Is this Cordova?", this.platform.is('cordova'));
-    if (!this.platform.is('cordova')) return;
+    console.log("Is this Capacitor?", this.platform.is('capacitor'));
+    if (!this.platform.is('capacitor')) return;
     this.platform.ready().then(() => {
       console.log("Initting push")
-      OneSignal.Debug.setLogLevel(LogLevel.Verbose);
-      OneSignal.initialize(ConfigurationService.oneSignalAppId);
-      if (this.currentUser) OneSignal.User.addTag("username", this.currentUser.trim())
-      else{
-        console.log("User not found, resetting sub")
-        OneSignal.User.removeTag("username");
-      }
+      // OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+      // OneSignal.initialize(ConfigurationService.oneSignalAppId);
+      // if (this.currentUser) OneSignal.User.addTag("username", this.currentUser.trim())
+      // else{
+      //   console.log("User not found, resetting sub")
+      //   OneSignal.User.removeTag("username");
+      // }
 
-      OneSignal.Notifications.addEventListener('click', (data) => {
-        console.log("Notification Clicked", data)
-        OneSignal.Notifications.removeNotification(data.notification.androidNotificationId!)
-        this.pushMessageHandler.processPushMessage(data.notification, true)
-        this.alarmData.rehandleAlarmCountBadge()
-      });
+      // OneSignal.Notifications.addEventListener('click', (data) => {
+      //   console.log("Notification Clicked", data)
+      //   OneSignal.Notifications.removeNotification(data.notification.androidNotificationId!)
+      //   this.pushMessageHandler.processPushMessage(data.notification, true)
+      //   this.alarmData.rehandleAlarmCountBadge()
+      // });
 
-      OneSignal.Notifications.addEventListener('foregroundWillDisplay', (data) => {
-        console.log("Foreground Notification Received", data)
-        OneSignal.Notifications.removeNotification(data.getNotification().androidNotificationId!)
-        this.pushMessageHandler.processPushMessage(data.getNotification())
-        this.alarmData.rehandleAlarmCountBadge()
-      });
+      // OneSignal.Notifications.addEventListener('foregroundWillDisplay', (data) => {
+      //   console.log("Foreground Notification Received", data)
+      //   OneSignal.Notifications.removeNotification(data.getNotification().androidNotificationId!)
+      //   this.pushMessageHandler.processPushMessage(data.getNotification())
+      //   this.alarmData.rehandleAlarmCountBadge()
+      // });
       // this.events.subscribe('login', () => {
       //   console.log("Login event detected, subbing")
       //     if(this.pushInterval) return;
@@ -367,6 +365,6 @@ export class AppComponent {
     //   //   this.authService.saveUserPushTokenToServer();
     //   // }
     // });
-    OneSignal.Notifications.requestPermission();
+    // OneSignal.Notifications.requestPermission();
   }
 }

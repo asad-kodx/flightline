@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { OneSignal } from "@awesome-cordova-plugins/onesignal/ngx";
 import { SharedModule } from './shared/shared.module';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
 
@@ -15,7 +14,6 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, SharedModule],
   providers: [
-    OneSignal,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],

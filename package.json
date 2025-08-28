@@ -21,8 +21,6 @@
     "@angular/platform-browser": "^20.0.0",
     "@angular/platform-browser-dynamic": "^20.0.0",
     "@angular/router": "^20.0.0",
-    "@awesome-cordova-plugins/core": "^8.1.0",
-    "@awesome-cordova-plugins/onesignal": "^8.1.0",
     "@capacitor/android": "^7.4.2",
     "@capacitor/core": "^7.4.2",
     "@capacitor/inappbrowser": "^2.3.1",
@@ -82,14 +80,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "onesignal-cordova-plugin": "^5.2.15",
     "typescript": "~5.8.0"
   },
-  "description": "An Ionic project",
-  "cordova": {
-    "plugins": {
-      "cordova-plugin-badge": {},
-      "onesignal-cordova-plugin": {}
-    }
-  }
+  "description": "An Ionic project"
 }
