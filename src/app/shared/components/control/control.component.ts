@@ -142,7 +142,7 @@ export class ControlComponent  implements OnInit {
         // .timeout(10000)
         // .catch((err) => loader.dismiss())
         .subscribe(async (port: any) => {
-          var connectionUrl = `http://flightline-control.com/assets/novnc/vnc.html?host=52.165.42.127&port=7000&password=ou812vncfusionconnect&path=%2Fwebsockify%3Ftoken%3D${port.tokenPort}&autoconnect=1&resize=none`;
+          var connectionUrl = `http://flightline-control.com/assets/novnc/vnc.html?host=controltechssh.flightline-control.com&port=7000&password=ou812vncfusionconnect&path=%2Fwebsockify%3Ftoken%3D${port.tokenPort}&autoconnect=1&resize=none`;
           setTimeout(async () => {
             //console.log("replacing with conneciton url")
             loading?.dismiss();
@@ -187,7 +187,7 @@ export class ControlComponent  implements OnInit {
         var url = `http://flightline-control.com/assets/novnc/vnc.html?connecting=true`;
         newWindow?.location.replace(url);
         this.controlData.startVnc(this.control.controlId).subscribe((port: any) => {
-          var connectionUrl = `http://flightline-control.com/assets/novnc/vnc.html?host=52.165.42.127&port=7000&password=ou812vncfusionconnect&path=%2Fwebsockify%3Ftoken%3D${port.tokenPort}&autoconnect=1&resize=scale`;
+          var connectionUrl = `http://flightline-control.com/assets/novnc/vnc.html?host=controltechssh.flightline-control.com&port=7000&password=ou812vncfusionconnect&path=%2Fwebsockify%3Ftoken%3D${port.tokenPort}&autoconnect=1&resize=scale`;
           setTimeout(() => {
             //console.log("replacing with conneciton url")
             newWindow?.location.replace(connectionUrl);
