@@ -50,9 +50,10 @@ export class UserSettingsPage implements OnInit {
     //   this.organizations!.map(orgs => {
     //     this.orgId = orgs[0].organizationId;
     // });
-    // this.events.subscribe("OrgCreated", data => {
-    //     console.info("org creation data", data);
-    // })
+    // Subscribe to organization creation events
+    this.orgs.organizationCreated$.subscribe(({organization, userInfo}) => {
+      console.info("Organization created:", {organization, userInfo});
+    });
   }
 
   ngOnInit() {

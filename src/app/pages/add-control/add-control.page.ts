@@ -122,7 +122,8 @@ export class AddControlPage implements OnInit {
                 localStorage.getItem('user_info') || ''
               );
               console.info('Org Site name', this.orgAndSiteName);
-              // this.events.publish("OrgCreated", this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
+              // Trigger organization created observable
+              this.orgDataProvider.triggerOrganizationCreated(data, this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
               this.messageBuilder.appendLine(
                 'Control added successfully to app & website <br/><br/>'
               );
@@ -231,7 +232,8 @@ export class AddControlPage implements OnInit {
                   localStorage.getItem('user_info') || ''
                 );
                 console.info('Org Site name', this.orgAndSiteName);
-                // this.events.publish("OrgCreated", this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
+                // Trigger organization created observable
+                this.orgDataProvider.triggerOrganizationCreated(data, this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
                 this.messageBuilder.appendLine(
                   'Control added successfully to app & website <br/><br/>'
                 );

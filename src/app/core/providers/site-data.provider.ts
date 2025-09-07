@@ -4,7 +4,7 @@ import { ConfigurationService } from "../services/configuration.service";
 import { BaseDataProvider } from "./base-data.provider";
 import { OrgContextService } from "../services/org-context.service";
 import { Observable, BehaviorSubject } from "rxjs";
-import { String } from 'typescript-string-operations';
+import { formatString } from 'typescript-string-operations';
 import { SiteContextService } from "../services/site-context.service";
 
 import { DBKeys, Site } from "../../shared/models/index";
@@ -42,7 +42,7 @@ export class SiteDataProvider extends BaseDataProvider<Site[]> {
         }
         this.dataStore!.values = JSON.parse(localStorage.getItem('sites') || "[]");
         this._data$.next(Object.assign({}, this.dataStore).values);
-        var endpointUrl = String.Format(this.sitesUrl, localStorage.getItem(DBKeys.SELECTED_ORG_ID));
+        var endpointUrl = formatString(this.sitesUrl, localStorage.getItem(DBKeys.SELECTED_ORG_ID));
         if(Number(localStorage.getItem(DBKeys.SELECTED_ORG_ID)) == -1){
             endpointUrl = this.sitesByUserUrl;
         }

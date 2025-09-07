@@ -3,9 +3,9 @@ import { HttpClient } from "@angular/common/http";
 import { ConfigurationService } from "../services/configuration.service";
 import { BaseDataProvider } from "./base-data.provider";
 import { OrgContextService } from "../services/org-context.service";
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { AuthService } from '../services/auth.service';
-import { String } from 'typescript-string-operations';
+import { formatString } from 'typescript-string-operations';
 import * as _ from 'lodash'
 
 import { Site, User, Organization, NewCustomer, SoftwareType, DBKeys } from "../../shared/models/index";
@@ -14,6 +14,10 @@ import { Site, User, Organization, NewCustomer, SoftwareType, DBKeys } from "../
     providedIn: 'root'
 })
 export class OrganizationDataProvider extends BaseDataProvider<Organization[]> {
+    // Observable subject for organization creation events
+    private organizationCreatedSubject = new Subject<{organization: Organization, userInfo: string}>();
+    public organizationCreated$ = this.organizationCreatedSubject.asObservable();
+    
     private readonly _orgsUrl: string = "/api/users/{0}/organizations";
     private readonly _newCustomerUrl: string = "/api/organization/newcustomer/true/deviceType/{0}";
     private readonly _getUserUrl: string = "/api/users/{0}";
@@ -42,7 +46,7 @@ export class OrganizationDataProvider extends BaseDataProvider<Organization[]> {
     }
 
     getOrganizations<T>() {
-        const endpointUrl = String.Format(this.orgsUrl, localStorage.getItem(DBKeys.USER_ID));
+        const endpointUrl = formatString(this.orgsUrl, localStorage.getItem(DBKeys.USER_ID));
         this.dataStore!.values = JSON.parse(localStorage.getItem('orgs') || "[]");
         this._data$.next(Object.assign({}, this.dataStore).values);
         this.getData<Organization[]>(endpointUrl).subscribe(orgs => {
@@ -53,7 +57,7 @@ export class OrganizationDataProvider extends BaseDataProvider<Organization[]> {
     }
 
     addNewCustomer<T>(newCustomer: NewCustomer): Observable<any> {
-        const endpointUrl = String.Format(this.newCustomerUrl, SoftwareType.FUSION_LIGHT);
+        const endpointUrl = formatString(this.newCustomerUrl, SoftwareType.FUSION_LIGHT);
         var currentUserInfo: User = JSON.parse(localStorage.getItem("user_info") || "{}");
         var newSite: Site =  new Site;
         
@@ -77,11 +81,21 @@ export class OrganizationDataProvider extends BaseDataProvider<Organization[]> {
         //Add site to the org
         newCustomer.sites = [];
         newCustomer.sites.push(newSite);
+        
         return this.postData(endpointUrl, newCustomer);
+    }
+    
+    /**
+     * Trigger organization created event manually
+     * @param organization The created organization
+     * @param userInfo User information string
+     */
+    triggerOrganizationCreated(organization: Organization, userInfo: string) {
+        this.organizationCreatedSubject.next({organization, userInfo});
     }
 
     addNewControl(serialNumber: any, orgId: any, siteId: any): Observable<Organization>{
-        const endpointUrl = String.Format(this.newControlUrl, orgId, siteId, serialNumber);
+        const endpointUrl = formatString(this.newControlUrl, orgId, siteId, serialNumber);
         return this.postData(endpointUrl, null);
     }
 }
