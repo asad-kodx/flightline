@@ -11,6 +11,10 @@ import { AuthService } from './auth.service';
 })
 export class OrgContextService {
     private organization$: Subject<number|undefined>;
+    private organizationChange$ = new Subject<{id: number, name: string}>();
+    
+    // Public observable for organization changes (includes both ID and name)
+    public orgChanged$ = this.organizationChange$.asObservable();
 
     constructor(private authService: AuthService) {
         this.organization$ = new BehaviorSubject<number | undefined>(undefined);
@@ -39,6 +43,19 @@ export class OrgContextService {
         this.saveOrgSelectionToLocalStorage(orgId);
         this.organization$.next(orgId);
     }
+    
+    /**
+     * Set organization with both ID and name, emitting change event
+     */
+    public setOrganization(orgId: number, orgName: string) {
+        // Update localStorage
+        localStorage.setItem(DBKeys.SELECTED_ORG_ID, orgId.toString());
+        localStorage.setItem(DBKeys.SELECTED_ORG_NAME, orgName);
+        
+        // Emit changes
+        this.organization$.next(orgId);
+        this.organizationChange$.next({id: orgId, name: orgName});
+    }
 
     private getOrgSelectionFromLocalStorage(): number {
         return Number(localStorage.getItem(DBKeys.SELECTED_ORG_ID));
@@ -46,6 +63,13 @@ export class OrgContextService {
 
     private saveOrgSelectionToLocalStorage(orgId: number) {
         localStorage.setItem(DBKeys.SELECTED_ORG_ID, orgId.toString());
+    }
+    
+    /**
+     * Get current organization name from localStorage
+     */
+    public getOrganizationName(): string | null {
+        return localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
     }
 
 }

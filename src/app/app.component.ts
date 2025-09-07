@@ -19,6 +19,7 @@ import { AlarmDataProvider } from './core/providers/alarm-data.provider';
 import { OrganizationDataProvider } from './core/providers/org-data.provider';
 import { SiteContextService } from './core/services/site-context.service';
 import { SiteDataProvider } from './core/providers/site-data.provider';
+import { OrgContextService } from './core/services/org-context.service';
 
 import { ConfigurationService } from './core/services/configuration.service';
 
@@ -80,7 +81,8 @@ export class AppComponent {
     private authService: AuthService,
     private signalRService: SignalRService,
     private platform: Platform,
-    private router: Router
+    private router: Router,
+    private orgContext: OrgContextService
 
   ) {
     this.platform.ready().then(() => {
@@ -122,10 +124,12 @@ export class AppComponent {
   }
 
   private setupListeners() {
-    // this.events.subscribe("OrgChange", () => {
-    //     this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
-    //     this.orgId = localStorage.getItem(DBKeys.SELECTED_ORG_ID);
-    // });
+    // Subscribe to organization changes
+    this.orgContext.orgChanged$.subscribe(({id, name}) => {
+      console.log('Organization changed:', {id, name});
+      this.orgName = name;
+      this.orgId = id.toString();
+    });
   }
   
   private handleInitialAuthentication() {

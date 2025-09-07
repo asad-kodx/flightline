@@ -7,6 +7,7 @@ import { ControlDataProvider } from 'src/app/core/providers/control-data.provide
 import { OrganizationDataProvider } from 'src/app/core/providers/org-data.provider';
 import { SiteDataProvider } from 'src/app/core/providers/site-data.provider';
 import { LocalStorageHelper } from 'src/app/core/providers/storage-helper.provider';
+import { OrgContextService } from 'src/app/core/services/org-context.service';
 import { DBKeys, Organization } from 'src/app/shared/models';
 
 @Component({
@@ -31,6 +32,7 @@ export class UserSettingsPage implements OnInit {
     private controlData: ControlDataProvider,
     private alarmData: AlarmDataProvider,
     private orgs: OrganizationDataProvider,
+    private orgContext: OrgContextService
 
   ) { 
     this.organizations = this.orgs.getOrganizationsBinding();
@@ -63,19 +65,25 @@ export class UserSettingsPage implements OnInit {
   }
 
   public changeOrg(organization: Organization, event: any){
-      console.log(event)
-      if(this.orgId == organization.organizationId) event.preventDefault();
+      console.log('Changing organization:', event);
+      if(this.orgId == organization.organizationId) {
+        event.preventDefault();
+        return;
+      }
+      
       this.orgId = organization.organizationId;
       this.orgName = organization.name;
-      console.log("new org Id", this.orgId, organization.organizationId)
-      localStorage.setItem(DBKeys.SELECTED_ORG_ID, organization.organizationId!.toString());
-      localStorage.setItem(DBKeys.SELECTED_ORG_NAME, organization.name!);
+      console.log("Changing to organization:", this.orgId, organization.name);
+      
+      // Use org context service to set organization (this will emit the observable)
+      this.orgContext.setOrganization(organization.organizationId!, organization.name!);
+      
+      // Refresh data for the new organization
       this.siteData.getSites();
-      // this.events.publish("OrgChange")
       this.controlData.getControls()?.subscribe();
       this.alarmData.getAlarms()?.subscribe();
-      this.navCtrl.navigateRoot('home')
-
+      
+      this.navCtrl.navigateRoot('home');
   }
 
 
