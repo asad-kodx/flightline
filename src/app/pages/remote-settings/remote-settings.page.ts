@@ -6,6 +6,8 @@ import { RemoteSettingsService } from '../../core/services/remote-settings-servi
 import { AlarmDataProvider } from '../../core/providers/alarm-data.provider';
 import { ConfigurationService } from '../../core/services/configuration.service';
 
+import { Keyboard } from '@capacitor/keyboard';
+
 // Import models and types
 import {
   RemoteSettings,
@@ -19,7 +21,8 @@ import {
   AlarmState,
   EntityType,
   RemoteSettingCommandType,
-  RemoteSettingsInputType
+  RemoteSettingsInputType,
+  RemoteControlStatusCode
 } from '../../shared/models/index';
 import { isNumber } from 'lodash';
 import { Router } from '@angular/router';
@@ -72,8 +75,8 @@ export class RemoteSettingsPage {
   public isEmptySettingReceived: boolean;
   private isAllSettingsExpanded: boolean;
   public isKeyboardOpen: boolean = false;
-  private keyboardOpenSub?: Subscription;
-  private keyboardClosedSub?: Subscription;
+
+  private subscriptions: Subscription = new Subscription();
 
   private expandCollapseIcon: string = "arrow-down";
   private toggleClassName: string = "settings-card-content-min";
@@ -108,16 +111,6 @@ export class RemoteSettingsPage {
     this.applySettingsTimer = null;
   }
 
-  ngOnDestroy() {
-    // Clean up subscriptions
-    if (this.keyboardOpenSub) {
-      this.keyboardOpenSub.unsubscribe();
-    }
-    if (this.keyboardClosedSub) {
-      this.keyboardClosedSub.unsubscribe();
-    }
-  }
-
   customPopoverOptions: any = {
     title: 'Value',
     enableBackdropDismiss: false,
@@ -125,26 +118,17 @@ export class RemoteSettingsPage {
   };
 
   ionViewWillLeave() {
-    // this.events.unsubscribe('receiveRemoteSettings');
-    // this.events.unsubscribe('receivedRemoteSettingsAcknowledgement');
-    // this.events.unsubscribe('receiveRequestSettingsAcknowledgement');
-    // this.events.unsubscribe('receiveApplySettingsAcknowledgement');
     // this.events.unsubscribe('AlarmControlTabs');
     this.remoteSettingsService.activeApplyRequests.clear();
     this.remoteSettingsService.activeGetRequests.clear();
-    if (this.keyboardOpenSub) {
-      this.keyboardOpenSub.unsubscribe();
-    }
-    if (this.keyboardClosedSub) {
-      this.keyboardClosedSub.unsubscribe();
-    }
+    Keyboard.removeAllListeners();
     // this.events.unsubscribe('AlarmSwitch');
+    this.subscriptions.unsubscribe();
   }
 
   ionViewWillEnter() {
     this.remoteSettingsInputType = RemoteSettingsInputType;
-    this.processReceivedRemoteSettings();
-    this.processSettingsUpdateAcknowledgement();
+    this.setupObservableSubscriptions();
     this.showPageLoader();
     this.getRemoteSettings();
     this.alarms = this.alarmData.getAllAlarmsBinding();
@@ -155,15 +139,14 @@ export class RemoteSettingsPage {
     //   this.navCtrl.navigateForward('/alarm-details-tabs', { state: { alarm: alarm, nav: this.navCtrl } });
     // });
 
-    // TODO: Implement keyboard handling when Keyboard plugin is available
-    // this.keyboardOpenSub = this.keyboard.onKeyboardWillShow().subscribe(() => {
-    //   this.isKeyboardOpen = true;
-    //   console.log("Setting keyboard open to true", this.isKeyboardOpen)
-    // });
-    // this.keyboardClosedSub = this.keyboard.onKeyboardWillHide().subscribe(() => {
-    //   console.log("Setting keyboard open to false")
-    //   this.isKeyboardOpen = false;
-    // })
+    Keyboard.addListener('keyboardWillShow', () => {
+      this.isKeyboardOpen = true;
+      console.log("Setting keyboard open to true", this.isKeyboardOpen)
+    });
+    Keyboard.addListener('keyboardWillHide', () => {
+      this.isKeyboardOpen = false;
+      console.log("Setting keyboard open to false", this.isKeyboardOpen)
+    });
   }
 
   handleRefresh(event: RefresherCustomEvent) {
@@ -445,122 +428,123 @@ export class RemoteSettingsPage {
     }
   }
 
-  processGetResponseId() {
-    // this.events.subscribe('receiveRequestSettingsAcknowledgement', data => {
-    //   //console.log("Get settings Request Id from server", data);
-    //   if (!isNullOrUndefined(data)) {
-    //     this.getActiveRequestId = data;
-    //   }
-    // })
+  setupObservableSubscriptions() {
+    // Subscribe to remote settings received
+    this.subscriptions.add(this.remoteSettingsService.remoteSettingsReceived$.subscribe(data => {
+      this.handleReceivedRemoteSettings(data);
+    }));
+
+    // Subscribe to remote settings acknowledgement
+    this.subscriptions.add(this.remoteSettingsService.remoteSettingsAcknowledgement$.subscribe(data => {
+      this.handleSettingsUpdateAcknowledgement(data);
+    }));
+
+    // Subscribe to request settings acknowledgement
+    this.subscriptions.add(this.remoteSettingsService.requestSettingsAcknowledgement$.subscribe(data => {
+      this.handleGetResponseId(data);
+    }));
+
+    // Subscribe to apply settings acknowledgement
+    this.subscriptions.add(this.remoteSettingsService.applySettingsAcknowledgement$.subscribe(data => {
+      this.handleApplyResponseId(data);
+    }));
   }
 
-  processApplyResponseId() {
-    // this.events.subscribe('receiveApplySettingsAcknowledgement', data => {
-    //   //console.log('Apply settings Request Id from server', data);
-    //   if (!isNullOrUndefined(data)) {
-    //     this.applyActiveRequestId = data;
-    //   }
-    // })
+  handleGetResponseId(data: any) {
+    console.log("Get settings Request Id from server", data);
+    if (data != null && data != undefined) {
+      this.getActiveRequestId = data;
+    }
   }
 
-  processReceivedRemoteSettings() {
-    // this.events.subscribe('receiveRemoteSettings', data => {
-    //   //console.log('JSON from control', data);
-    //   //Deserializing value JSON
-    //   if (!isNullOrUndefined(data)) {
-    //     //Check if the response belongs to this request
-    //     this.pageLoader?.data.content = "Received & processing control settings"
-    //     //Dismiss the page loader        
-    //     if (this.isPageLoading) {
-    //       this.pageLoader?.present().then(() => {
-    //         this.pageLoader?.dismiss();
-    //         this.isPageLoading = false;
-    //         this.btnApplyDisabled = true;
-    //       })
-    //     }
-
-    //     //Check if the control responded with errors
-    //     //console.log("Check if the control responded with errors");
-    //     if (data.statusCode == StatusCode.NoError) {
-    //       //console.log('No errors')
-    //       //if (isNullOrUndefined(this.remoteSettings)) {
-    //       this.remoteSettings = this.preProcessReceivedSettings(data);
-    //       //console.log('going for pre-processing')
-    //       if (isNullOrUndefined(this.remoteSettings)) {
-    //         this.isEmptySettingReceived = true;
-    //         this.showErrorInfoTemplate = true;
-    //         this.pageLoadErrorTitle = "Info";
-    //         this.pageLoadErrorMessage = "No settings received from the control";
-    //         //console.log('No settings received from the control')
-    //       }
-    //       else if (this.remoteSettings.settings.entitySettings.length == 0 && this.remoteSettings.settings.alarmSettings.length == 0) {
-    //         this.isEmptySettingReceived = true;
-    //         this.showErrorInfoTemplate = true;
-    //         this.pageLoadErrorTitle = "Info";
-    //         this.pageLoadErrorMessage = "No settings received from the control";
-    //         //console.log('No settings received from the control')
-    //       }
-    //       else {
-    //         //console.log('settings received from the control')
-    //         this.hideApplyResetButtons = false;
-    //         this.isAllSettingsExpanded = false;
-    //         this.expandCollapseBtnTxt = "Expand all";
-    //       }
-    //       console.log("Remote Settings", this.remoteSettings);
-    //       //}
-    //     }
-    //     else {
-    //       this.loadHasErrors = true;
-    //       this.showErrorInfoTemplate = true;
-    //       this.pageLoadErrorTitle = "Error";
-    //       this.pageLoadErrorMessage = data.statusDescription;
-    //     }
-    //     if (this.isPageRefreshRequested && (!isNullOrUndefined(this.remoteSettings))) {
-    //       this.showToast("Settings refreshed successfully", 3000, true);
-    //       this.isPageRefreshRequested = false;
-    //       //console.log("Refresh happened");
-    //     }
-    //   }
-    // });
-
+  handleApplyResponseId(data: any) {
+    console.log('Apply settings Request Id from server', data);
+    if (data != null && data != undefined) {
+      this.applyActiveRequestId = data;
+    }
   }
 
-  processSettingsUpdateAcknowledgement() {
-    // this.events.subscribe('receivedRemoteSettingsAcknowledgement', data => {
-    //   this.btnApplyDisabled = true;
-    //   //console.log("Setting update acknowledgement", data);
-    //   //Deserializing acknowlgement JSON
-    //   if (!isNullOrUndefined(data)) {
-    //     this.settingUpdateAcknowledgement = data;
-    //     if (this.settingUpdateAcknowledgement.statusCode == 0) {
-    //       if (this.isPageLoading) {
-    //         this.pageLoader?.present().then(() => {
-    //           this.pageLoader?.dismiss();
-    //           this.isPageLoading = false;
-    //         })
-    //       }
-    //       clearTimeout(this.applySettingsTimer);
-    //       this.isPageRefreshAfterApply = true;
-    //       console.log("Man fire", this.isManualFireClicked);
-    //       //check if Manual fire is used
-    //       if (this.isManualFireClicked == false) {
-    //         //If no, then its a regular apply settings actions so success toast is shown
-    //         this.showToast("Successfully applied the selected settings", 3000, true);
-    //       }
-    //       else {
-    //         //If yes, then manual fire is clicked so don't show success toast
-    //         this.isManualFireClicked = false;
-    //       }
-    //       this.getRemoteSettings();
-    //       this.backupRemoteSettings = JSON.stringify(this.remoteSettings);
-    //     }
-    //     else {
-    //       this.getRemoteSettings();
-    //       this.showToast(this.settingUpdateAcknowledgement.statusDescription, 10000, true);
-    //     }
-    //   }
+  handleReceivedRemoteSettings(data: RemoteSettings) {
+    console.log('JSON from control', data);
+    if (data != null && data != undefined) {
+      // Update page loader message
+      if (this.pageLoader) {
+        this.pageLoader.message = "Received & processing control settings";
+      }
+      
+      // Dismiss the page loader
+      if (this.isPageLoading) {
+        this.pageLoader?.present().then(() => {
+          this.pageLoader?.dismiss();
+          this.isPageLoading = false;
+          this.btnApplyDisabled = true;
+        });
+      }
 
-    // })
+      // Process received settings (RemoteSettings doesn't have statusCode, so we process directly)
+      this.remoteSettings = this.preProcessReceivedSettings(data);
+      
+      if (this.remoteSettings == null || this.remoteSettings == undefined) {
+        this.isEmptySettingReceived = true;
+        this.showErrorInfoTemplate = true;
+        this.pageLoadErrorTitle = "Info";
+        this.pageLoadErrorMessage = "No settings received from the control";
+      }
+      else if (this.remoteSettings.settings?.entitySettings.length == 0 && this.remoteSettings.settings?.alarmSettings.length == 0) {
+        this.isEmptySettingReceived = true;
+        this.showErrorInfoTemplate = true;
+        this.pageLoadErrorTitle = "Info";
+        this.pageLoadErrorMessage = "No settings received from the control";
+      }
+      else {
+        this.hideApplyResetButtons = false;
+        this.isAllSettingsExpanded = false;
+        this.expandCollapseBtnTxt = "Expand all";
+      }
+      console.log("Remote Settings", this.remoteSettings);
+      
+      if (this.isPageRefreshRequested && (this.remoteSettings != null && this.remoteSettings != undefined)) {
+        this.showToast("Settings refreshed successfully", 3000, true);
+        this.isPageRefreshRequested = false;
+      }
+    }
+  }
+
+  handleSettingsUpdateAcknowledgement(data: any) {
+    this.btnApplyDisabled = true;
+    console.log("Setting update acknowledgement", data);
+    
+    if (data != null && data != undefined) {
+      this.settingUpdateAcknowledgement = data;
+      
+      if (this.settingUpdateAcknowledgement?.statusCode == RemoteControlStatusCode.NoError) {
+        if (this.isPageLoading) {
+          this.pageLoader?.dismiss();
+          this.isPageLoading = false;
+        }
+        
+        clearTimeout(this.applySettingsTimer);
+        this.isPageRefreshAfterApply = true;
+        console.log("Manual fire", this.isManualFireClicked);
+        
+        // Check if Manual fire is used
+        if (this.isManualFireClicked == false) {
+          // Regular apply settings action, show success toast
+          this.showToast("Successfully applied the selected settings", 3000, true);
+        }
+        else {
+          // Manual fire was clicked, don't show success toast
+          this.isManualFireClicked = false;
+        }
+        
+        this.getRemoteSettings();
+        this.backupRemoteSettings = JSON.stringify(this.remoteSettings);
+      }
+      else {
+        this.getRemoteSettings();
+        this.showToast(this.settingUpdateAcknowledgement?.statusDescription || 'Unknown error', 10000, true);
+      }
+    }
   }
 
   toggleCheckbox(currentSetting: SettingItem, currentOption: Option) {
@@ -979,10 +963,10 @@ export class RemoteSettingsPage {
    * @param remoteSettingsToSort Unsorted remote settings received from the control
    */
   sortRemoteSettings(remoteSettingsToSort: RemoteSettings): RemoteSettings {
-    remoteSettingsToSort.settings.entitySettings.forEach(function (setting) {
+    remoteSettingsToSort.settings?.entitySettings.forEach(function (setting) {
       setting.options = setting.options.sort((a, b) => a.placement - b.placement);
     })
-    remoteSettingsToSort.settings.entitySettings.sort((a, b) => a.placement - b.placement);
+    remoteSettingsToSort.settings?.entitySettings.sort((a, b) => a.placement - b.placement);
     return remoteSettingsToSort;
   }
 

@@ -4,6 +4,7 @@ import { Subject, BehaviorSubject } from "rxjs";
 // import { DBKeys } from "../models/dbkeys.static";
 // import { Events } from "ionic-angular";
 import { DBKeys } from "../../shared/models/index";
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,7 @@ import { DBKeys } from "../../shared/models/index";
 export class OrgContextService {
     private organization$: Subject<number|undefined>;
 
-    constructor() {
+    constructor(private authService: AuthService) {
         this.organization$ = new BehaviorSubject<number | undefined>(undefined);
         let orgId = Number(localStorage.getItem(DBKeys.SELECTED_ORG_ID));
 
@@ -20,9 +21,10 @@ export class OrgContextService {
             this.organization$.next(orgId);
         }
 
-        // this.events.subscribe('logout', () => {
-        //     this.organization$.next(null);
-        // })
+        // Subscribe to logout observable
+        this.authService.logout$.subscribe(() => {
+            this.organization$.next(undefined);
+        });
     }
 
     public get OrganizationId(): number {

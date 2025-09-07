@@ -4,6 +4,7 @@ import { ConfigurationService } from "../services/configuration.service";
 import { BaseDataProvider } from "./base-data.provider";
 import { OrgContextService } from "../services/org-context.service";
 import { Observable, BehaviorSubject } from "rxjs";
+import { AuthService } from '../services/auth.service';
 import { String } from 'typescript-string-operations';
 import * as _ from 'lodash'
 
@@ -23,16 +24,17 @@ export class OrganizationDataProvider extends BaseDataProvider<Organization[]> {
     private get getUsersUrl(): string { return this.configurations.baseUrl + this._getUserUrl; }
     private get newControlUrl(): string { return this.configurations.baseUrl + this._newControlUrl; }
 
-    constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector, orgContext: OrgContextService) {
+    constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector, orgContext: OrgContextService, private authService: AuthService) {
         super(http, orgContext);
 
         this.dataStore = { values: [] };
         this._data$ = new BehaviorSubject<Organization[]>([]);
         this.data = this._data$.asObservable();
 
-        // this.events.subscribe('logout', () => {
-        //     this._data$.next([]);
-        // })
+        // Subscribe to logout observable
+        this.authService.logout$.subscribe(() => {
+            this._data$.next([]);
+        });
     }
 
     getOrganizationsBinding(): Observable<Organization[]> | undefined {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { ConfigurationService } from "./configuration.service";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { BehaviorSubject, Subscription, EMPTY, timer } from 'rxjs';
+import { BehaviorSubject, Subscription, EMPTY, timer, Subject } from 'rxjs';
 import { HttpService } from './http-service';
 import { JwtHelper } from '../providers/jwt-helper.provider';
 import { DBKeys, IdToken } from '../../shared/models/index';
@@ -20,6 +20,10 @@ export class AuthService {
     public refreshToken$: BehaviorSubject<string | undefined>;
     private refreshTimer?: Subscription;
     private tokenExpireTime?: number;
+    
+    // Observable for logout events
+    private logoutSubject = new Subject<void>();
+    public logout$ = this.logoutSubject.asObservable();
 
     constructor(public http: HttpClient, private httpService: HttpService) {
         this.authToken$ = new BehaviorSubject<string | undefined>(undefined);
@@ -147,6 +151,18 @@ export class AuthService {
         localStorage.clear();
         if (deviceId) localStorage.setItem('DeviceId', deviceId);
         this.loginStatus$.next(false);
+        this.authToken$.next(undefined);
+        this.refreshToken$.next(undefined);
+        
+        // Emit logout event via observable
+        this.logoutSubject.next();
+    }
+    
+    /**
+     * Triggers logout from external components (like interceptors)
+     */
+    triggerLogout() {
+        this.logout();
     }
 
 }
