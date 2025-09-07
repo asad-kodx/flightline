@@ -27,9 +27,10 @@ export class SiteDataProvider extends BaseDataProvider<Site[]> {
         this._data$ = new BehaviorSubject<Site[]>([]);
         this.data = this._data$.asObservable();
 
-        // this.events.subscribe('UpdateSitesMap', (mapString => {
-        //     this.setSitesMap(mapString);
-        // }));
+        // Subscribe to sites map updates
+        this.siteContext.sitesMapUpdate$.subscribe((mapString) => {
+            this.setSitesMap(mapString);
+        });
     }
 
     getSitesBinding(): Observable<Site[]> | undefined{
