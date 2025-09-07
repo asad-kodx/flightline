@@ -7,9 +7,17 @@ import { Mode } from '../../models/types/mode';
 })
 export class ModePipe implements PipeTransform {
 
-    transform(value: any, args: any[]): any {
-        if(!args || value == null) return null;
-        let mode = Number(<Mode>args[0]);
+    transform(value: Mode | number | null | undefined, args?: any[]): string | null {
+        if (value == null) {
+            return null;
+        }
+        
+        // Handle both direct mode value and args array for backward compatibility
+        const mode = args && args.length > 0 ? Number(args[0]) : Number(value);
+        
+        if (isNaN(mode)) {
+            return null;
+        }
 
         switch (mode) {
             case Mode.Auto:
@@ -19,7 +27,7 @@ export class ModePipe implements PipeTransform {
             case Mode.Stop:
                 return 'Stop';
             default:
-                return null;
+                return 'Unknown';
         }
     }
 

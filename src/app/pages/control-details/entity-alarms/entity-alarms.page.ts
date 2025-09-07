@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NavController, NavParams } from '@ionic/angular';
 import { from, map, Observable } from 'rxjs';
 import { AlarmDataProvider } from 'src/app/core/providers/alarm-data.provider';
@@ -36,10 +37,10 @@ export class EntityAlarmsPage implements OnInit {
     private alarmData: AlarmDataProvider,
     public roomData: RoomDataProvider,
     public controlData: ControlDataProvider,
-    private navParams: NavParams
+    private router: Router
   ) {
     this.alarms = from([]);
-    this.entity = this.navParams.data['data'];
+    this.entity = (this.router.currentNavigation()?.extras.state as any).sensor;
     if (this.entity.entitySerialNumber) {
       this.entity = this.roomData.getEntity(this.entity.entitySerialNumber)!;
     }

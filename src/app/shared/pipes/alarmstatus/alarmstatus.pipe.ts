@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { AlarmState, ControlAlarm } from '../../models';
 
 @Pipe({
@@ -8,25 +7,25 @@ import { AlarmState, ControlAlarm } from '../../models';
 })
 export class AlarmStateActivePipe implements PipeTransform {
 
-  transform(value: ControlAlarm[] | null) {
-    if (value) {
-        return value.filter(a =>
-            a.state === AlarmState.Active ||
-            a.state === AlarmState.Acknowledged
-        );
+  transform(value: ControlAlarm[] | null | undefined): ControlAlarm[] {
+    if (!value) {
+        return [];
     }
-    return [];
+    return value.filter(alarm =>
+        alarm.state === AlarmState.Active ||
+        alarm.state === AlarmState.Acknowledged
+    );
   }
 }
 
 @Pipe({ name: 'AlarmStateOther', standalone: false })
 export class AlarmStateOtherPipe implements PipeTransform {
-    transform(value: ControlAlarm[] | null, args: any) {
-        if (value !== null) {
-            return value.filter((a: ControlAlarm) => {
-              return a.state === AlarmState.Resolved;
-            });
+    transform(value: ControlAlarm[] | null | undefined): ControlAlarm[] {
+        if (!value) {
+            return [];
         }
-        return [];
+        return value.filter((alarm: ControlAlarm) => 
+            alarm.state === AlarmState.Resolved
+        );
     }
 }

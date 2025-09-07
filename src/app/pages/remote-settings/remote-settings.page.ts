@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import diff from "microdiff";
-import { NavController, ToastController, LoadingController, Platform, RefresherCustomEvent } from '@ionic/angular';
+import { ToastController, LoadingController, RefresherCustomEvent } from '@ionic/angular';
 import { RemoteSettingsService } from '../../core/services/remote-settings-service';
-import { ControlDataProvider } from '../../core/providers/control-data.provider';
 import { AlarmDataProvider } from '../../core/providers/alarm-data.provider';
 import { ConfigurationService } from '../../core/services/configuration.service';
 
@@ -80,18 +79,15 @@ export class RemoteSettingsPage {
   private toggleClassName: string = "settings-card-content-min";
 
   constructor(
-    private navCtrl: NavController,
-    private platform: Platform,
     private toastController: ToastController,
     private loadingController: LoadingController,
     private router: Router,
-    private controlData: ControlDataProvider,
     public remoteSettingsService: RemoteSettingsService,
     private alarmData: AlarmDataProvider
   ) {
     this.remoteSettingHeader = new RemoteHeader();
     console.log(this.router.currentNavigation()?.extras)
-    this.entityData = this.router.currentNavigation()?.extras;
+    this.entityData = (this.router.currentNavigation()?.extras.state as any)?.data;
     console.log(this.entityData)
     this.btnApplyDisabled = true;
     this.pageLoadErrorMessage = '';

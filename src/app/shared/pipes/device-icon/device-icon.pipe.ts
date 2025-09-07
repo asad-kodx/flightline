@@ -7,9 +7,12 @@ import { DeviceType } from '../../models';
 })
 export class DeviceIconPipe implements PipeTransform {
 
-  transform(value: any, args: any[]): any {
-
-      let devType = (<DeviceType>args[0])
+  transform(_value: any, args: any[] | null | undefined): string {
+      if (!args || args.length === 0) {
+          return 'custom-device-default';
+      }
+      
+      const devType = args[0] as DeviceType;
       switch (devType) {
           case DeviceType.DualRelayCardBooleanFanDevice:
           case DeviceType.OctoRelayCardBooleanFanDevice:
@@ -18,34 +21,34 @@ export class DeviceIconPipe implements PipeTransform {
           case DeviceType.VariableCurrentCardVariableFanDevice:
           case DeviceType.FanGroupDevice:
           case DeviceType.BooleanRelayFanDevice:
-              return 'custom-device-fan'
+              return 'custom-device-fan';
           case DeviceType.DualRelayCardBooleanFoggerDevice:
           case DeviceType.QuadRelayCardBooleanFoggerDevice:
           case DeviceType.BooleanRelayFoggerDevice:
-              return 'custom-device-fogger'
+              return 'custom-device-fogger';
           case DeviceType.QuadRelayCardBooleanMotorDevice:
           case DeviceType.DualRelayCardBooleanMotorDevice:
           case DeviceType.BooleanRelayMotorDevice:
           case DeviceType.GenericBooleanMotorDevice:
-              return 'custom-device-feed-motor'
+              return 'custom-device-feed-motor';
           case DeviceType.GenericProcessDevice:
-              return 'custom-device-feed-process'
+              return 'custom-device-feed-process';
           case DeviceType.BallDropDevice:
-              return 'custom-device-ball-drop'
+              return 'custom-device-ball-drop';
           case DeviceType.QuadRelayCardBooleanHeaterDevice:
           case DeviceType.DualRelayCardBooleanHeaterDevice:
           case DeviceType.OctoRelayCardBooleanHeaterDevice:
           case DeviceType.VariableCardHeatLampDevice:
           case DeviceType.VariableCurrentCardVariableHeaterDevice:
           case DeviceType.BooleanRelayHeaterDevice:
-              return 'custom-device-heater'
+              return 'custom-device-heater';
           case DeviceType.LightDevice:
-              return 'custom-device-light'
+              return 'custom-device-light';
           case DeviceType.CurtainCardCurtainDevice:
           case DeviceType.CurtainDeviceV2:
-              return 'custom-device-curtain'
+              return 'custom-device-curtain';
           case DeviceType.SingleSmsDevice:
-              return 'custom-device-smsy'
+              return 'custom-device-smsy';
           case DeviceType.ClockDevice:
           case DeviceType.DayTimerDevice:
           case DeviceType.CycleTimerDevice:
@@ -54,7 +57,7 @@ export class DeviceIconPipe implements PipeTransform {
           case DeviceType.AlarmDevice:
           case DeviceType.SwitchDevice:
           case DeviceType.ChainDiskDevice:
-              return 'custom-device-switch-on'
+              return 'custom-device-switch-on';
           case DeviceType.SlideDevice:
               return 'custom-device-bin-slide';
           case DeviceType.BinSlideDevice:
@@ -67,9 +70,9 @@ export class DeviceIconPipe implements PipeTransform {
           case DeviceType.VariableDoserDevice:
               return 'custom-device-doser';
           case DeviceType.BatchTankProcessDevice:
-              return 'custom-device-batch-tank'
+              return 'custom-device-batch-tank';
           default:
-              return
+              return 'custom-device-default';
       }
   }
 }

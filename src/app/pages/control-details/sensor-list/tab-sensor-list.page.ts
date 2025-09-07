@@ -33,7 +33,7 @@ export class TabSensorListPage implements OnInit {
     }
     ngOnInit() {
         if (!this.control.serialNumber) return;
-        this.rooms = JSON.parse(localStorage.getItem(`sensors_${this.control.serialNumber}`) || '');
+        this.rooms = JSON.parse(localStorage.getItem(`sensors_${this.control.serialNumber}`) || '[]');
         this.roomData.getSensorsForControl(this.control.serialNumber).pipe(
           catchError(() => {
             return of(null);
@@ -83,6 +83,7 @@ export class TabSensorListPage implements OnInit {
         console.log(room)
         const actionSheet = await this.actionSheet.create({
           header: "Room Navigation",
+          cssClass: "my-custom-class",
           buttons: [
             {
               text: "Room Settings",
@@ -97,9 +98,9 @@ export class TabSensorListPage implements OnInit {
                   actionSheet.present();
                   return;
                 }
-                var roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: "", remoteSettingType: RemoteSettingCommandType.EntitySettings, entityType: EntityType.Room };
+                const roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: "", remoteSettingType: RemoteSettingCommandType.EntitySettings, entityType: EntityType.Room };
                 console.log('Navigating to room settings', roomData);
-                this.navCtrl.navigateForward('remote-settings-page', roomData);
+                this.navCtrl.navigateForward('remote-settings', { state: { data: roomData } });
               }
             },
             {
@@ -118,7 +119,7 @@ export class TabSensorListPage implements OnInit {
                 //Navigate to room alarm settings
                 var roomData: any = { entityNumber: controlSerialNumber + "." + room.programId, roomId: controlSerialNumber + "." + room.programId, controlSerialNumber: controlSerialNumber, controlName: this.control.name, deviceName: "", remoteSettingType: RemoteSettingCommandType.AlarmSettings, entityType: EntityType.Room };
                 console.log('Navigating to room alarm settings', roomData);
-                this.navCtrl.navigateForward('remote-settings-page', roomData);
+                this.navCtrl.navigateForward('remote-settings', { state: { data: roomData } });
               }
             }
           ]
@@ -131,11 +132,12 @@ export class TabSensorListPage implements OnInit {
         console.log(sensor)
        const actionSheet =  await this.actionSheet.create({
          header: "Sensor Navigation",
+         cssClass: "my-custom-class",
          buttons: [
            {
              text: 'Alarms',
              handler: () => {
-               this.navCtrl.navigateForward('entity-alarms-page', {queryParams: {sensor}});
+               this.navCtrl.navigateForward('entity-alarms', {state: {sensor}});
              }
            },
            {
@@ -151,7 +153,7 @@ export class TabSensorListPage implements OnInit {
                  await toastController.present()
                  return;
                }
-               this.navCtrl.navigateForward('entity-graphs-page', { queryParams: { sensor } });
+               this.navCtrl.navigateForward('entity-graphs', { state: { sensor } });
              }
            },
            // {
@@ -176,7 +178,7 @@ export class TabSensorListPage implements OnInit {
                }
                var sensorData: any = { entityNumber: sensor.sensorSerialNumber, roomId: sensor.controlSerialNumber + "." + sensor.roomProgramId, controlSerialNumber: sensor.controlSerialNumber, controlName: this.control.name, deviceName: sensor.sensorName, remoteSettingType: RemoteSettingCommandType.AlarmSettings, entityType: EntityType.Sensor };
                console.log('Navigating to Sensor alarm settings', sensorData);
-               this.navCtrl.navigateForward('remote-settings-page', sensorData);
+               this.navCtrl.navigateForward('remote-settings', { state: { data: sensorData } });
              }
            },
            {
