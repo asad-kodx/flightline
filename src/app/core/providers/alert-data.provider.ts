@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
 import { OfflineAlert } from 'src/app/shared/models';
 import { ConfigurationService } from '../services/configuration.service';
 import { HttpService } from '../services/http-service';
+import { AuthService } from '../services/auth.service';
 import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
@@ -17,16 +18,10 @@ export class AlertDataProvider {
     offlineAlerts: OfflineAlert[];
   };
 
-  constructor(private httpService: HttpService) {
-    // this.events.subscribe('Logout', () => {
-    //     this._offlineAlerts.next(Object.assign({}, this.offlineAlertStore).offlineAlerts);
-    // });
-
-    // this.events.subscribe('OfflineAlertCleared', (clearedAlert: OfflineAlert) => {
-    //     var foundAlert = this.offlineAlertStore.offlineAlerts.findIndex(oa => oa.serialNumber == clearedAlert.serialNumber);
-    //     this.offlineAlertStore.offlineAlerts.splice(foundAlert, 1);
-    //     this._offlineAlerts.next(Object.assign({}, this.offlineAlertStore).offlineAlerts);
-    // });
+  constructor(private httpService: HttpService, private authService: AuthService) {
+    this.authService.logout$.subscribe(() => {
+        this._offlineAlerts.next(Object.assign({}, this.offlineAlertStore).offlineAlerts);
+    });
 
     this.offlineAlertStore = { offlineAlerts: [] };
     this._offlineAlerts = new BehaviorSubject<OfflineAlert[]>([]);
@@ -56,16 +51,26 @@ export class AlertDataProvider {
       });
   }
 
-  clearOfflineAlert(serialNumber: number, userId: string | null) {
+  clearOfflineAlert(serialNumber: number, userId: string | null, clearedAlert?: OfflineAlert) {
     return this.httpService
       .post(
         `${this.config.baseUrl}/api/mobile/alerts/${userId}/offlinealerts/clear/${serialNumber}`,
         null
       )
-      .subscribe(
-        () => {},
-        (error) => this.handleError(error)
-      );
+      .subscribe({
+        next: () => {
+          // If the clearedAlert is provided, emit it via the observable
+          if (clearedAlert) {
+            // this.offlineAlertClearedSubject.next(clearedAlert);
+            const foundAlert = this.offlineAlertStore.offlineAlerts.findIndex(oa => oa.serialNumber == clearedAlert.serialNumber);
+            if (foundAlert !== -1) {
+              this.offlineAlertStore.offlineAlerts.splice(foundAlert, 1);
+              this._offlineAlerts.next(Object.assign({}, this.offlineAlertStore).offlineAlerts);
+            }
+          }
+        },
+        error: (error) => this.handleError(error)
+      });
   }
 
   private handleError(error: any) {

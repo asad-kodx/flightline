@@ -36,8 +36,8 @@ export class OfflineAlertDetailsPage implements OnInit {
         this.offlineAlert.isActive = false;
         const alertSerialNumber = offlineAlert.serialNumber;
         const userId = localStorage.getItem('user_id');
-        this.alertData.clearOfflineAlert(alertSerialNumber, userId);
-        // this.events.publish("OfflineAlertCleared", offlineAlert);
+        // Pass the cleared alert to the provider so it can emit the observable
+        this.alertData.clearOfflineAlert(alertSerialNumber, userId, offlineAlert);
         this.nav.pop();
     }
 
