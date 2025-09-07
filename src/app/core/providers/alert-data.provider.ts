@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { OfflineAlert } from 'src/app/shared/models';
 import { ConfigurationService } from '../services/configuration.service';
 import { HttpService } from '../services/http-service';

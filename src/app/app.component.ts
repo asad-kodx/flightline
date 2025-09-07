@@ -84,116 +84,179 @@ export class AppComponent {
 
   ) {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      // this.statusBar.styleDefault();
-      // this.statusBar.show();
-      if (Capacitor.isNativePlatform()) {
-        StatusBar.setStyle({ style: Style.Light });
-        SplashScreen.hide();
-      }
-      var bigToken = localStorage.getItem('auth-tokens');
-      if (bigToken) {
-        var parsedToken = JSON.parse(bigToken);
-        console.log('Parsed Token', parsedToken);
+      this.initializePlatform();
+    });
+    
+    this.setupBackButtonHandler();
+  }
+  
+  private async initializePlatform() {
+    try {
+      // Initialize native platform features
+      this.setupNativePlatform();
+      
+      // Handle authentication state
+      this.handleInitialAuthentication();
+
+      this.setupListeners();
+      
+      // Initialize app data and services
+      this.initializeAppServices();
+      
+      // Setup authentication status monitoring
+      this.setupAuthenticationMonitoring();
+      
+      // Initialize additional features
+      this.initializeAdditionalFeatures();
+      
+    } catch (error) {
+      console.error('Error during platform initialization:', error);
+    }
+  }
+  
+  private setupNativePlatform() {
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setStyle({ style: Style.Light });
+      SplashScreen.hide();
+    }
+  }
+
+  private setupListeners() {
+    // this.events.subscribe("OrgChange", () => {
+    //     this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
+    //     this.orgId = localStorage.getItem(DBKeys.SELECTED_ORG_ID);
+    // });
+  }
+  
+  private handleInitialAuthentication() {
+    // Handle legacy auth-tokens format
+    this.migrateLegacyTokens();
+    
+    // Check current authentication state
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      this.navigateToLogin();
+    } else {
+      this.navigateToHome();
+    }
+    
+    // Load user data
+    this.loadUserData();
+  }
+  
+  private migrateLegacyTokens() {
+    const bigToken = localStorage.getItem('auth-tokens');
+    if (bigToken) {
+      try {
+        const parsedToken = JSON.parse(bigToken);
+        console.log('Migrating legacy token format');
         this.authService.setAuthToken(parsedToken.access_token);
         localStorage.setItem('refresh_token', parsedToken.refresh_token);
+        localStorage.removeItem('auth-tokens'); // Clean up legacy format
+      } catch (error) {
+        console.error('Error parsing legacy token:', error);
+        localStorage.removeItem('auth-tokens'); // Remove corrupted token
       }
-      var token = localStorage.getItem('auth_token');
-      if (!token) {
-        this.menuCtrl.enable(false, 'loggedInMenu');
-        this.navCtrl.navigateRoot('login');
-      } else {
-        this.menuCtrl.enable(true, 'loggedInMenu');
-        this.navCtrl.navigateRoot('home');
-      }
-      // this.checkForUpdate();
-      var startup = true;
-      if (localStorage.getItem('username'))
-        this.currentUser = localStorage.getItem('username')!.trim();
-      this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
-      this.orgId = localStorage.getItem(DBKeys.SELECTED_ORG_ID);
-      this.startupAuth();
-      this.sites = this.siteData.getSitesBinding();
-      this.siteData.getSites();
-      this.signalRService.connect();
-      // this.events.subscribe("OrgChange", () => {
-      //   this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
-      //   this.orgId = localStorage.getItem(DBKeys.SELECTED_ORG_ID);
-      // });
-      // this.events.subscribe('logout', () => {
-      //   this.nav.setRoot('login-page');
-      // });
-      this.authService.loginStatus$.subscribe((status) => {
-        if (!status && !startup) {
-          console.log('User is not logged in... ');
-          // this.enableMenu(false);
-          // this.nav.setRoot('login-page');
-          this.menuCtrl.enable(false, 'loggedInMenu');
-          this.navCtrl.navigateRoot('login');
-          signalRService.disconnect();
-        } else if (status) {
-          this.currentUser = localStorage.getItem('username')!.trim();
-          console.debug('User is logged in...');
-          // this.events.publish('login');
-          this.authService.startRefreshTimer();
-          this.menuCtrl.enable(true, 'loggedInMenu');
-          this.getOrgs();
-          this.userData.getUserInfo().subscribe((data: User) => {
-            localStorage.setItem('user_info', JSON.stringify(data));
-          });
-
-          if (!startup) signalRService.connect();
-          startup = false;
-        } else {
-          startup = false;
-        }
-      });
-
-      // this.events.subscribe("AlarmNav", (alarm => {
-      //   this.handleAlarmPushNav(alarm);
-      // }));
-
-      // this.events.subscribe("AlertNav", (offlineAlert => {
-      //   this.handleAlertPushNav(offlineAlert);
-      // }));
-
-      // this.events.subscribe("PopToRoot", () => {
-      //   this.nav.pop();
-      // })
-      // this.initDeeplinks();
-      this.initPush();
-      this.hookPlatformEvents();
-      document.addEventListener('keypress', (e: KeyboardEvent) => {
-        if (e.key === 'Enter') Keyboard.hide();
-      });
-      // if (this.platform.is('capacitor')) this.screen.lock('portrait');
-      //Handling for deeplinks
+    }
+  }
+  
+  private navigateToLogin() {
+    this.menuCtrl.enable(false, 'loggedInMenu');
+    this.navCtrl.navigateRoot('login');
+  }
+  
+  private navigateToHome() {
+    this.menuCtrl.enable(true, 'loggedInMenu');
+    this.navCtrl.navigateRoot('home');
+  }
+  
+  private loadUserData() {
+    const username = localStorage.getItem('username');
+    if (username) {
+      this.currentUser = username.trim();
+    }
+    
+    this.orgName = localStorage.getItem(DBKeys.SELECTED_ORG_NAME);
+    this.orgId = localStorage.getItem(DBKeys.SELECTED_ORG_ID);
+  }
+  
+  private initializeAppServices() {
+    this.startupAuth();
+    this.sites = this.siteData.getSitesBinding();
+    this.siteData.getSites();
+    // this.signalRService.connect();
+  }
+  
+  private setupAuthenticationMonitoring() {
+    let startup = true;
+    
+    this.authService.loginStatus$.subscribe((status) => {
+      this.handleAuthenticationStatusChange(status, startup);
+      startup = false; // After first status change, no longer startup
     });
+  }
+  
+  private handleAuthenticationStatusChange(status: boolean, isStartup: boolean) {
+    if (!status && !isStartup) {
+      this.handleUserLogout();
+    } else if (status) {
+      this.handleUserLogin(isStartup);
+    }
+  }
+  
+  private handleUserLogout() {
+    console.log('User logged out - redirecting to login');
+    this.menuCtrl.enable(false, 'loggedInMenu');
+    this.navCtrl.navigateRoot('login');
+    this.signalRService.disconnect();
+  }
+  
+  private handleUserLogin(isStartup: boolean) {
+    const username = localStorage.getItem('username');
+    if (username) {
+      this.currentUser = username.trim();
+    }
+    
+    console.debug('User logged in - initializing services');
+    
+    this.authService.startRefreshTimer();
+    this.menuCtrl.enable(true, 'loggedInMenu');
+    this.getOrgs();
+    
+    // Load user info
+    this.userData.getUserInfo().subscribe({
+      next: (data: User) => {
+        localStorage.setItem('user_info', JSON.stringify(data));
+      },
+      error: (error) => {
+        console.error('Error loading user info:', error);
+      }
+    });
+    
+    // Connect SignalR if not during startup
+    if (!isStartup) {
+      this.signalRService.connect();
+    }
+  }
+  
+  private initializeAdditionalFeatures() {
+    this.initPush();
+    this.hookPlatformEvents();
+    
+    // Handle Enter key to hide keyboard
+    document.addEventListener('keypress', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        Keyboard.hide();
+      }
+    });
+  }
+  
+  private setupBackButtonHandler() {
 
     this.platform.backButton.subscribeWithPriority(2, () => {
-      // const modal = this.app._appRoot._modalPortal.getActive();
-      // const actionSheet = this.app._appRoot._overlayPortal.getActive()
-      // const nav = this.app.getActiveNav();
-      // if (actionSheet && actionSheet.dismiss()) {
-      //   actionSheet.dismiss();
-      // }
-      // else if (modal && modal.dismiss()) {
-      //   modal.dismiss();
-      // }
-      // else if (this.menu.isOpen()) {
-      //   this.menu.close();
-      // }
-      // else if (nav.canGoBack()) {
-      //   nav.pop();
-      // }
-      // else if (this.nav.canGoBack()) {
-      //   this.nav.pop();
-      // }
-      // else {
-      //   if (this.nav.getActive().id == 'login-page') return;
-      //   this.nav.setRoot('home-page')
-      // }
+      // Back button handling is managed by individual pages
+      // This is a fallback handler with lower priority
+      console.log('Back button pressed - handled by default behavior');
     });
   }
 
@@ -225,24 +288,6 @@ export class AppComponent {
   }
 
   isActive(page: PageInterface) {
-    // let childNav = this.navCtrl.
-
-    // // Main nav active
-    // if (this.nav.getActive() && this.nav.getActive().id === page.name) {
-    //   return 'primary';
-    // }
-
-    // //Tabs are a special case because they have their own navigation
-    // if (childNav) {
-    //   if (childNav.getSelected() && childNav.getSelected().root === page.tabComponent) {
-    //     return 'primary';
-    //   }
-    //   return;
-    // }
-
-    // if (this.nav.getActive() && this.nav.getActive().name === page.name) {
-    //   return 'primary';
-    // }
     return this.router.url.includes(page.name) ? 'primary' : 'white';
   }
 
@@ -273,7 +318,7 @@ export class AppComponent {
   }
 
   changeOrg() {
-    this.navCtrl.navigateRoot('user-settings-page');
+    this.navCtrl.navigateRoot('user-settings');
     this.menuCtrl.close();
   }
 

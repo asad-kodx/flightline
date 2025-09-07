@@ -74,7 +74,7 @@ export class UserSettingsPage implements OnInit {
       // this.events.publish("OrgChange")
       this.controlData.getControls()?.subscribe();
       this.alarmData.getAlarms()?.subscribe();
-      this.navCtrl.navigateRoot('home-page')
+      this.navCtrl.navigateRoot('home')
 
   }
 
