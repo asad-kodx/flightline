@@ -1,4 +1,4 @@
-import { interval, of } from 'rxjs';
+import { interval, of, Subject } from 'rxjs';
 import { take } from "rxjs/operators";
 import { ToastController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
@@ -23,6 +23,10 @@ export class RemoteControlService {
     private slowRequests: Map<string, any>;
     private requestLog: string[];
     private toast: any;
+    
+    // Observable subject for request ID checks
+    private requestIdCheckSubject = new Subject<any>();
+    public requestIdCheck$ = this.requestIdCheckSubject.asObservable();
 
     constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
@@ -166,7 +170,8 @@ export class RemoteControlService {
             window.setTimeout(() => {
                 var processedResponse = this.mapSignalrResponse(data)
                 this.handleResponse(processedResponse.deviceId, processedResponse.requestId, processedResponse.statusCode, processedResponse.statusDescription);
-                // this.events.publish('CheckRequestId', data);
+                // Emit request ID check via observable
+                this.requestIdCheckSubject.next(data);
             }, 1000);
         });
     }

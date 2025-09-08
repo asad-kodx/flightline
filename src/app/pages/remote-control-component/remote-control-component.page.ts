@@ -58,6 +58,8 @@ export class RemoteControlComponentPage implements OnInit {
   public resetAuxSwitch!: number;
   public resetCurtainRight: string = 'stop';
   public resetBooleanRight: string = 'off';
+  
+  private requestIdCheckSubscription?: Subscription;
   private requestId!: string;
   public activeRequest!: boolean;
   public resetRequest!: boolean;
@@ -83,8 +85,9 @@ export class RemoteControlComponentPage implements OnInit {
   @ViewChild('stopCurtainButton') stopCurtainButton: any;
   @ViewChild('submitButton') submitButton: any;
   @ViewChild('variableSlider') variableSlider: any;
-default: any;
-deviceType: any;
+  
+  public default: any;
+  public deviceType: any;
 
   constructor(
     public navCtrl: NavController,
@@ -762,27 +765,26 @@ deviceType: any;
     // }
     if (this.entity?.hideManualControl) return;
     if (!this.type) return;
-    // this.events.subscribe('CheckRequestId', (data: any) => {
-    //   console.log(data, this.requestId);
-    //   if (data.requestId == this.requestId) {
-    //     this.activeRequest = false;
-    //     this.requestLiveValue();
-    //     window.setTimeout(() => {
-    //     const gesture = this.gestureCtrl.create({
-    //         el: this.submitButton['el'], // internal native element
-    //         gestureName: 'press-gesture',
-    //         onStart: () => {
-    //           this.submitButton.fill = 'solid';
-    //         },
-    //         onEnd: () => {
-    //           this.submitButton.fill = 'outline';
-    //           // this.submit();
-    //         },
-    //       });
-    //       gesture.enable(true);
-    //     }, 100);
-    //   }
-    // });
+    this.requestIdCheckSubscription = this.remoteControlService.requestIdCheck$.subscribe((data: any) => {
+      console.log('Request ID check:', data, this.requestId);
+      if (data.requestId == this.requestId) {
+        this.activeRequest = false;
+        this.requestLiveValue();
+        window.setTimeout(() => {
+          this.gesture = this.gestureCtrl.create({
+            el: this.submitButton.nativeElement,
+            gestureName: 'press-gesture',
+            onStart: () => {
+              this.submitButton.fill = 'solid';
+            },
+            onEnd: () => {
+              this.submitButton.fill = 'outline';
+            },
+          });
+          this.gesture.enable(true);
+        }, 100);
+      }
+    });
     // this.events.subscribe('GetRequestId', () => {
     //   this.requestId = this.remoteControlService.getRequestId(
     //     this.entity.deviceSerialNumber
@@ -808,17 +810,16 @@ deviceType: any;
     //     nav: this.navCtrl,
     //   });
     // });
-   this.gestureCtrl.create({
+   this.gesture = this.gestureCtrl.create({
       el: this.submitButton.nativeElement,
       gestureName: 'long-press',
-      onStart: ev => {
+      onStart: (_ev: any) => {
         this.submitButton.nativeElement.classList.remove('outline');
         this.submitButton.nativeElement.classList.add('default');
       },
-      onEnd: ev => {
+      onEnd: (_ev: any) => {
         this.submitButton.nativeElement.classList.remove('default');
         this.submitButton.nativeElement.classList.add('outline');
-        // this.submit();
       },
     });
 
@@ -828,9 +829,15 @@ deviceType: any;
   ionViewWillLeave() {
     //this.liveValueRequestor.unsubscribe();
     // this.events.unsubscribe('GetRequestId');
-    // this.events.unsubscribe('CheckRequestId');
     // this.events.unsubscribe('RequestTimeout');
     // this.events.unsubscribe('AlarmControlTabs');
+
+    if (this.requestIdCheckSubscription) {
+      this.requestIdCheckSubscription.unsubscribe();
+    }
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   private requestLiveValue() {
