@@ -27,7 +27,9 @@ export class RemoteControlService {
     // Observable subject for request ID checks
     private requestIdCheckSubject = new Subject<any>();
     public requestIdCheck$ = this.requestIdCheckSubject.asObservable();
-
+    private getRequestIdSubject = new Subject<any>();
+    public getRequestId$ = this.getRequestIdSubject.asObservable(); 
+    
     constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
         this.timedOutRequests = new Map<string, string>();
@@ -65,19 +67,18 @@ export class RemoteControlService {
                     var requestId = res.requestId;
                     console.log('Post Returned', requestId, this.slowRequests)
                     if (this.slowRequests.has(requestId)) {
-                        this.handleSlowRequest(time, deviceId, this.slowRequests.get(requestId));
+                        this.handleSlowRequest(time, deviceId, this.slowRequests.get(requestId), requestId);
                         return;
                     }
                     this.requestTimes.set(requestId, time);
                     this.activeRequests.set(deviceId, requestId);
                     console.log(this.activeRequests)
-                    // this.events.publish('GetRequestId');
+                    this.getRequestIdSubject.next(requestId);
                     this.timedOutRequests.delete(deviceId);
                     interval(30000).pipe(take(1)).subscribe(() => {
                         if (this.activeRequests.get(deviceId) == requestId) {
                             this.timedOutRequests.set(deviceId, requestId);
                             this.activeRequests.delete(deviceId);
-                            // this.events.publish('RequestTimeout');
                         }
                     });
                 },
@@ -90,11 +91,12 @@ export class RemoteControlService {
             });
     }
 
-    handleSlowRequest(startTime: any, deviceId: string, requestInfo: any) {
+    handleSlowRequest(startTime: any, deviceId: string, requestInfo: any, requestId: string) {
         console.log("Handling slow request")
         var requestTime = requestInfo.time.diff(startTime, 'milliseconds');
         this.handleError(requestInfo.statusCode);
         // this.events.publish('GetRequestId');
+        this.getRequestIdSubject.next(requestId);
     }
 
     getRequestId(deviceId: string): string {

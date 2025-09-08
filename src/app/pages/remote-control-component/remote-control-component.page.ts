@@ -60,6 +60,7 @@ export class RemoteControlComponentPage implements OnInit {
   public resetBooleanRight: string = 'off';
   
   private requestIdCheckSubscription?: Subscription;
+  private getRequestIdSubscription?: Subscription;
   private requestId!: string;
   public activeRequest!: boolean;
   public resetRequest!: boolean;
@@ -785,21 +786,11 @@ export class RemoteControlComponentPage implements OnInit {
         }, 100);
       }
     });
-    // this.events.subscribe('GetRequestId', () => {
-    //   this.requestId = this.remoteControlService.getRequestId(
-    //     this.entity.deviceSerialNumber
-    //   );
-    //   if (this.requestId) this.activeRequest = true;
-    //   else this.activeRequest = false;
-    // });
-    // this.events.subscribe('RequestTimeout', () => {
-    //   this.calibrateClicked = false;
-    //   this.timedOut = this.remoteControlService.isTimedOut(
-    //     this.entity.deviceSerialNumber
-    //   );
-    //   this.remoteControlService.displayTimeOutToast();
-    //   this.activeRequest = false;
-    // });
+    this.getRequestIdSubscription = this.remoteControlService.getRequestId$.subscribe((rID: string) => {
+        this.requestId = rID;
+        if (this.requestId) this.activeRequest = true;
+        else this.activeRequest = false;
+    })
     // this.events.subscribe('PostFailed', () => {
     //   this.calibrateClicked = false;
     //   this.activeRequest = false;
@@ -828,12 +819,13 @@ export class RemoteControlComponentPage implements OnInit {
 
   ionViewWillLeave() {
     //this.liveValueRequestor.unsubscribe();
-    // this.events.unsubscribe('GetRequestId');
-    // this.events.unsubscribe('RequestTimeout');
     // this.events.unsubscribe('AlarmControlTabs');
 
     if (this.requestIdCheckSubscription) {
       this.requestIdCheckSubscription.unsubscribe();
+    }
+    if(this.getRequestIdSubscription){
+      this.getRequestIdSubscription.unsubscribe();
     }
     if (this.sub) {
       this.sub.unsubscribe();
