@@ -31,6 +31,8 @@ export class RemoteControlService {
     public getRequestId$ = this.getRequestIdSubject.asObservable(); 
     private requestTimeoutSubject = new Subject<string>();
     public requestTimeout$ = this.requestTimeoutSubject.asObservable();
+    private postFailedSubject = new Subject<string>();
+    public postFailed$ = this.postFailedSubject.asObservable();
     
     constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
@@ -86,8 +88,7 @@ export class RemoteControlService {
                     });
                 },
                 error: (error: any) => {
-                    
-                    // this.events.publish('PostFailed');
+                    this.postFailedSubject.next('PostFailed')
                     console.error(error)
                     return of(null);
                 }

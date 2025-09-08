@@ -62,6 +62,7 @@ export class RemoteControlComponentPage implements OnInit {
   private requestIdCheckSubscription?: Subscription;
   private getRequestIdSubscription?: Subscription;
   private requestTimeoutSubscription?: Subscription;
+  private postFailedSubscription?: Subscription;
   private requestId!: string;
   public activeRequest!: boolean;
   public resetRequest!: boolean;
@@ -799,10 +800,10 @@ export class RemoteControlComponentPage implements OnInit {
         this.remoteControlService.displayTimeOutToast();
         this.activeRequest = false;
     })
-    // this.events.subscribe('PostFailed', () => {
-    //   this.calibrateClicked = false;
-    //   this.activeRequest = false;
-    // });
+    this.postFailedSubscription = this.remoteControlService.postFailed$.subscribe(()=>{
+      this.calibrateClicked = false;
+      this.activeRequest = false;
+    })
     // this.events.subscribe('AlarmControlTabs', (alarm: any) => {
     //   this.navCtrl.navigateForward('alarm-details-tabs', {
     //     alarm: alarm,
