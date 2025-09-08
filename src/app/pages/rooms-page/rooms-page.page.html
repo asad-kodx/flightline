@@ -27,38 +27,24 @@
     <ion-select-option *ngFor="let item of searchData" [value]="item">{{item}}</ion-select-option>
   </ion-select>
 
-  <ion-searchbar #searchBar *ngIf="searchTerm" [(ngModel)]='searchInput' (keyup)="handleKeyUp($event)" (ionClear)="closeKeyboard()"></ion-searchbar>
+  <ion-searchbar #searchBar *ngIf="searchTerm" (ionClear)="onClearSearch()" [(ngModel)]='searchInput' [animated]='true' debounce="800" (ionInput)='onSearchChange($event)' (keyup)="handleKeyUp($event)" (ionClear)="closeKeyboard()"></ion-searchbar>
 
   <ion-list #ionList>
-    <div *ngFor="let entity of entArray" style="min-width:100%; max-width: 100%">
-      <ion-item style="max-width: 100%" *ngIf="shouldShow(entity)">
-        <!-- <entity *ngIf="entity.entityType == 2" [device]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
-        <entity *ngIf="entity.entityType == 1" [sensor]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity> -->
+    <div *ngFor="let entity of filteredArray" style="min-width:100%; max-width: 100%">
+      <ion-item button style="max-width: 100%" *ngIf="shouldShow(entity)">
         <ion-label>
           <h2>{{entity.entityName}}</h2>
           <p>{{entity.roomName}} - {{entity.controlName}}</p>
-          <p *ngIf="entity.entityType == 0">Please select a type from above.</p>
         </ion-label>
+        <entity *ngIf="entity.entityType == 2" [device]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
+        <entity *ngIf="entity.entityType == 1" [sensor]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
+        <p *ngIf="entity.entityType == 0">Please select a type from above.</p>
       </ion-item>
     </div>
   </ion-list>
 </ion-content>
 <ion-footer>
-  <ion-toolbar class="footer">
-    <!-- <sliding-footer [searchType]="searchType" [liveValueDisplay]="liveValueDisplay" [modeType]="modeType" [buttonsDisplayType]="buttonsDisplayType" (sortAZ)="sortAlphabetical()" (sortVal)="sortValue()" (showMode)="displayMode()" (showValues)="displayLiveValues()"></sliding-footer> -->
-    <ion-buttons slot="start">
-      <ion-button (click)="sortAlphabetical()">
-        <ion-icon name="text"></ion-icon>
-        Sort A-Z
-      </ion-button>
-      <ion-button (click)="sortValue()">
-        <ion-icon name="stats-chart"></ion-icon>
-        Sort Value
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="displayLiveValues()">Live Values</ion-button>
-      <ion-button (click)="displayMode()">Mode</ion-button>
-    </ion-buttons>
+  <ion-toolbar class="footer ion-no-padding">
+    <sliding-footer [searchType]="searchType" [liveValueDisplay]="liveValueDisplay" [modeType]="modeType" [buttonsDisplayType]="buttonsDisplayType" (sortAZ)="sortAlphabetical()" (sortVal)="sortValue()" (showMode)="displayMode()" (showValues)="displayLiveValues()"></sliding-footer>
   </ion-toolbar>
 </ion-footer>
