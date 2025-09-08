@@ -33,7 +33,7 @@ export class RemoteControlService {
     public requestTimeout$ = this.requestTimeoutSubject.asObservable();
     private postFailedSubject = new Subject<string>();
     public postFailed$ = this.postFailedSubject.asObservable();
-    
+
     constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
         this.timedOutRequests = new Map<string, string>();

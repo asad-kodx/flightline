@@ -793,23 +793,17 @@ export class RemoteControlComponentPage implements OnInit {
         this.requestId = rID;
         if (this.requestId) this.activeRequest = true;
         else this.activeRequest = false;
-    })
+    });
     this.requestTimeoutSubscription = this.remoteControlService.requestTimeout$.subscribe((data: string) =>{
         this.calibrateClicked = false;
         this.timedOut = this.remoteControlService.isTimedOut(this.entity.deviceSerialNumber);
         this.remoteControlService.displayTimeOutToast();
         this.activeRequest = false;
-    })
+    });
     this.postFailedSubscription = this.remoteControlService.postFailed$.subscribe(()=>{
-      this.calibrateClicked = false;
-      this.activeRequest = false;
-    })
-    // this.events.subscribe('AlarmControlTabs', (alarm: any) => {
-    //   this.navCtrl.navigateForward('alarm-details-tabs', {
-    //     alarm: alarm,
-    //     nav: this.navCtrl,
-    //   });
-    // });
+        this.calibrateClicked = false;
+        this.activeRequest = false;
+    });
    this.gesture = this.gestureCtrl.create({
       el: this.submitButton.nativeElement,
       gestureName: 'long-press',
@@ -827,9 +821,6 @@ export class RemoteControlComponentPage implements OnInit {
   }
 
   ionViewWillLeave() {
-    //this.liveValueRequestor.unsubscribe();
-    // this.events.unsubscribe('AlarmControlTabs');
-
     if (this.requestIdCheckSubscription) {
       this.requestIdCheckSubscription.unsubscribe();
     }
