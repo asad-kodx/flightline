@@ -15,7 +15,7 @@ import { LiveValueDisplayPipe } from 'src/app/shared/pipes/live-value/live-value
 })
 export class AlarmItemPage {
 
-@Input('alarms') alarms: Observable<ControlAlarm[]>;
+    @Input('alarms') alarms: Observable<ControlAlarm[]>;
     @Input('resolved') resolved: boolean = false;
     @Input('searchText') searchText!: string;
     @Input('mine') mine!: boolean;

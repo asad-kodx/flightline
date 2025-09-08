@@ -1,6 +1,6 @@
 import { BaseDataProvider } from "./base-data.provider";
 import { Injectable } from "@angular/core";
-import { formatString, String } from 'typescript-string-operations';
+import { formatString } from 'typescript-string-operations';
 import { OrgContextService } from "../services/org-context.service";
 import { HttpClient } from "@angular/common/http";
 // import { notImplemented } from "@angular/core/src/render3/util";

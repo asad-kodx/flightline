@@ -7,6 +7,13 @@ const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
       resizeOnFullScreen: false
+    },
+    SplashScreen: {
+      launchShowDuration: 13000,
+      launchAutoHide: true,
+      backgroundColor: '#ffffffff',
+      androidSplashResourceName: 'splash',
+      showSpinner: false
     }
   }
 };

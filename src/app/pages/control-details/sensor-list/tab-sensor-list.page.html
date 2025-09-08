@@ -23,11 +23,6 @@
           &nbsp;
         </span>
         {{room.name}}
-        <ion-icon *ngIf="room.collapsed" name="arrow-forward" style="float: right; margin-left: 20px; margin-right: 5px; width: 15.5px"
-          (click)="expandRoom(room)"></ion-icon>
-        <ion-icon *ngIf="!room.collapsed" name="arrow-down" style="float: right; margin-left: 20px; margin-right: 5px; width: 15.5px"
-          (click)="expandRoom(room)"></ion-icon>
-        <ion-icon *ngIf="room.type == 1" name="settings" style="float: right" (click)="navToRoomSettings(control.serialNumber,room)"></ion-icon>
         <br />
         <div style="zoom: .7; margin-top: 1em; font-size: 1.1em;"><span *ngIf="room.type == 1">Setpoint: </span><span *ngIf="room.type == 1" style='color: orange'>{{((liveValuesMap | async )?.get(control.serialNumber+'.'+room.programId)?.dayTemperatureHistory.setTemperature) || '- -'}} </span>
           <span *ngIf="room.type == 1">Room Temp: </span><span *ngIf="room.type == 1" style='color: orange'>{{ ((liveValuesMap | async )?.get(control.serialNumber+'.'+room.programId)?.dayTemperatureHistory.roomTemperature) || '- -' }}</span>
@@ -38,6 +33,13 @@
 
       </ion-label>
     
+      <div slot="end" class="ion-margin-bottom" style="padding-bottom: 10px;">
+        <ion-icon *ngIf="room.collapsed" name="arrow-forward" style="float: right; margin-left: 20px; margin-right: 5px; width: 15.5px"
+          (click)="expandRoom(room)"></ion-icon>
+        <ion-icon *ngIf="!room.collapsed" name="arrow-down" style="float: right; margin-left: 20px; margin-right: 5px; width: 15.5px"
+          (click)="expandRoom(room)"></ion-icon>
+        <ion-icon *ngIf="room.type == 1" name="settings" style="float: right" (click)="navToRoomSettings(control.serialNumber,room)"></ion-icon>
+      </div>
     </ion-item-divider>
     <div *ngFor="let sensor of room?.sensors">
       <ion-item button style="zoom:.85" (click)="navToGraph(sensor)" *ngIf="shouldShow(sensor) && !room.collapsed">

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ entity?.deviceName || entity?.sensorName }}</ion-title>
+    <ion-title>{{ entity.deviceName || entity.sensorName }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -81,11 +81,11 @@
           </ion-col>
 
           <ion-col size="1">
-            <ion-icon name="contact" style="zoom:0.8;"></ion-icon>
+            <ion-icon name="person-circle-outline" style="zoom:0.8;"></ion-icon>
           </ion-col>
           <ion-col size="5" style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
             <span>Assigned To:</span>
-            <br />{{ alarm.transactions[0]?.assignedToUsername || 'System Controller' }}
+            <br />{{ alarm.transactions[0].assignedToUsername || 'System Controller' }}
           </ion-col>
         </ion-row>
       </ion-grid>

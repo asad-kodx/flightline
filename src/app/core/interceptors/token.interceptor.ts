@@ -107,12 +107,8 @@ export class TokenInterceptor implements HttpInterceptor {
 
 
     logoutUser() {
-        // Route to the login page (implementation up to you)
-        // this.events.publish('logout');
-        // var deviceId = localStorage.getItem("DeviceId");
-        // this.auth.loginStatus$.next(false);
-        localStorage.clear();
-        // if(deviceId) localStorage.setItem("DeviceId", deviceId);
+        // Trigger logout via auth service which will emit the logout observable
+        this.auth.triggerLogout();
         return this.interceptorError("");
     }
 
