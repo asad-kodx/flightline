@@ -61,6 +61,7 @@ export class RemoteControlComponentPage implements OnInit {
   
   private requestIdCheckSubscription?: Subscription;
   private getRequestIdSubscription?: Subscription;
+  private requestTimeoutSubscription?: Subscription;
   private requestId!: string;
   public activeRequest!: boolean;
   public resetRequest!: boolean;
@@ -75,6 +76,7 @@ export class RemoteControlComponentPage implements OnInit {
   private initMode!: Mode;
   public hasSliderValue!: boolean;
   private sub!: Subscription;
+  timedOut!: boolean;
 
   @ViewChild('autoButton') autoButton: any;
   @ViewChild('manualButton') manualButton: any;
@@ -791,6 +793,12 @@ export class RemoteControlComponentPage implements OnInit {
         if (this.requestId) this.activeRequest = true;
         else this.activeRequest = false;
     })
+    this.requestTimeoutSubscription = this.remoteControlService.requestTimeout$.subscribe((data: string) =>{
+        this.calibrateClicked = false;
+        this.timedOut = this.remoteControlService.isTimedOut(this.entity.deviceSerialNumber);
+        this.remoteControlService.displayTimeOutToast();
+        this.activeRequest = false;
+    })
     // this.events.subscribe('PostFailed', () => {
     //   this.calibrateClicked = false;
     //   this.activeRequest = false;
@@ -826,6 +834,9 @@ export class RemoteControlComponentPage implements OnInit {
     }
     if(this.getRequestIdSubscription){
       this.getRequestIdSubscription.unsubscribe();
+    }
+    if(this.requestTimeoutSubscription){
+      this.requestTimeoutSubscription.unsubscribe();
     }
     if (this.sub) {
       this.sub.unsubscribe();

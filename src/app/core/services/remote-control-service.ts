@@ -29,6 +29,8 @@ export class RemoteControlService {
     public requestIdCheck$ = this.requestIdCheckSubject.asObservable();
     private getRequestIdSubject = new Subject<any>();
     public getRequestId$ = this.getRequestIdSubject.asObservable(); 
+    private requestTimeoutSubject = new Subject<string>();
+    public requestTimeout$ = this.requestTimeoutSubject.asObservable();
     
     constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
@@ -79,6 +81,7 @@ export class RemoteControlService {
                         if (this.activeRequests.get(deviceId) == requestId) {
                             this.timedOutRequests.set(deviceId, requestId);
                             this.activeRequests.delete(deviceId);
+                            this.requestTimeoutSubject.next('RequestTimeout');
                         }
                     });
                 },
@@ -95,7 +98,6 @@ export class RemoteControlService {
         console.log("Handling slow request")
         var requestTime = requestInfo.time.diff(startTime, 'milliseconds');
         this.handleError(requestInfo.statusCode);
-        // this.events.publish('GetRequestId');
         this.getRequestIdSubject.next(requestId);
     }
 
