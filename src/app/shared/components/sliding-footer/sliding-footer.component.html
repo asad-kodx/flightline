@@ -1,0 +1,50 @@
+<div class="outer-container" [ngStyle]="{ 'width.%': 100 + 25 * (numButtons - 4) }">
+  <div #footerContainer class="footer-container" [ngStyle]="{ 'left.%': leftMargin }">
+    <ion-row class="footer-row">
+      <ion-col class="button-col">
+        <ion-button #azButton class="footer-button" expand="block" fill="clear" size="large" color="inactive" (click)="sortAlphabetical()">
+          A-Z
+          <ion-icon *ngIf="searchType != 1" name="arrow-down-outline" slot="end"></ion-icon>
+          <ion-icon *ngIf="searchType == 1" name="arrow-up-outline" slot="end"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col class="button-col">
+        <ion-button #valButton class="footer-button" expand="block" fill="clear" size="large" color="inactive" (click)="sortValue()">
+          Val
+          <ion-icon *ngIf="searchType != 3" name="arrow-down-outline" slot="end"></ion-icon>
+          <ion-icon *ngIf="searchType == 3" name="arrow-up-outline" slot="end"></ion-icon>
+        </ion-button>
+      </ion-col>
+
+      <ion-col class="button-col" *ngIf="buttonsDisplayType == 2">
+        <ion-button #lvButton class="footer-button" expand="block" fill="clear" size="large" [color]="getColor(0)" (click)="displayLiveValues()">
+          LiveValue
+        </ion-button>
+      </ion-col>
+
+      <ion-col class="button-col" *ngIf="buttonsDisplayType == 2 && (modeType == 0 || modeType == null)">
+        <ion-button #modeButton class="footer-button" expand="block" fill="clear" size="large" [color]="getColor(1)" (click)="displayMode()">
+          Mode<br />All
+        </ion-button>
+      </ion-col>
+
+      <ion-col class="button-col" *ngIf="buttonsDisplayType == 2 && modeType == 1">
+        <ion-button #modeButton class="footer-button" expand="block" fill="clear" size="large" [color]="getColor(1)" (click)="displayMode()">
+          Mode<br />On
+        </ion-button>
+      </ion-col>
+
+      <ion-col class="button-col" *ngIf="buttonsDisplayType == 2 && modeType == 2">
+        <ion-button #modeButton class="footer-button" expand="block" fill="clear" size="large" [color]="getColor(1)" (click)="displayMode()">
+          Mode<br />Off
+        </ion-button>
+      </ion-col>
+
+      <ion-col class="button-col" *ngIf="buttonsDisplayType == 2 && modeType == 3">
+        <ion-button #modeButton class="footer-button" expand="block" fill="clear" size="large" [color]="getColor(1)" (click)="displayMode()">
+          Mode<br />Auto
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

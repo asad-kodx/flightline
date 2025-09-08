@@ -1,3 +1,4 @@
+
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import * as _ from 'lodash';
@@ -71,7 +72,9 @@ export class RoomsPagePage implements OnInit, OnDestroy {
   public liveValueDisplay: LiveValueDisplay = LiveValueDisplay.LiveValues;
   public buttonsDisplayType: ButtonsDisplayType = ButtonsDisplayType.All;
   public modeType: ModeDisplayType = ModeDisplayType.All;
-  public alarmCount: Observable<Map<string, AlarmCount>> | undefined;
+  public alarmCount!: Observable<Map<string, AlarmCount>>;
+  filteredArray: Entity[] = [];
+  query!: string;
 
   constructor(private entityData: EntitiesDataProvider,
     private roomData: RoomDataProvider
@@ -153,6 +156,7 @@ export class RoomsPagePage implements OnInit, OnDestroy {
 
     this.entityData.getEntities(this.searchTerm, entityType).subscribe((data) => {
       this.entArray = data;
+      this.filteredArray = data;
       var group = Object.keys(_.groupBy(data, 'controlSerialNumber'));
       group.forEach(serial => {
         if(!this.roomData.controlsPulled.has(serial)){
@@ -192,11 +196,13 @@ export class RoomsPagePage implements OnInit, OnDestroy {
   sortAlphabetical() {
     if (this.searchType == RoomSearchType.AlphabeticalDesc) {
       this.entArray = [...this.entArray].sort((a, b) => a.entityName.localeCompare(b.entityName)).reverse();
+      this.filteredArray = [...this.entArray];
     }
     else {
       this.entArray = [...this.entArray].sort((a, b) => a.entityName.localeCompare(b.entityName));
+      this.filteredArray = [...this.entArray];
     }
-
+    
     if (this.searchType == RoomSearchType.AlphabeticalDesc) {
       this.searchType = RoomSearchType.AlphabeticalAsc
     }
@@ -215,12 +221,15 @@ export class RoomsPagePage implements OnInit, OnDestroy {
       this.entArray = [...this.entArray].sort((a, b) => {
         const aVal = (a as any)[filterTerm] || 0;
         const bVal = (b as any)[filterTerm] || 0;
+        this.filteredArray = [...this.entArray]
         return aVal - bVal;
-      });
-    } else {
-      this.entArray = [...this.entArray].sort((a, b) => {
-        const aVal = (a as any)[filterTerm] || 0;
-        const bVal = (b as any)[filterTerm] || 0;
+      }
+    );
+  } else {
+    this.entArray = [...this.entArray].sort((a, b) => {
+      const aVal = (a as any)[filterTerm] || 0;
+      const bVal = (b as any)[filterTerm] || 0;
+      this.filteredArray = [...this.entArray]
         return bVal - aVal;
       });
     }
@@ -236,23 +245,26 @@ export class RoomsPagePage implements OnInit, OnDestroy {
   filterList(): void {
     if (this.searchType == RoomSearchType.AlphabeticalAsc) {
       this.entArray = [...this.entArray].sort((a, b) => a.entityName.localeCompare(b.entityName)).reverse();
+      this.filteredArray = [...this.entArray]
       return;
     }
     if (this.searchType == RoomSearchType.AlphabeticalDesc) {
       this.entArray = [...this.entArray].sort((a, b) => a.entityName.localeCompare(b.entityName));
+      this.filteredArray = [...this.entArray]
       return;
     }
-
+    
     var filterTerm: keyof Entity;
     if (this.liveValueDisplay == LiveValueDisplay.LiveValues) filterTerm = 'liveValueData';
     if (this.liveValueDisplay == LiveValueDisplay.Mode) filterTerm = 'mode';
-
+    
     if (this.searchType == RoomSearchType.ValDesc) {
       this.entArray = [...this.entArray].sort((a, b) => {
         const aVal = (a as any)[filterTerm] || 0;
         const bVal = (b as any)[filterTerm] || 0;
         return bVal - aVal;
       });
+      this.filteredArray = [...this.entArray]
       return;
     }
     if (this.searchType == RoomSearchType.ValAsc) {
@@ -261,6 +273,7 @@ export class RoomsPagePage implements OnInit, OnDestroy {
         const bVal = (b as any)[filterTerm] || 0;
         return aVal - bVal;
       });
+      this.filteredArray = [...this.entArray]
       return;
     }
   }
@@ -305,4 +318,22 @@ export class RoomsPagePage implements OnInit, OnDestroy {
     return true;
   }
 
+  onSearchChange(event: any) {
+  const query = event.target.value.toLowerCase();
+    if (!query || query.trim() === '') {
+    this.filteredArray = [...this.entArray];
+  } else {
+    this.filteredArray = this.entArray.filter(d =>
+      d.entityName.toLowerCase().includes(query)
+    );
+    console.log(this.filteredArray);
+    }
+  }
+  onClearSearch(){
+    this.filteredArray = [...this.entArray];
+  }
 }
+
+
+
+

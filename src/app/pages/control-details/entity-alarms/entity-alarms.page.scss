@@ -1,0 +1,22 @@
+entity {
+    .entityName{
+        max-width:100%;
+       font-size: .8em;
+    }
+    .roomName{
+        font-size: .65em;
+        color: #e9e9e9;
+        overflow:hidden; 
+        text-overflow:ellipsis;
+    }
+
+    .mode{
+        font-size: .65em;
+        color: #e9e9e9;
+        text-align: right;
+    }
+
+    .liveValue{
+        text-align: right;
+    }
+}
