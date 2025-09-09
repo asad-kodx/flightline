@@ -1,10 +1,16 @@
 PODS:
-  - Capacitor (7.4.2):
+  - Capacitor (7.4.3):
     - CapacitorCordova
-  - CapacitorCordova (7.4.2)
-  - CordovaPlugins (7.4.2):
+  - CapacitorApp (7.1.0):
+    - Capacitor
+  - CapacitorCordova (7.4.3)
+  - CapacitorSplashScreen (7.0.2):
+    - Capacitor
+  - CapacitorStatusBar (7.0.2):
+    - Capacitor
+  - CordovaPlugins (7.4.3):
     - CapacitorCordova
-  - CordovaPluginsStatic (7.4.2):
+  - CordovaPluginsStatic (7.4.3):
     - CapacitorCordova
     - OneSignalXCFramework (= 5.2.14)
   - OneSignalXCFramework (5.2.14):
@@ -56,7 +62,10 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
+  - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
   - CordovaPluginsStatic (from `../capacitor-cordova-ios-plugins`)
 
@@ -67,20 +76,29 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorSplashScreen:
+    :path: "../../node_modules/@capacitor/splash-screen"
+  CapacitorStatusBar:
+    :path: "../../node_modules/@capacitor/status-bar"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
   CordovaPluginsStatic:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 156d98aba46ec01dde72c4bbb92fa626837cad29
-  CapacitorCordova: 5e58d04631bc5094894ac106e2bf1da18a9e6151
-  CordovaPlugins: ecd3d32da47588e195481a8512fe9472755040eb
-  CordovaPluginsStatic: 2e52f7dec452effbcfa3ca84e815ad18cd903e9f
+  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
+  CapacitorApp: 26587c2ce485d88ddb39adb21cac64f8e481afe3
+  CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
+  CapacitorSplashScreen: 157947576b59d913792063a8d442a79e6d283ee5
+  CapacitorStatusBar: e04d05e121d5a5979c29eb4249186a4e4a84cacb
+  CordovaPlugins: 39454af61b66c5495293b4be216bd851e0cd32ab
+  CordovaPluginsStatic: e1d03a74c8a31ac3ac8e39ebeee5ce33f0e5e941
   OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
 
-PODFILE CHECKSUM: 8d7e6583ac57ff9568d6063e5db1964d5daf5bc9
+PODFILE CHECKSUM: bcec4c7abd225dc5a132455e7e7551deffdabbfa
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

@@ -8,6 +8,7 @@ import { OrganizationDataProvider  } from "./core/providers/org-data.provider";
 import { SiteContextService } from './core/services/site-context.service';
 import { SiteDataProvider } from './core/providers/site-data.provider';
 import OneSignal from 'onesignal-cordova-plugin';
+import {App} from '@capacitor/app'
 
 import { ConfigurationService } from "./core/services/configuration.service";
 
@@ -36,7 +37,7 @@ export class AppComponent {
     { title: 'Entities', name: 'rooms-page', index: 4, icon: 'speedometer' },
     { title: 'Offline Alerts', name: 'offline-alerts', index: 5, icon: 'alert' }
   ];
-
+  tap = 0;
   currentUser?: string;
   sites?: Observable<Site[]>;
   private organizations?: Observable<Organization[]>;
@@ -64,12 +65,12 @@ export class AppComponent {
     private pushMessageHandler: PushMessageHandler,
     private authService: AuthService,
     private signalRService: SignalRService,
-    private platform: Platform
-
+    private platform: Platform,
+    private router: Router,
   ) {
-
-     this.platform.ready().then(() => {
-
+    this.platform.ready().then(() => {
+      // this.exitAppOnDoubleTap();
+      this.exitAppOnAlert();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       // this.statusBar.styleDefault();
@@ -185,8 +186,71 @@ export class AppComponent {
       // }
 
     });
+  
   }
-
+  async exitAppOnDoubleTap(){
+    if(Capacitor.getPlatform() == 'android'){
+      this.platform.backButton.subscribeWithPriority(10, async()=>{
+        if(this.router.url.includes('/home')){
+          this.tap++;
+          if(this.tap == 2){
+            App.exitApp()
+          }
+          else {
+            this.doubleTapExitToast();
+          }
+        }
+        else{
+          window.history.back();
+        }
+      })
+    }
+  }
+  async exitAppOnAlert(){
+      if(Capacitor.getPlatform() == 'android'){
+        this.platform.backButton.subscribeWithPriority(10, async()=>{
+          if(!this.router.url.includes('/home')){
+            console.log('Pages left')
+            window.history.back();
+          }
+          else{
+            this.alertExit()
+          }
+        })
+      }
+  }
+  async doubleTapExitToast(){
+    console.log('Double Tap Exit Called!');
+    let toast = await this.toastCtrl.create({
+      message: 'Tap back button again to exit the App',
+      duration: 3000,
+      position: 'bottom',
+      color: 'primary'
+    })
+    toast.present();
+    const dismiss = await toast.onDidDismiss();
+    if(dismiss){
+      console.log('Dismiss',  dismiss);
+      this.tap = 0
+    }
+  }
+  async alertExit(){
+    console.log('alert');
+    const alert = await this.alertCtrl.create({
+      header: 'Exit App',
+      subHeader: 'Confirm',
+      message: 'Are you sure you want to exit the App?',
+      buttons: [
+        {text: 'NO', role: 'cancel'},
+        {text: 'YES', role: 'confirm', 
+          handler: ()=>{
+            App.exitApp();
+          }
+        }
+      ]
+    })
+    alert.present();
+  }
    private hookPlatformEvents() {
     this.platform.resume.subscribe(() => {
       this.authService.startRefreshTimer();

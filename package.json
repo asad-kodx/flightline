@@ -27,6 +27,7 @@
     "@awesome-cordova-plugins/network": "^8.1.0",
     "@awesome-cordova-plugins/onesignal": "^8.1.0",
     "@capacitor/android": "^7.4.2",
+    "@capacitor/app": "^7.1.0",
     "@capacitor/core": "^7.4.2",
     "@capacitor/ios": "^7.4.2",
     "@capacitor/splash-screen": "^7.0.2",
