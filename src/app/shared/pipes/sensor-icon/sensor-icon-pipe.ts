@@ -6,10 +6,13 @@ import { SensorType } from '../../models/types/sensor-type';
   standalone: false
 })
 export class SensorDisplayIconPipe implements PipeTransform {
-  transform(value: SensorType, args: any[]) {
-    let sensType = (<SensorType>args[0])
+  transform(_value: SensorType, args: any[] | null | undefined): string {
+    if (!args || args.length === 0) {
+      return 'custom-sensor-default';
+    }
+    
+    const sensType = args[0] as SensorType;
 
-    // if(value == null) return null;
     switch (sensType) {
       case SensorType.AbstractSensor:
         return 'custom-sensor-default';
@@ -65,7 +68,7 @@ export class SensorDisplayIconPipe implements PipeTransform {
       case SensorType.PPM:
         return 'custom-sensor-ppm';
       default:
-        return
+        return 'custom-sensor-default';
     }
   }
 }

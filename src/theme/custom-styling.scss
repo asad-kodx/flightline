@@ -1,0 +1,25 @@
+ion-menu-button {
+    width: auto;
+}
+
+ion-segment-button::part(native){
+  color: #ffffff;
+}
+
+.segment-button-checked.md::part(native) {
+  color: var(--ion-color-primary);
+}
+
+ion-card-header { position: relative }
+.center-right{
+    position: absolute;
+    font-size: 1.7em;
+    margin-top: -0.1em;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+}
+
+ion-action-sheet.my-custom-class .action-sheet-group {
+  background: var(--ion-color-light);
+}

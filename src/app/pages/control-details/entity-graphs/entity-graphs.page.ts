@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -55,7 +56,7 @@ export class EntityGraphsPage implements OnInit {
   autoScale = true;
 
   constructor(
-    private navParams: NavParams,
+    private router: Router,
     private liveValuesService: LiveValueService,
     private lvSub: LiveValuesSubscription,
     private graphService: GraphService,
@@ -63,7 +64,7 @@ export class EntityGraphsPage implements OnInit {
     private navCtrl: NavController,
     private roomData: RoomDataProvider
   ) {
-    this.entity = this.navParams.data['data'];
+    this.entity = (this.router.currentNavigation()?.extras.state as any).sensor;
     if (this.entity.entitySerialNumber) {
       console.log('pulling entity');
       this.entity = this.roomData.getEntity(this.entity.entitySerialNumber)!;

@@ -4,15 +4,16 @@ const config: CapacitorConfig = {
   appId: 'com.ionicframework.controltechionic546641',
   appName: 'Flightline',
   webDir: 'www',
-  cordova: {
-    preferences: {
-      ScrollEnabled: 'false',
-      BackupWebStorage: 'none',
-      SplashMaintainAspectRatio: 'true',
-      FadeSplashScreenDuration: '300',
-      SplashShowOnlyFirstTime: 'false',
-      SplashScreen: 'screen',
-      SplashScreenDelay: '3000'
+  plugins: {
+    Keyboard: {
+      resizeOnFullScreen: false
+    },
+    SplashScreen: {
+      launchShowDuration: 13000,
+      launchAutoHide: true,
+      backgroundColor: '#ffffffff',
+      androidSplashResourceName: 'splash',
+      showSpinner: false
     }
   }
 };

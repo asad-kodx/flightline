@@ -7,6 +7,7 @@ import { OrganizationDataProvider } from 'src/app/core/providers/org-data.provid
 import { SiteDataProvider } from 'src/app/core/providers/site-data.provider';
 import { UserDataProvider } from 'src/app/core/providers/user-data.provider';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { OrgContextService } from 'src/app/core/services/org-context.service';
 import { NewCustomer, Organization, Site, User } from 'src/app/shared/models';
 import { StringBuilder } from 'typescript-string-operations';
 @Component({
@@ -58,6 +59,7 @@ export class AddControlPage implements OnInit {
     public loadingController: LoadingController,
     public navParams: NavParams,
     public orgDataProvider: OrganizationDataProvider,
+    private orgContext: OrgContextService,
     private siteDataProvider: SiteDataProvider,
     public controlDataProvider: ControlDataProvider,
     private authService: AuthService,
@@ -120,7 +122,8 @@ export class AddControlPage implements OnInit {
                 localStorage.getItem('user_info') || ''
               );
               console.info('Org Site name', this.orgAndSiteName);
-              // this.events.publish("OrgCreated", this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
+              // Trigger organization created observable
+              this.orgDataProvider.triggerOrganizationCreated(data, this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
               this.messageBuilder.appendLine(
                 'Control added successfully to app & website <br/><br/>'
               );
@@ -197,16 +200,16 @@ export class AddControlPage implements OnInit {
   }
   public onOrgChange(organization: any) {
     if (!organization.organizationId) return;
+    
     this.orgId = organization.organizationId;
     this.orgName = organization.name;
-    console.log('new org Id', this.orgId, organization.organizationId);
-    localStorage.setItem(
-      DBKeys.SELECTED_ORG_ID,
-      organization.organizationId.toString()
-    );
-    localStorage.setItem(DBKeys.SELECTED_ORG_NAME, organization.name);
+    console.log('Organization changed to:', this.orgId, organization.name);
+    
+    // Use org context service to set organization (this will emit the observable)
+    this.orgContext.setOrganization(organization.organizationId, organization.name);
+    
+    // Refresh sites for the new organization
     this.siteDataProvider.getSites();
-    // this.events.publish("OrgChange")
   }
   assignControl() {
     this.showPageLoader();
@@ -229,7 +232,8 @@ export class AddControlPage implements OnInit {
                   localStorage.getItem('user_info') || ''
                 );
                 console.info('Org Site name', this.orgAndSiteName);
-                // this.events.publish("OrgCreated", this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
+                // Trigger organization created observable
+                this.orgDataProvider.triggerOrganizationCreated(data, this.orgAndSiteName.firstName + " " + this.orgAndSiteName.lastName);
                 this.messageBuilder.appendLine(
                   'Control added successfully to app & website <br/><br/>'
                 );

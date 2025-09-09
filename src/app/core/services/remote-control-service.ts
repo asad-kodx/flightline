@@ -1,4 +1,4 @@
-import { interval, of } from 'rxjs';
+import { interval, of, Subject } from 'rxjs';
 import { take } from "rxjs/operators";
 import { ToastController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
@@ -23,6 +23,16 @@ export class RemoteControlService {
     private slowRequests: Map<string, any>;
     private requestLog: string[];
     private toast: any;
+    
+    // Observable subject for request ID checks
+    private requestIdCheckSubject = new Subject<any>();
+    public requestIdCheck$ = this.requestIdCheckSubject.asObservable();
+    private getRequestIdSubject = new Subject<any>();
+    public getRequestId$ = this.getRequestIdSubject.asObservable(); 
+    private requestTimeoutSubject = new Subject<string>();
+    public requestTimeout$ = this.requestTimeoutSubject.asObservable();
+    private postFailedSubject = new Subject<string>();
+    public postFailed$ = this.postFailedSubject.asObservable();
 
     constructor(private toastCtrl: ToastController, private signalr: SignalRService, private remoteControlProvider: RemoteControlProvider) {
         this.activeRequests = new Map<string, string>();
@@ -61,36 +71,35 @@ export class RemoteControlService {
                     var requestId = res.requestId;
                     console.log('Post Returned', requestId, this.slowRequests)
                     if (this.slowRequests.has(requestId)) {
-                        this.handleSlowRequest(time, deviceId, this.slowRequests.get(requestId));
+                        this.handleSlowRequest(time, deviceId, this.slowRequests.get(requestId), requestId);
                         return;
                     }
                     this.requestTimes.set(requestId, time);
                     this.activeRequests.set(deviceId, requestId);
                     console.log(this.activeRequests)
-                    // this.events.publish('GetRequestId');
+                    this.getRequestIdSubject.next(requestId);
                     this.timedOutRequests.delete(deviceId);
                     interval(30000).pipe(take(1)).subscribe(() => {
                         if (this.activeRequests.get(deviceId) == requestId) {
                             this.timedOutRequests.set(deviceId, requestId);
                             this.activeRequests.delete(deviceId);
-                            // this.events.publish('RequestTimeout');
+                            this.requestTimeoutSubject.next('RequestTimeout');
                         }
                     });
                 },
                 error: (error: any) => {
-                    
-                    // this.events.publish('PostFailed');
+                    this.postFailedSubject.next('PostFailed')
                     console.error(error)
                     return of(null);
                 }
             });
     }
 
-    handleSlowRequest(startTime: any, deviceId: string, requestInfo: any) {
+    handleSlowRequest(startTime: any, deviceId: string, requestInfo: any, requestId: string) {
         console.log("Handling slow request")
         var requestTime = requestInfo.time.diff(startTime, 'milliseconds');
         this.handleError(requestInfo.statusCode);
-        // this.events.publish('GetRequestId');
+        this.getRequestIdSubject.next(requestId);
     }
 
     getRequestId(deviceId: string): string {
@@ -166,7 +175,8 @@ export class RemoteControlService {
             window.setTimeout(() => {
                 var processedResponse = this.mapSignalrResponse(data)
                 this.handleResponse(processedResponse.deviceId, processedResponse.requestId, processedResponse.statusCode, processedResponse.statusDescription);
-                // this.events.publish('CheckRequestId', data);
+                // Emit request ID check via observable
+                this.requestIdCheckSubject.next(data);
             }, 1000);
         });
     }

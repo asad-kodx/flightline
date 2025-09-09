@@ -1,7 +1,7 @@
 <div *ngIf="!resolved">
   <div *ngFor="let alarm of ( alarms | async) | AlarmStateActive">
-    <ion-item button detail="false" style="zoom:.85" *ngIf="shouldShow(alarm)" (click)="navigateToDetails(alarm)">
-      <ion-icon name="radio-button-on" slot="start" style="zoom:0.5; line-height:2.5em" [color]="alarmStateColor(alarm)">
+    <ion-item button detail="false" style="zoom:.85" *ngIf="shouldShow(alarm)" (click)="navigateToDetails(alarm)" detail="true">
+      <ion-icon name="radio-button-on" slot="start" style="zoom:0.7; line-height:2.5em" [color]="alarmStateColor(alarm)">
       </ion-icon>
 
       <ion-grid>
@@ -38,11 +38,11 @@
             <br />{{ controlData.getControl(alarm.controlSerialNumber)?.name || controlData.getControl(alarm.controlSerialNumber)?.serialNumber}}
           </ion-col>
           <ion-col size="1">
-            <ion-icon name="person" style="zoom:0.8;"></ion-icon>
+            <ion-icon name="person-circle-outline" style="zoom:0.8;"></ion-icon>
           </ion-col>
           <ion-col size="5" style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
             <span>Assigned To:</span>
-            <br />{{ alarm.transactions[0]?.assignedToUsername || 'System Controller' }}
+            <br />{{ alarm.transactions[0].assignedToUsername }}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -52,9 +52,9 @@
 
 
 <div *ngIf="resolved">
-  <div *ngFor="let alarm of (alarms | async) | AlarmStateOther: (alarms | async )">
-    <ion-item button detail="false" style="zoom:.85" *ngIf="shouldShow(alarm)" (click)="navigateToDetails(alarm)">
-      <ion-icon name="radio-button-on" slot="start" style="zoom:0.5; line-height:2.5em" [color]="alarmStateColor(alarm)">
+  <div *ngFor="let alarm of (alarms | async) | AlarmStateOther">
+    <ion-item button detail="false" style="zoom:.85" *ngIf="shouldShow(alarm)" (click)="navigateToDetails(alarm)" detail="true">
+      <ion-icon name="radio-button-on" slot="start" style="zoom:0.7; line-height:2.5em" [color]="alarmStateColor(alarm)">
       </ion-icon>
 
       <ion-grid>
@@ -80,11 +80,11 @@
             <br />{{ alarm.controlSerialNumber }}
           </ion-col>
           <ion-col size="1">
-            <ion-icon name="person" style="zoom:0.8;"></ion-icon>
+            <ion-icon name="person-circle-outline" style="zoom:0.8;"></ion-icon>
           </ion-col>
           <ion-col size="5" style="zoom:0.8; line-height:1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
             <span>Assigned To:</span>
-            <br />{{ alarm.transactions[0]?.assignedToUsername }}
+            <br />{{ alarm.transactions[0].assignedToUsername }}
           </ion-col>
         </ion-row>
       </ion-grid>

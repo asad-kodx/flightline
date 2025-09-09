@@ -1,9 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject, BehaviorSubject } from "rxjs";
 import { DBKeys, Site } from "../../shared/models/index";
-// import { DBKeys } from "../models/dbkeys.static";
-// import { Site } from "../models/site.model";
-// import { Events } from "ionic-angular";
 
 
 
@@ -13,6 +10,10 @@ import { DBKeys, Site } from "../../shared/models/index";
 export class SiteContextService {
     private sites$: Subject<number[]>;
     private selectedSitesMap?: Map<number, number[]>;
+    
+    // Observable subject for sites map updates
+    private sitesMapUpdateSubject = new Subject<string>();
+    public sitesMapUpdate$ = this.sitesMapUpdateSubject.asObservable();
 
     constructor() {
         this.sites$ = new BehaviorSubject<number[]>([]);
@@ -96,7 +97,8 @@ export class SiteContextService {
 
     private updateSitesMapOnServer(){
         var mapString = JSON.stringify(Array.from(this.selectedSitesMap!));
-        // this.events.publish('UpdateSitesMap', mapString);
+        // Emit sites map update via observable
+        this.sitesMapUpdateSubject.next(mapString);
     }
 
     public clearSitesMap(){

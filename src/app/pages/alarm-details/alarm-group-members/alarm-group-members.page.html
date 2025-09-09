@@ -20,7 +20,7 @@
                 </ion-list-header>
                 <ion-row *ngFor="let user of alarm.alarmGroup?.members">
                     <ion-col col-1>
-                        <ion-icon name="person" *ngIf="alarm.assignedToId == user.userId"></ion-icon>
+                        <ion-icon name="person-circle-outline" *ngIf="alarm.assignedToId == user.userId"></ion-icon>
                         <ion-icon name="radio-button-on" *ngIf="alarm.assignedToId != user.userId"></ion-icon>
                     </ion-col>
                     <ion-col col-11>

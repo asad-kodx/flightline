@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { User } from "../../shared/models/index";
 import { OrgContextService } from "../services/org-context.service";
 import { BaseDataProvider } from "./base-data.provider";
-import { String } from 'typescript-string-operations';
+import { formatString } from 'typescript-string-operations';
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -26,7 +26,7 @@ export class UserDataProvider extends BaseDataProvider<User> {
     }
 
     getUserInfo(): Observable<User> {
-        var endpointUrl = String.Format(this.getUsersUrl, localStorage.getItem('user_id'));
+        var endpointUrl = formatString(this.getUsersUrl, localStorage.getItem('user_id'));
         return this.getData<User>(endpointUrl);
     }
 
@@ -42,7 +42,7 @@ export class UserDataProvider extends BaseDataProvider<User> {
     }
 
     addRolesToUserEndpoint(roles: Array<string>, userId: string): Observable<any> {
-        var endpointUrl = String.Format(this.addRolesToUserUrl, userId);
+        var endpointUrl = formatString(this.addRolesToUserUrl, userId);
         return this.postData(endpointUrl, roles);
     }
 

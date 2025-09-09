@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Organization } from '../../models';
-import * as _ from 'lodash'
 
 @Pipe({
   name: 'OrgSearch',
@@ -9,9 +7,14 @@ import * as _ from 'lodash'
 })
 export class OrgSearchPipe implements PipeTransform {
 
-  transform(data: Observable<Organization>, searchTerm: string) {
-      return _.filter(data, (org: Organization) => 
-          org.name!.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+  transform(data: Organization[] | null | undefined, searchTerm: string | null | undefined): Organization[] {
+      if (!data || !searchTerm || searchTerm.trim() === '') {
+          return data || [];
+      }
+      
+      const searchTermLower = searchTerm.toLowerCase();
+      return data.filter((org: Organization) => 
+          org.name?.toLowerCase().includes(searchTermLower) ?? false
       );
   }
 

@@ -112,7 +112,7 @@ export class AlarmListTabsPage implements OnInit {
       alarm.roomName
         .toLocaleLowerCase()
         .indexOf(this.searchText.toLocaleLowerCase()) > -1 ||
-      alarm.entityId.indexOf(this.searchText.toLocaleLowerCase()) > -1
+      alarm.entityId.toString().indexOf(this.searchText.toLocaleLowerCase()) > -1
     );
   }
 }

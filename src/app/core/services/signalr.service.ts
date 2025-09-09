@@ -3,7 +3,7 @@ import { ConfigurationService } from "./configuration.service";
 import { Injectable, EventEmitter } from "@angular/core";
 import { LogLevel } from "@microsoft/signalr";
 import { LiveValueMessage, ControlAlarm, RemoteSettings, Control } from "../../shared/models/index";
-import { Network } from "@awesome-cordova-plugins/network/ngx";
+import { Network } from '@capacitor/network';
 import { Platform } from "@ionic/angular";
 @Injectable({
     providedIn: 'root'
@@ -22,7 +22,7 @@ export class SignalRService {
     public sendExtendedRoomData: EventEmitter<any> = new EventEmitter<any>();
     public sendControlUpdate$: EventEmitter<Control> = new EventEmitter<Control>();
 
-    constructor(private platform: Platform, private network: Network) {
+    constructor(private platform: Platform) {
         this.hookPlatformEvents();
     }
     public connect() {
@@ -33,13 +33,16 @@ export class SignalRService {
         this.realtimeDataHub = this.hubConnectionFactory.get('realtimedatahub');
 
         this.realtimeDataHub.connect()
-        .subscribe(() => {
-            console.log("connected")
-            this.setupSubscriptions();
+        .subscribe({
+            next: () => {
+                console.log("connected")
+                this.setupSubscriptions();
 
-            this.connected = true
-        }, err => {
-            this.connected = true;
+                this.connected = true
+            }, 
+            error: err => {
+                this.connected = true;
+            }
         });
     }
     public disconnect() {
@@ -93,16 +96,19 @@ export class SignalRService {
         });
     }
     private hookPlatformEvents(){
-        this.network.onDisconnect().subscribe(() => {
-            if(this.realtimeDataHub) this.disconnect();
-            this.realtimeDataHub = undefined;
-            console.log("Signal r disconnected event occured",this.realtimeDataHub)
+        Network.addListener('networkStatusChange', status => {
+            console.log('Network status changed', status);
+            if (!status.connected) {
+                if(this.realtimeDataHub) this.disconnect();
+                this.realtimeDataHub = undefined;
+                console.log("Signal r disconnected event occured",this.realtimeDataHub)
+            } else {
+                console.log("Signal r connect event occuring", this.realtimeDataHub)
+                if(!this.realtimeDataHub) this.connect();
+                console.log("Signal r connected event occured", this.realtimeDataHub)
+            }
         });
-        this.network.onConnect().subscribe(() => {
-            console.log("Signal r connect event occuring", this.realtimeDataHub)
-            if(!this.realtimeDataHub) this.connect();
-            console.log("Signal r connected event occured", this.realtimeDataHub)
-        });
+
         this.platform.resume.subscribe(() => {
             console.log("Signal r resume event occuring", this.realtimeDataHub)
             if(!this.realtimeDataHub) this.connect();
