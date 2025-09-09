@@ -41,7 +41,7 @@
   <!-- Switch Content -->
   <ng-container [ngSwitch]="segmentSelected">
     <!-- ALL -->
-    <ion-list *ngSwitchCase="'all'">
+    <ion-list *ngSwitchCase="'all'" class="ion-no-padding">
       <ion-list-header *ngIf="hasFavorites('all', controls | async)">
         Favorites
       </ion-list-header>
@@ -74,7 +74,7 @@
     </ion-list>
 
     <!-- ONLINE -->
-    <ion-list *ngSwitchCase="'online'">
+    <ion-list *ngSwitchCase="'online'" class="ion-no-padding">
       <ion-list-header *ngIf="hasFavorites('online', controls | async)">
         Favorites
       </ion-list-header>
@@ -104,7 +104,7 @@
     </ion-list>
 
     <!-- OFFLINE -->
-    <ion-list *ngSwitchCase="'offline'">
+    <ion-list *ngSwitchCase="'offline'" class="ion-no-padding">
       <ion-list-header *ngIf="hasFavorites('offline', controls | async)">
         Favorites
       </ion-list-header>

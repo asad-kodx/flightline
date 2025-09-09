@@ -6,7 +6,11 @@ import { CalibrationStatus } from '../../models/types/calibration-status';
   standalone: false,
 })
 export class CalibrationStatusPipe implements PipeTransform {
-  transform(value: CalibrationStatus) {
+  transform(value: CalibrationStatus | null | undefined): string {
+    if (value == null) {
+      return 'Unknown';
+    }
+    
     switch (value) {
       case CalibrationStatus.Calibrated:
         return 'Calibrated';
@@ -14,6 +18,8 @@ export class CalibrationStatusPipe implements PipeTransform {
         return 'Calibrating';
       case CalibrationStatus.NotCalibrated:
         return 'Not Calibrated';
+      default:
+        return 'Unknown';
     }
   }
 }

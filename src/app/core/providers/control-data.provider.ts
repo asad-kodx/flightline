@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BaseDataProvider } from './base-data.provider'
 import { OrgContextService } from "../services/org-context.service";
-import { formatString, String } from 'typescript-string-operations';
+import { formatString } from 'typescript-string-operations';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { SignalRService } from "../services/signalr.service";
 import * as _ from 'lodash'

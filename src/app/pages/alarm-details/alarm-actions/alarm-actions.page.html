@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
 
     <ion-title>Alarm Actions</ion-title>
@@ -26,8 +26,8 @@
   <ion-card>
     <ion-card-header (click)="toggleCard('actions')" style="height: 3.2em">
       Actions
-      <ion-icon *ngIf="!actionsExpanded" name="arrow-forward" style="font-size:1.7em; margin-top:-.1em;"></ion-icon>
-      <ion-icon *ngIf="actionsExpanded" name="arrow-down" style="font-size:1.7em; margin-top:-.1em;"></ion-icon>
+      <ion-icon class="center-right" *ngIf="!actionsExpanded" name="chevron-forward-outline"></ion-icon>
+      <ion-icon class="center-right" *ngIf="actionsExpanded" name="chevron-down-outline"></ion-icon>
     </ion-card-header>
 
     <ion-card-content *ngIf="actionsExpanded">
@@ -81,7 +81,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm?.entityHardwareId || '')?.deviceType ?? 0 < 268435456">
+        <ion-row *ngIf="alarm?.entityHardwareId && roomData.getEntity(alarm?.entityHardwareId || '')?.deviceType || 268435457 < 268435456">
           <ion-col size="5">Amps:</ion-col>
           <ion-col size="7">
             {{ ((liveValuesMap | async)?.get(alarm.entityHardwareId)?.amps | number: '1.0-3') || '- -' }}
@@ -138,15 +138,15 @@
   <ion-card>
     <ion-card-header (click)="toggleCard('members')" style="height:3.2em;">
       Members
-      <ion-icon *ngIf="!membersExpanded" name="arrow-forward"></ion-icon>
-      <ion-icon *ngIf="membersExpanded" name="arrow-down"></ion-icon>
+      <ion-icon class="center-right" *ngIf="!membersExpanded" name="chevron-forward-outline"></ion-icon>
+      <ion-icon class="center-right" *ngIf="membersExpanded" name="chevron-down-outline"></ion-icon>
     </ion-card-header>
     <ion-card-content *ngIf="membersExpanded">
       <ion-list lines="none">
         <ion-list-header>Users</ion-list-header>
         <ion-row *ngFor="let user of alarm.alarmGroup?.members">
           <ion-col size="1">
-            <ion-icon name="person" *ngIf="alarm.assignedToId === user.userId"></ion-icon>
+            <ion-icon name="person-circle-outline" *ngIf="alarm.assignedToId === user.userId"></ion-icon>
             <ion-icon name="radio-button-on" *ngIf="alarm.assignedToId !== user.userId"></ion-icon>
           </ion-col>
           <ion-col size="11">
@@ -166,8 +166,8 @@
   <ion-card>
     <ion-card-header (click)="toggleCard('assignments')" style="height:3.2em;">
       Assignments
-      <ion-icon *ngIf="!assignmentsExpanded" name="arrow-forward"></ion-icon>
-      <ion-icon *ngIf="assignmentsExpanded" name="arrow-down"></ion-icon>
+      <ion-icon class="center-right" *ngIf="!assignmentsExpanded" name="chevron-forward-outline"></ion-icon>
+      <ion-icon class="center-right" *ngIf="assignmentsExpanded" name="chevron-down-outline"></ion-icon>
     </ion-card-header>
     <ion-card-content *ngIf="assignmentsExpanded" class="ion-text-left">
       <ion-list>

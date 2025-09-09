@@ -23,14 +23,13 @@
   ></ion-searchbar>
 
   <ion-list *ngFor="let room of rooms">
-    <ion-item-divider color="dark">
+    <ion-item-divider style="background: linear-gradient(to bottom, #515151 51%,#383838 51%)">
       <ion-label>
         <span>
           <img
             *ngIf="room.type == 1"
             style="height: 1em"
             src="../../assets/room/room_white.svg"
-            x
           />
           <img
             *ngIf="room.type == 2"
@@ -41,6 +40,28 @@
         </span>
         {{ room.name }}
 
+        <br />
+
+        <div style="zoom: 0.7; margin-top: 1em; font-size: 1.1em">
+          <span *ngIf="room.type == 1">Setpoint: </span>
+          <span *ngIf="room.type == 1" style="color: orange">
+            {{ ((liveValuesMap | async)?.get(control.serialNumber + '.' +
+            room.programId)?.dayTemperatureHistory.setTemperature) || '- -' }}
+          </span>
+          <span *ngIf="room.type == 1">Room Temp: </span>
+          <span *ngIf="room.type == 1" style="color: orange">
+            {{ ((liveValuesMap | async)?.get(control.serialNumber + '.' +
+            room.programId)?.dayTemperatureHistory.roomTemperature) || '- -' }}
+          </span>
+          <span *ngIf="room.type == 1">Animal Day: </span>
+          <span *ngIf="room.type == 1" style="color: orange">
+            {{ ((liveValuesMap | async)?.get(control.serialNumber + '.' +
+            room.programId)?.animalDay) || '- -' }}
+          </span>
+        </div>
+      </ion-label>
+
+      <div slot="end" class="ion-margin-bottom" style="padding-bottom: 10px;">
         <ion-icon
           *ngIf="room.collapsed"
           name="arrow-forward"
@@ -73,27 +94,7 @@
           (click)="navToRoomSettings(control.serialNumber, room)"
         >
         </ion-icon>
-
-        <br />
-
-        <div style="zoom: 0.7; margin-top: 1em; font-size: 1.1em">
-          <span *ngIf="room.type == 1">Setpoint: </span>
-          <span *ngIf="room.type == 1" style="color: orange">
-            {{ ((liveValuesMap | async)?.get(control.serialNumber + '.' +
-            room.programId)?.dayTemperatureHistory.setTemperature) || '- -' }}
-          </span>
-          <span *ngIf="room.type == 1">Room Temp: </span>
-          <span *ngIf="room.type == 1" style="color: orange">
-            {{ ((liveValuesMap | async)?.get(control.serialNumber + '.' +
-            room.programId)?.dayTemperatureHistory.roomTemperature) || '- -' }}
-          </span>
-          <span *ngIf="room.type == 1">Animal Day: </span>
-          <span *ngIf="room.type == 1" style="color: orange">
-            {{ ((liveValuesMap | async)?.get(control.serialNumber + '.' +
-            room.programId)?.animalDay) || '- -' }}
-          </span>
-        </div>
-      </ion-label>
+      </div>
     </ion-item-divider>
     <ng-container *ngFor="let device of room?.devices">
       <ion-item

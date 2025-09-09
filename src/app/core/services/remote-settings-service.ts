@@ -7,6 +7,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { SignalRService } from './signalr.service';
+import { Subject } from 'rxjs';
 
 import {
   RemoteSettingCommandType,
@@ -26,6 +27,18 @@ export class RemoteSettingsService {
 
     public activeGetRequests: Map<string, any>;
     public activeApplyRequests: Map<string, any>;
+
+    // Observable subjects for events
+    private remoteSettingsReceivedSubject = new Subject<RemoteSettings>();
+    private remoteSettingsAcknowledgementSubject = new Subject<any>();
+    private requestSettingsAcknowledgementSubject = new Subject<any>();
+    private applySettingsAcknowledgementSubject = new Subject<any>();
+
+    // Public observables
+    public remoteSettingsReceived$ = this.remoteSettingsReceivedSubject.asObservable();
+    public remoteSettingsAcknowledgement$ = this.remoteSettingsAcknowledgementSubject.asObservable();
+    public requestSettingsAcknowledgement$ = this.requestSettingsAcknowledgementSubject.asObservable();
+    public applySettingsAcknowledgement$ = this.applySettingsAcknowledgementSubject.asObservable();
     /**
      * Creates a new instance of this service class
      * @param events Ionic events service
@@ -53,10 +66,11 @@ export class RemoteSettingsService {
                 res => {
                     console.log("active get requests",this.activeGetRequests);
                     if(this.activeGetRequests.has(res.requestId)) {
-                        // this.events.publish('receiveRemoteSettings', this.activeGetRequests.get(res.requestId));
+                        this.requestSettingsAcknowledgementSubject.next(this.activeGetRequests.get(res.requestId));
                     }
                     else {
                         this.activeGetRequests.set(res.requestId, "");
+                        this.requestSettingsAcknowledgementSubject.next(res.requestId);
                     }                    
                 }
             )
@@ -71,10 +85,11 @@ export class RemoteSettingsService {
             if (this.activeGetRequests.has(data.requestId)) {
                 this.activeGetRequests.delete(data.requestId);
                 this.activeGetRequests.set(data.requestId, data);
-                // this.events.publish('receiveRemoteSettings', data);
+                this.remoteSettingsReceivedSubject.next(data);
             }
             else {
                 this.activeGetRequests.set(data.requestId, data);
+                this.remoteSettingsReceivedSubject.next(data);
             }            
         })
     }
@@ -94,10 +109,11 @@ export class RemoteSettingsService {
                 res => {
                     console.log("active set requests",this.activeApplyRequests);
                     if (this.activeApplyRequests.has(res.requestId)) {
-                        // this.events.publish('receivedRemoteSettingsAcknowledgement', this.activeApplyRequests.get(res.requestId));
+                        this.applySettingsAcknowledgementSubject.next(this.activeApplyRequests.get(res.requestId));
                     }
                     else {
                         this.activeApplyRequests.set(res.requestId, "");
+                        this.applySettingsAcknowledgementSubject.next(res.requestId);
                     }                    
                 }
             )
@@ -113,10 +129,11 @@ export class RemoteSettingsService {
             if (this.activeApplyRequests.has(data.requestId)) {
                 this.activeApplyRequests.delete(data.requestId);
                 this.activeApplyRequests.set(data.requestId, data);
-                // this.events.publish('receivedRemoteSettingsAcknowledgement', data);
+                this.remoteSettingsAcknowledgementSubject.next(data);
             }
             else {
                 this.activeApplyRequests.set(data.requestId, data);
+                this.remoteSettingsAcknowledgementSubject.next(data);
             }
         })
     }

@@ -33,13 +33,16 @@ export class SignalRService {
         this.realtimeDataHub = this.hubConnectionFactory.get('realtimedatahub');
 
         this.realtimeDataHub.connect()
-        .subscribe(() => {
-            console.log("connected")
-            this.setupSubscriptions();
+        .subscribe({
+            next: () => {
+                console.log("connected")
+                this.setupSubscriptions();
 
-            this.connected = true
-        }, err => {
-            this.connected = true;
+                this.connected = true
+            }, 
+            error: err => {
+                this.connected = true;
+            }
         });
     }
     public disconnect() {

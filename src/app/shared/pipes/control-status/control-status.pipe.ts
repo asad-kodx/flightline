@@ -4,7 +4,7 @@ import * as moment from 'moment';
 
 @Pipe({ name: 'OnlineFilter', standalone: false })
 export class OnlineFilter implements PipeTransform {
-  transform(value: Control[] | null, args?: any): Control[] {
+  transform(value: Control[] | null, _args?: any): Control[] {
     if (!value) return [];
     return value.filter(ctrl => {
       const httpDiff = moment().diff(moment(ctrl.lastHttpPing), 'minutes');
@@ -22,14 +22,15 @@ export class OfflineFilter implements PipeTransform {
     return value.filter(ctrl => {
       const httpDiff = moment().diff(moment(ctrl.lastHttpPing), 'minutes');
       const mqttDiff = moment().diff(moment(ctrl.lastMqttPing), 'minutes');
-      return httpDiff > 5 || mqttDiff > 5;
+      // Offline if both pings are older than 5 minutes
+      return httpDiff > 5 && mqttDiff > 5;
     });
   }
 }
 
 @Pipe({ name: 'FavoriteFilter', standalone: false })
 export class FavoriteFilter implements PipeTransform {
-  transform(value: Control[] | null, args?: any): Control[] {
+  transform(value: Control[] | null, _args?: any): Control[] {
     if (!value) return [];
     return value.filter(ctrl => ctrl.isFavorite);
   }
@@ -37,7 +38,7 @@ export class FavoriteFilter implements PipeTransform {
 
 @Pipe({ name: 'NonFavoriteFilter', standalone: false })
 export class NonFavoriteFilter implements PipeTransform {
-  transform(value: Control[] | null, args?: any): Control[] {
+  transform(value: Control[] | null, _args?: any): Control[] {
     if (!value) return [];
     return value.filter(ctrl => !ctrl.isFavorite);
   }
