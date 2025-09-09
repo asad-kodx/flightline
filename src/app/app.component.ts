@@ -309,7 +309,6 @@ export class AppComponent {
     console.log('alert');
     const alert = await this.alertCtrl.create({
       header: 'Exit App',
-      subHeader: 'Confirm',
       message: 'Are you sure you want to exit the App?',
       buttons: [
         {text: 'NO', role: 'cancel'},
