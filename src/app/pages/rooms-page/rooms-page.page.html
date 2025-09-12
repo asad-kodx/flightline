@@ -33,12 +33,10 @@
     <div *ngFor="let entity of filteredArray" style="min-width:100%; max-width: 100%">
       <ion-item button style="max-width: 100%" *ngIf="shouldShow(entity)">
         <ion-label>
-          <h2>{{entity.entityName}}</h2>
-          <p>{{entity.roomName}} - {{entity.controlName}}</p>
+          <entity *ngIf="entity.entityType == 2" [device]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
+          <entity *ngIf="entity.entityType == 1" [sensor]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
+          <p *ngIf="entity.entityType == 0">Please select a type from above.</p>
         </ion-label>
-        <entity *ngIf="entity.entityType == 2" [device]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
-        <entity *ngIf="entity.entityType == 1" [sensor]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
-        <p *ngIf="entity.entityType == 0">Please select a type from above.</p>
       </ion-item>
     </div>
   </ion-list>

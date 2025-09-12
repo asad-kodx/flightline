@@ -1,72 +1,71 @@
-<!-- <button > -->
-<ion-row (click)="deviceTapped(device)" *ngIf="device && shouldShow() && shouldShowMode()">
-  <ion-col size="1" class="ion-align-self-center">
-    <ion-icon [name]="device.deviceType | DeviceDisplayIcon: [device.deviceOrSensorType]" slot="start"></ion-icon>
-  </ion-col>
+<ion-grid>
 
-  <ion-col size="5" class="ion-align-self-center ion-text-left" style="max-width: 60%">
-    <div class="entityName">
-      {{ device.entityName }}
-    </div>
-    <div class="roomName" style="overflow:hidden; text-overflow:ellipsis">
-      {{ device.roomName }} - {{ device.controlName || device.controlSerialNumber }}
-    </div>
-  </ion-col>
-  
-  <ion-col size="1" class="ion-align-self-center ion-text-right">
-    <!-- <div *ngIf="(alarmCount | async)?.get(device.entitySerialNumber)?.activeCount > 0 || (alarmCount | async)?.get(device.entitySerialNumber)?.ackCount > 0">
-      <ion-badge *ngIf="(alarmCount | async)?.get(device.entitySerialNumber)?.activeCount > 0" color="alarm0">{{(alarmCount | async)?.get(device.entitySerialNumber)?.activeCount}}</ion-badge>
-    </div>
-    <div>
-      <ion-badge *ngIf="(alarmCount | async)?.get(device.entitySerialNumber)?.ackCount > 0" color="alarm1">{{(alarmCount | async)?.get(device.entitySerialNumber)?.ackCount}}</ion-badge>
-    </div> -->
-  </ion-col>
+  <ion-row (click)="deviceTapped(device)" *ngIf="device && shouldShow() && shouldShowMode()">
+    <ion-col size="1" class="ion-align-self-center">
+      <ion-icon [class]="device.deviceType | DeviceDisplayIcon: [device.deviceOrSensorType]" slot="start"></ion-icon>
+    </ion-col>
 
-  <ion-col size="5" class="ion-align-self-center ion-text-right">
-    <span [style.color]="getLVColor((liveValuesMap | async)?.get(device.entitySerialNumber)?.value)">
-      {{ ((liveValuesMap | async )?.get(device.entitySerialNumber)?.value | LiveValueDisplay: ['device',
-        device.deviceOrSensorType, controlData.getControl(device.controlSerialNumber)]) || '- -'}}
-      <div class="mode" *ngIf="device.deviceType < 268435456">
-        {{ (liveValuesMap | async )?.get(device.entitySerialNumber)?.mode 
-          | ModeDisplay: [ (liveValuesMap | async )?.get(device.entitySerialNumber)?.mode] }} 
-          - {{ (liveValuesMap | async )?.get(device.entitySerialNumber)?.amps | number: '1.0-3' }} amps
+    <ion-col size="5" class="ion-align-self-center ion-text-left" style="max-width: 60%">
+      <div class="entityName">
+        {{ device.entityName }}
       </div>
-    </span>
-  </ion-col>
-</ion-row>
-<!-- </button> -->
+      <div class="roomName" style="overflow:hidden; text-overflow:ellipsis">
+        {{ device.roomName }} - {{ device.controlName || device.controlSerialNumber }}
+      </div>
+    </ion-col>
+    
+    <ion-col size="1" class="ion-align-self-center ion-text-right">
+      <!-- <div *ngIf="(alarmCount | async)?.get(device.entitySerialNumber)?.activeCount > 0 || (alarmCount | async)?.get(device.entitySerialNumber)?.ackCount > 0">
+        <ion-badge *ngIf="(alarmCount | async)?.get(device.entitySerialNumber)?.activeCount > 0" color="alarm0">{{(alarmCount | async)?.get(device.entitySerialNumber)?.activeCount}}</ion-badge>
+      </div>
+      <div>
+        <ion-badge *ngIf="(alarmCount | async)?.get(device.entitySerialNumber)?.ackCount > 0" color="alarm1">{{(alarmCount | async)?.get(device.entitySerialNumber)?.ackCount}}</ion-badge>
+      </div> -->
+    </ion-col>
+
+    <ion-col size="5" class="ion-align-self-center ion-text-right">
+      <span [style.color]="getLVColor((liveValuesMap | async)?.get(device.entitySerialNumber)?.value)">
+        {{ ((liveValuesMap | async )?.get(device.entitySerialNumber)?.value | LiveValueDisplay: ['device',
+          device.deviceOrSensorType, controlData.getControl(device.controlSerialNumber)]) || '- -'}}
+        <div class="mode" *ngIf="device.deviceType < 268435456">
+          {{ (liveValuesMap | async )?.get(device.entitySerialNumber)?.mode 
+            | ModeDisplay: [ (liveValuesMap | async )?.get(device.entitySerialNumber)?.mode] }} 
+            - {{ (liveValuesMap | async )?.get(device.entitySerialNumber)?.amps | number: '1.0-3' }} amps
+        </div>
+      </span>
+    </ion-col>
+  </ion-row>
 
 
 
-<!-- <button > -->
-<ion-row (click)="sensorTapped(sensor)" *ngIf="sensor && shouldShow()" style="width: 100%">
-  <ion-col size="1" class="ion-align-self-center" style="width: 8%">
-    <ion-icon [name]="sensor.sensorType | SensorDisplayIcon: [sensor.deviceOrSensorType]"></ion-icon>
-  </ion-col>
+  <ion-row (click)="sensorTapped(sensor)" *ngIf="sensor && shouldShow()" style="width: 100%">
+    <ion-col size="1" class="ion-align-self-center" style="width: 8%">
+      <ion-icon [class]="sensor.sensorType | SensorDisplayIcon: [sensor.deviceOrSensorType]"></ion-icon>
+    </ion-col>
 
-  <ion-col size="6" class="ion-align-self-center ion-text-left">
-    <div class="entityName">
-      {{ sensor.entityName }}
-    </div>
-    <div class="roomName" style="overflow:hidden; text-overflow:ellipsis">
-      {{ sensor.roomName }} - {{ sensor.controlName || sensor.controlSerialNumber}}
-    </div>
-  </ion-col>
+    <ion-col size="6" class="ion-align-self-center ion-text-left">
+      <div class="entityName">
+        {{ sensor.entityName }}
+      </div>
+      <div class="roomName" style="overflow:hidden; text-overflow:ellipsis">
+        {{ sensor.roomName }} - {{ sensor.controlName || sensor.controlSerialNumber}}
+      </div>
+    </ion-col>
 
-  <ion-col size="1" class="ion-align-self-center ion-text-right">
-    <!-- <div *ngIf="(alarmCount | async)?.get(sensor.entitySerialNumber)?.activeCount > 0 || (alarmCount | async)?.get(sensor.entitySerialNumber)?.ackCount > 0">
-      <ion-badge *ngIf="(alarmCount | async)?.get(sensor.entitySerialNumber)?.activeCount > 0" color="alarm0">{{(alarmCount | async)?.get(sensor.entitySerialNumber)?.activeCount}}</ion-badge>
-    </div>
-    <div>
-      <ion-badge *ngIf="(alarmCount | async )?.get(sensor.entitySerialNumber)?.ackCount > 0" color="alarm1">{{(alarmCount | async)?.get(sensor.entitySerialNumber)?.ackCount}}</ion-badge>
-    </div> -->
-  </ion-col>
+    <ion-col size="1" class="ion-align-self-center ion-text-right">
+      <!-- <div *ngIf="(alarmCount | async)?.get(sensor.entitySerialNumber)?.activeCount > 0 || (alarmCount | async)?.get(sensor.entitySerialNumber)?.ackCount > 0">
+        <ion-badge *ngIf="(alarmCount | async)?.get(sensor.entitySerialNumber)?.activeCount > 0" color="alarm0">{{(alarmCount | async)?.get(sensor.entitySerialNumber)?.activeCount}}</ion-badge>
+      </div>
+      <div>
+        <ion-badge *ngIf="(alarmCount | async )?.get(sensor.entitySerialNumber)?.ackCount > 0" color="alarm1">{{(alarmCount | async)?.get(sensor.entitySerialNumber)?.ackCount}}</ion-badge>
+      </div> -->
+    </ion-col>
 
-  <ion-col size="4" class="ion-align-self-center ion-text-right">
-    <span [style.color]="getLVColor((liveValuesMap | async)?.get(sensor.entitySerialNumber)?.value)">
-      {{ ((liveValuesMap | async )?.get(sensor.entitySerialNumber)?.value | LiveValueDisplay: ['sensor',
-        sensor.deviceOrSensorType, controlData.getControl(sensor.controlSerialNumber), (liveValuesMap | async )?.get(sensor.entitySerialNumber)?.label]) || '- -' }}
-    </span>
-  </ion-col>
-</ion-row>
-<!-- </button> -->
+    <ion-col size="4" class="ion-align-self-center ion-text-right">
+      <span [style.color]="getLVColor((liveValuesMap | async)?.get(sensor.entitySerialNumber)?.value)">
+        {{ ((liveValuesMap | async )?.get(sensor.entitySerialNumber)?.value | LiveValueDisplay: ['sensor',
+          sensor.deviceOrSensorType, controlData.getControl(sensor.controlSerialNumber), (liveValuesMap | async )?.get(sensor.entitySerialNumber)?.label]) || '- -' }}
+      </span>
+    </ion-col>
+  </ion-row>
+</ion-grid>
