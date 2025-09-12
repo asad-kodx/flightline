@@ -17,11 +17,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Rooms</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
 
   <ion-select class="ion-padding-horizontal" label-placement="floating" interface="popover" label="Select A Type" (ionChange)="onSelected($event)">
     <ion-select-option *ngFor="let item of searchData" [value]="item">{{item}}</ion-select-option>
