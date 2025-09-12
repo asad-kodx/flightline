@@ -25,7 +25,7 @@
 
   <div [ngSwitch]="segmentSelected">
     <ion-list *ngSwitchCase="'mine'">
-      <ion-list-header>
+      <ion-list-header class='alarm-status-heading'>
         {{ activeAlarmsPresent ? 'My Alarms' : 'No Alarms to display...' }}
       </ion-list-header>
       <app-alarm-item *ngIf="activeAlarmsPresent"
@@ -36,7 +36,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'active'">
-      <ion-list-header>
+      <ion-list-header class='alarm-status-heading'>
         {{ activeAlarmsPresent ? 'Active Alarms' : 'No Alarms to display...' }}
       </ion-list-header>
       <app-alarm-item *ngIf="activeAlarmsPresent"
@@ -47,7 +47,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'resolved'">
-      <ion-list-header>
+      <ion-list-header class='alarm-status-heading'>
         {{ resolvedAlarmsPresent ? 'Resolved Alarms' : 'No Alarms to display...' }}
       </ion-list-header>
       <app-alarm-item *ngIf="resolvedAlarmsPresent"

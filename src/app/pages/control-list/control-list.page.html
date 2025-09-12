@@ -42,7 +42,7 @@
   <ng-container [ngSwitch]="segmentSelected">
     <!-- ALL -->
     <ion-list *ngSwitchCase="'all'" class="ion-no-padding">
-      <ion-list-header *ngIf="hasFavorites('all', controls | async)">
+      <ion-list-header class='alarm-status-heading' *ngIf="hasFavorites('all', controls | async)">
         Favorites
       </ion-list-header>
       <ng-container
@@ -57,7 +57,7 @@
         ></control>
       </ng-container>
 
-      <ion-list-header *ngIf="hasNormal('all', controls | async)">
+      <ion-list-header class='alarm-status-heading' *ngIf="hasNormal('all', controls | async)">
         Controls
       </ion-list-header>
       <ng-container
@@ -75,7 +75,7 @@
 
     <!-- ONLINE -->
     <ion-list *ngSwitchCase="'online'" class="ion-no-padding">
-      <ion-list-header *ngIf="hasFavorites('online', controls | async)">
+      <ion-list-header class='alarm-status-heading' *ngIf="hasFavorites('online', controls | async)">
         Favorites
       </ion-list-header>
       <ng-container *ngFor="let control of (controls | async) | FavoriteFilter:(controls | async) | OnlineFilter:(controls| async)">
@@ -87,7 +87,7 @@
         ></control>
       </ng-container>
 
-      <ion-list-header *ngIf="hasNormal('online', controls | async)">
+      <ion-list-header class='alarm-status-heading' *ngIf="hasNormal('online', controls | async)">
         Controls
       </ion-list-header>
       <ng-container
@@ -105,7 +105,7 @@
 
     <!-- OFFLINE -->
     <ion-list *ngSwitchCase="'offline'" class="ion-no-padding">
-      <ion-list-header *ngIf="hasFavorites('offline', controls | async)">
+      <ion-list-header class='alarm-status-heading' *ngIf="hasFavorites('offline', controls | async)">
         Favorites
       </ion-list-header>
       <ng-container
@@ -120,7 +120,7 @@
         ></control>
       </ng-container>
 
-      <ion-list-header *ngIf="hasNormal('offline', controls | async)">
+      <ion-list-header class='alarm-status-heading' *ngIf="hasNormal('offline', controls | async)">
         Controls
       </ion-list-header>
       <ng-container

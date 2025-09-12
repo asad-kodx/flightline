@@ -25,7 +25,7 @@ export class LiveValueDisplayPipe implements PipeTransform {
         switch (sensorType) {
             case SensorType.AbstractSensor:
             case SensorType.Humidity:
-                return value.toFixed(2) + ' %';
+                return value?.toFixed(2) + ' %';
             case SensorType.Oxygen:
             case SensorType.Pressure:
             case SensorType.StaticPressure:

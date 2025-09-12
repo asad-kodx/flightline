@@ -8,42 +8,67 @@
     </ion-header>
 
     <ion-content class="outer-content">
-      <ion-list style="margin-bottom: 0px">
-
-        <ion-list-header style="zoom: 0.8" color="primary">
-          {{ currentUser }}
-          <ion-button
-            (click)="logout()"
-            style="color: red; font-size: 2.0em; font-weight: 600; margin-left: auto;"
+      <ion-list>
+        <ion-item color="primary">
+          <ion-label><p>{{ currentUser }}</p></ion-label>
+          <ion-button (click)="logout()" class="ion-no-padding ion-no-margin">
+            <ion-icon slot="icon-only" color="danger" size="large" name="log-out"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item color="primary">
+          <ion-label><p>Org: {{ orgName }}</p></ion-label>
+          <ion-badge
+          *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
+          slot="end"
+          color="alarm0"
+          class="icon-badge"
           >
+          {{ alarmData.getAllAlarmsNotInOrg(orgId) }}
+        </ion-badge>
+        <ion-button class='ion-no-padding'>
+          <ion-icon slot='icon-only' name="settings" style='color: #ffffff;' size="large"></ion-icon>
+        </ion-button>
+        </ion-item>
+        <ion-item color="danger">
+          <ion-label>Notifications are disabled. Tap here to enable.</ion-label>
+        </ion-item>
+        <!-- <ion-list style="margin-bottom: 0px">
+          
+          <ion-list-header style="zoom: 0.8" color="primary">
+            <ion-label>{{ currentUser }}</ion-label>
+            <ion-button
+            (click)="logout()"
+            
+            >
             <ion-icon slot="icon-only" name="log-out"></ion-icon>
           </ion-button>
         </ion-list-header>
-
+        
         <ion-list-header style="zoom: 0.8" color="primary" (click)="changeOrg()">
           Org: {{ orgName }}
           <ion-badge
-            *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
-            slot="end"
-            color="alarm0"
-            class="icon-badge"
+          *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
+          slot="end"
+          color="alarm0"
+          class="icon-badge"
           >
-            {{ alarmData.getAllAlarmsNotInOrg(orgId) }}
-          </ion-badge>
-          <ion-button style="color: white; margin-right: 15px; font-size: 2em; margin-left: auto;">
-            <ion-icon slot="icon-only" name="settings"></ion-icon>
-          </ion-button>
-        </ion-list-header>
-
-        <ion-list-header
-          *ngIf="!pushEnabled"
-          style="zoom: 0.8"
-          color="danger"
-          (click)="goToPushSettings()"
-        >
-          Notifications are disabled. Tap here to enable.
-        </ion-list-header>
-
+          {{ alarmData.getAllAlarmsNotInOrg(orgId) }}
+        </ion-badge>
+        <ion-button style="color: white; margin-right: 15px; font-size: 2em; margin-left: auto;">
+          <ion-icon slot="icon-only" name="settings"></ion-icon>
+        </ion-button>
+      </ion-list-header>
+      
+      <ion-list-header
+      *ngIf="!pushEnabled"
+      style="zoom: 0.8"
+      color="danger"
+      (click)="goToPushSettings()"
+      >
+      Notifications are disabled. Tap here to enable.
+    </ion-list-header> -->
+  </ion-list>
+    
         <ion-item
           button
           menuClose
@@ -53,7 +78,6 @@
           <ion-icon slot="start" [name]="p.icon" [color]="isActive(p)"></ion-icon>
           {{ p.title }}
         </ion-item>
-      </ion-list>
 
       <ion-toolbar>
         <ion-title>Sites</ion-title>
@@ -61,12 +85,10 @@
 
       <ion-list>
         <ion-item
-          no-padding
-          class="site"
+          class="site ion-no-padding"
           *ngFor="let site of sites | async"
         >
-          <ion-item
-            button
+          <ion-item 
             detail="false"
             (click)="toggleSite(site)"
             lines="none"
@@ -82,8 +104,8 @@
 
           <ion-button
             fill="clear"
+            class='ion-no-padding'
             color='danger'
-            style="margin: 0 auto; height: 100%; padding: 0; width: 50px;"
             (click)="navToSiteAlarms(site)"
             slot="end"
           >
