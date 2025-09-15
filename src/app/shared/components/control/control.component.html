@@ -6,19 +6,18 @@
     slot="start">
   </ion-icon>
 
-  <ion-grid style="padding: 0px">
+  <ion-grid style='padding: 0px;'>
     <ion-row style="height: 100%; padding: 0px;">
       
       <ion-col size="1" class="ion-text-center ion-no-padding" style="align-self: center; display: flex;" (click)="favoriteClicked()">
         <ion-icon style="font-size: 1.4em" class="pushDown" [name]="control.isFavorite ? 'star' : 'star-outline'"></ion-icon>
       </ion-col>
 
-      <ion-col class="ion-no-margin" size="8" (click)="itemTapped()">
-        <h2 class="ion-no-margin">{{ control.name || control.serialNumber }}</h2>
-        <p class="version">{{ control.siteSiteName }} <br/> Version: {{ control.version }}</p>
+      <ion-col style='margin-top: 15px; margin-bottom: 15px;' size="6" (click)="itemTapped()">
+        <h2 class="ion-no-margin" style='font-size: 1.1rem;'>{{ control.name || control.serialNumber }}</h2>
+        <p class="ion-no-margin version" style='font-size: 0.7rem;'>{{ control.siteSiteName }} - Version: {{ control.version }}</p>
       </ion-col>
-
-      <ion-col size="1" style="margin-top: 15px; margin-bottom: 15px;" (click)="itemTapped()">
+      <ion-col size="1" style='margin-top: 15px; margin-bottom: 15px;' class='ion-align-self-center' (click)="itemTapped()">
         <ion-badge *ngIf="shouldShowBadge(control)" class="pushdown-badge" color="danger">
           {{ alarmData.getAlarmCounts(control.serialNumber, undefined).activeCount + alarmData.getAlarmCounts(control.serialNumber, undefined).acknowledgedCount }}
         </ion-badge>
@@ -26,9 +25,10 @@
           {{ alarmData.getAlarmCounts(control.serialNumber, undefined).silentCount }}
         </ion-badge>
       </ion-col>
-
+      <ion-col size="2"></ion-col>
+      
       <ion-col size="2" style="padding: 0px; margin: 0px;">
-        <ion-button expand="block" style="height:100%; margin:0px" (click)="startRemoteAccess(control)">
+        <ion-button expand="full" style="height:100%; margin:0px" (click)="startRemoteAccess(control)">
           VNC
         </ion-button>
       </ion-col>

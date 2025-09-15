@@ -10,13 +10,13 @@
     <ion-content class="outer-content">
       <ion-list>
         <ion-item color="primary">
-          <ion-label><p>{{ currentUser }}</p></ion-label>
-          <ion-button (click)="logout()" class="ion-no-padding ion-no-margin">
+          <ion-label><p class='text'>{{ currentUser }}</p></ion-label>
+          <ion-button fill="clear" (click)="logout()" class="ion-no-padding ion-no-margin">
             <ion-icon slot="icon-only" color="danger" size="large" name="log-out"></ion-icon>
           </ion-button>
         </ion-item>
         <ion-item color="primary">
-          <ion-label><p>Org: {{ orgName }}</p></ion-label>
+          <ion-label><p class='text'>Org: {{ orgName}}</p></ion-label>
           <ion-badge
           *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
           slot="end"
@@ -25,12 +25,12 @@
           >
           {{ alarmData.getAllAlarmsNotInOrg(orgId) }}
         </ion-badge>
-        <ion-button class='ion-no-padding'>
+        <ion-button fill='clear' class='ion-no-padding'>
           <ion-icon slot='icon-only' name="settings" style='color: #ffffff;' size="large"></ion-icon>
         </ion-button>
         </ion-item>
         <ion-item color="danger">
-          <ion-label>Notifications are disabled. Tap here to enable.</ion-label>
+          <ion-label class='notifications'>Notifications are disabled. Tap here to enable.</ion-label>
         </ion-item>
         <!-- <ion-list style="margin-bottom: 0px">
           

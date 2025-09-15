@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button color="white">
+      <ion-menu-button>
         <ion-icon name="menu"></ion-icon>
         <span><alarm-count></alarm-count></span>
       </ion-menu-button>
@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content class="ion-padding">
 
   <!-- Alarms Card -->
   <ion-card type="button" (click)="navToAlarms()">

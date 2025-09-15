@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button>
@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Rooms</ion-title>
@@ -31,7 +31,7 @@
 
   <ion-list #ionList>
     <div *ngFor="let entity of filteredArray" style="min-width:100%; max-width: 100%">
-      <ion-item button style="max-width: 100%" *ngIf="shouldShow(entity)">
+      <ion-item detail='false' button style="max-width: 100%" *ngIf="shouldShow(entity)">
         <ion-label>
           <entity *ngIf="entity.entityType == 2" [device]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>
           <entity *ngIf="entity.entityType == 1" [sensor]="entity" [liveValueDisplay]="liveValueDisplay" [alarmCount]="alarmCount"></entity>

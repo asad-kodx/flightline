@@ -1,0 +1,29 @@
+.text{
+    font-size: 14px;
+}
+
+.notifications{
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    max-width: 300px;
+}
+
+.ios {
+    .text{
+        font-size: 10px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+    .notifications{
+        font-size: 11px;
+        text-transform: uppercase;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        max-width: 300px;
+    }
+}
