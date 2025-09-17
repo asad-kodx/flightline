@@ -4,6 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.ionicframework.controltechionic546641',
   appName: 'Flightline',
   webDir: 'www',
+  ios: {
+    // ... additional configuration
+    handleApplicationNotifications: false
+  },
   plugins: {
     Keyboard: {
       resizeOnFullScreen: false
