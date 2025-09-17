@@ -34,6 +34,8 @@ import { ControlDataProvider } from './core/providers/control-data.provider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 
+import OneSignal, { LogLevel, NotificationWillDisplayEvent } from 'onesignal-cordova-plugin';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -214,12 +216,14 @@ export class AppComponent {
     this.menuCtrl.enable(false, 'loggedInMenu');
     this.navCtrl.navigateRoot('login');
     this.signalRService.disconnect();
+    OneSignal.User.removeTag("username");
   }
   
   private handleUserLogin(isStartup: boolean) {
     const username = localStorage.getItem('username');
     if (username) {
       this.currentUser = username.trim();
+      OneSignal.User.addTag("username", this.currentUser.trim())
     }
     
     console.debug('User logged in - initializing services');
@@ -434,56 +438,40 @@ export class AppComponent {
     if (!this.platform.is('capacitor')) return;
     this.platform.ready().then(() => {
       console.log("Initting push")
-      // OneSignal.Debug.setLogLevel(LogLevel.Verbose);
-      // OneSignal.initialize(ConfigurationService.oneSignalAppId);
-      // if (this.currentUser) OneSignal.User.addTag("username", this.currentUser.trim())
-      // else{
-      //   console.log("User not found, resetting sub")
-      //   OneSignal.User.removeTag("username");
-      // }
+      OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+      OneSignal.initialize(ConfigurationService.oneSignalAppId);
+      if (this.currentUser) OneSignal.User.addTag("username", this.currentUser.trim())
+      else{
+        console.log("User not found, resetting sub")
+        OneSignal.User.removeTag("username");
+      }
 
-      // OneSignal.Notifications.addEventListener('click', (data) => {
-      //   console.log("Notification Clicked", data)
-      //   OneSignal.Notifications.removeNotification(data.notification.androidNotificationId!)
-      //   this.pushMessageHandler.processPushMessage(data.notification, true)
-      //   this.alarmData.rehandleAlarmCountBadge()
-      // });
+      OneSignal.Notifications.getPermissionAsync().then((hasPermission) => {
+        this.pushEnabled = hasPermission;
+      });
 
-      // OneSignal.Notifications.addEventListener('foregroundWillDisplay', (data) => {
-      //   console.log("Foreground Notification Received", data)
-      //   OneSignal.Notifications.removeNotification(data.getNotification().androidNotificationId!)
-      //   this.pushMessageHandler.processPushMessage(data.getNotification())
-      //   this.alarmData.rehandleAlarmCountBadge()
-      // });
-      // this.events.subscribe('login', () => {
-      //   console.log("Login event detected, subbing")
-      //     if(this.pushInterval) return;
-      //     // OneSignal.deleteTag('username')
-      //     // this.pushInterval = Observable.interval(5000).subscribe(() => {
-      //     //   console.log("push interval running")
-      //     //   OneSignal.getTags((data) => {
-      //     //     console.log(data)
-      //     //     // OneSignal.disablePush(false);
-      //     //     OneSignal.setAppId(ConfigurationService.oneSignalAppId);
-      //         if(this.currentUser) OneSignal.sendTag("username", this.currentUser.trim())
-      //       })
+      OneSignal.Notifications.addEventListener('click', (data) => {
+        console.log("Notification Clicked", data)
+        OneSignal.Notifications.removeNotification(data.notification.androidNotificationId!)
+        this.pushMessageHandler.processPushMessage(data.notification, true)
+        this.alarmData.rehandleAlarmCountBadge()
+      });
 
-      // })
-
-      // });
-      // this.events.subscribe('logout', () => {
-      //   OneSignal.deleteTag("username");
-      // });
+      OneSignal.Notifications.addEventListener('foregroundWillDisplay', (data) => {
+        console.log("Foreground Notification Received", data)
+        OneSignal.Notifications.removeNotification(data.getNotification().androidNotificationId!)
+        this.pushMessageHandler.processPushMessage(data.getNotification())
+        this.alarmData.rehandleAlarmCountBadge()
+      });
     });
   }
 
   public goToPushSettings() {
-    // OneSignal.Notifications.promptForPushNotificationsWithUserResponse().then((accepted) => {
-    //   // if (accepted) {
-    //   //   this.pushEnabled = true;
-    //   //   this.authService.saveUserPushTokenToServer();
-    //   // }
-    // });
-    // OneSignal.Notifications.requestPermission();
+    OneSignal.Notifications.requestPermission(true).then(
+      (accepted: boolean) => {
+        console.log('User accepted notifications: ' + accepted);
+        this.pushEnabled = accepted;
+      }
+    );
   }
 }

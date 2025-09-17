@@ -41,6 +41,7 @@
     "lodash": "^4.17.21",
     "microdiff": "^1.5.0",
     "moment": "^2.30.1",
+    "onesignal-cordova-plugin": "^5.2.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "typescript-string-operations": "^1.6.1",

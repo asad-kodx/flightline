@@ -15,7 +15,7 @@
             <ion-icon slot="icon-only" color="danger" size="large" name="log-out"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-item color="primary">
+        <ion-item color="primary" (click)="changeOrg()">
           <ion-label><p class='text'>Org: {{ orgName}}</p></ion-label>
           <ion-badge
           *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
@@ -29,7 +29,7 @@
           <ion-icon slot='icon-only' name="settings" style='color: #ffffff;' size="large"></ion-icon>
         </ion-button>
         </ion-item>
-        <ion-item color="danger">
+        <ion-item *ngIf="!pushEnabled" color="danger" (click)="goToPushSettings()">
           <ion-label class='notifications'>Notifications are disabled. Tap here to enable.</ion-label>
         </ion-item>
         <!-- <ion-list style="margin-bottom: 0px">
@@ -44,7 +44,7 @@
           </ion-button>
         </ion-list-header>
         
-        <ion-list-header style="zoom: 0.8" color="primary" (click)="changeOrg()">
+        <ion-list-header style="zoom: 0.8" color="primary" >
           Org: {{ orgName }}
           <ion-badge
           *ngIf="alarmData.getAllAlarmsNotInOrg(orgId) > 0"
